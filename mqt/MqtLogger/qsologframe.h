@@ -4,6 +4,7 @@
 #include "contacts.h"
 #include "ScreenContact.h"
 #include "focuswatcher.h"
+#include "minospanel.h"
 #include "validators.h"
 #include "cutils.h"
 #include "rigmemcommondata.h"
@@ -15,7 +16,7 @@ namespace Ui {
 class QSOLogFrame;
 }
 
-class QSOLogFrame : public QFrame
+class QSOLogFrame : public MinosPanel
 {
     Q_OBJECT
     Ui::QSOLogFrame *ui;

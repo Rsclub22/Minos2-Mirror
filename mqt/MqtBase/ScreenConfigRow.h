@@ -7,6 +7,7 @@
 class QScrollArea;
 class ScreenConfig;
 class ScreenConfigElement;
+class MinosSplitter;
 
 namespace Ui {
 class ScreenConfigRow;
@@ -18,13 +19,15 @@ class ScreenConfigRow : public QFrame
 
     void unsplit();
 public:
+    int tag = 0;
+
     Ui::ScreenConfigRow *ui;
     bool selected = false;
 
     explicit ScreenConfigRow(ScreenConfigElement *parentElement);
     ~ScreenConfigRow() override;
 
-    QHBoxLayout *hbl = nullptr;
+    MinosSplitter *hmsplit = nullptr;
     ScreenConfigElement *parentElement;
 
     ScreenConfigElement *addLeft(ScreenConfigElement *e);

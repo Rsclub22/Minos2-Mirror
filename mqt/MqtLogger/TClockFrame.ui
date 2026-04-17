@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>TClockFrame</class>
- <widget class="QFrame" name="TClockFrame">
+ <widget class="MinosPanel" name="TClockFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -44,6 +44,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MinosPanel</class>
+   <extends>QFrame</extends>
+   <header>minospanel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

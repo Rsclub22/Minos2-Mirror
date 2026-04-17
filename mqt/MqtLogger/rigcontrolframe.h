@@ -21,6 +21,7 @@
 
 #include "MinosLoggerEvents.h"
 #include "PubSubName.h"
+#include "minospanel.h"
 #include "rigmemcommondata.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
@@ -37,7 +38,7 @@ class TSingleLogFrame;
 const int CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT = 1500;
 
 
-class RigControlFrame : public QFrame
+class RigControlFrame : public MinosPanel
 {
     Q_OBJECT
     friend class RunButtonsFrame;

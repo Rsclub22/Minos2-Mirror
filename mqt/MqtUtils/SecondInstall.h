@@ -23,6 +23,7 @@ public:
     static QString getSingleAppStarterDescription();
     static qint16 getClientPort();
     static qint16 getRouterPort();
+    static qint16 getUPNPPort();
     static QString getZConfName();
 
     static QString getRouterEventName();

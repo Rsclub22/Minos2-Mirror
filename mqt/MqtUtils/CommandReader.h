@@ -32,6 +32,7 @@ private slots:
     void onReadyRead();
 signals:
     void commandLine(QString);
+    void fontChanged();
 };
 
 #endif // COMMANDREADER_H

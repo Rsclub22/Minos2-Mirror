@@ -1,5 +1,6 @@
 #include <QStandardItemModel>
 #include <QListView>
+#include <QSortFilterProxyModel>
 
 #include "QtUtils.h"
 #include "MMessageDialog.h"
@@ -9,38 +10,15 @@
 #include "MTrace.h"
 #include "cutils.h"
 #include "ScreenConfigElement.h"
+#include "minossplitter.h"
 #include "ui_ScreenConfigElement.h"
 
-QVector <SCTypeOption> ScreenConfigElement::scoptions =
+QVector <SCTypeOption> ScreenConfigElement::scoptions;
+
+void ScreenConfigElement::setScreenOptions(QVector <SCTypeOption> &sco)
 {
-    {sctMainScreen, QT_TR_NOOP("mainscreen"), QT_TR_NOOP("Main Screen")},
-    {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
-    {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
-    {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
-    {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
-    {sctLog, QT_TR_NOOP("Log List"), QT_TR_NOOP("QSO Log List")},
-    {sctNextQSODetails, QT_TR_NOOP("Next QSO Details"), QT_TR_NOOP("Next QSO details")},
-    {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
-    {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
-    {sctBandSwitch, QT_TR_NOOP("HF Band Switching"), QT_TR_NOOP("HF Band Switching")},
-    {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Run Freq Buttons")},
-    {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
-    {sctSkyScanControl, QT_TR_NOOP("SkyScan Control"), QT_TR_NOOP("SkyScan Control")},
-    {sctRotCompassDisplay, QT_TR_NOOP("Rotator Compass Display"), QT_TR_NOOP("Rotator Compass Display")},
-    {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
-    {sctRotSkyScanPresets, QT_TR_NOOP("SkyScan Presets"), QT_TR_NOOP("SkyScan Presets")},
-    {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
-    {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },
-    {sctArchiveMatch, QT_TR_NOOP("Archive Match"), QT_TR_NOOP("Archive List Matches") },
-    {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
-    {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
-    {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
-    {sctTxVmButtons, QT_TR_NOOP("Keyer"), QT_TR_NOOP("Keyer")},
-    {sctQrzDisplay, QT_TR_NOOP("QRZ Display"), QT_TR_NOOP("QRZ Display")},
-    {sctQsoMap, QT_TR_NOOP("QSO Map"), QT_TR_NOOP("QSO Map")},
-    {sctDMButtons, QT_TR_NOOP("Data Modes Buttons"), QT_TR_NOOP("Data Modes Buttons")},
-    {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
-};
+    scoptions = sco;
+}
 SCType ScreenConfigElement::getScreenType(QString s)
 {
     for(auto const  &opt: QASCONST(scoptions))
@@ -80,30 +58,61 @@ bool ScreenConfigElement::getIsSplitElement() const
     return isSplitElement;
 }
 
+void ScreenConfigElement::setFontSize(int f)
+{
+    ui->fontSize->setValue(f);
+}
+
+int ScreenConfigElement::getFontSize() const
+{
+    return ui->fontSize->value();
+}
+
 void ScreenConfigElement::setIsSplitElement(bool value)
 {
     isSplitElement = value;
     ui->splitFrame->setVisible(!value);
     ui->elementTypeCombo->setVisible(!value);
     ui->auxTypeCombo->setVisible(!value);
+    ui->fontSizeFrame->setVisible(!value);
+
+    if (!vmsplit)
+    {
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
 }
 
 ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc) :
-    QFrame(nullptr)
+    QScrollArea(nullptr)
   , ui(new Ui::ScreenConfigElement)
   , parentRow(parentrow)
   , parentDialog(sc)
 {
+    static int rollingTag = 0;
+
+    tag = rollingTag++;
+
     ui->setupUi(this);
 
+    connect(screenConfigDialog, &ScreenConfig::resetFont, this, &ScreenConfigElement::resetFont);
     // colours from https://www.december.com/html/spec/colorsvg.html
-    setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
+    //setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
 
     if (parentDialog)
-        vbl = parentDialog->vbl;
+    {
+        vmsplit = parentDialog->vmsplit;
+    }
     else
     {
-        vbl = ui->eleRowsVbl;
+        eleSplitter = new MinosSplitter(nullptr);
+        eleSplitter->setOrientation(Qt::Horizontal);
+        eleSplitter->addWidget(ui->cframe);
+        /*layout()->*/setWidget(eleSplitter);
+
+        eleSplitter->setStretchFactor(0, 0);
+        eleSplitter->setStretchFactor(1, 100);
     }
 
     ui->elementTypeCombo->clear();
@@ -145,9 +154,9 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(pind.row(), true);
 
     i = 0;
-    for(auto const &opt: QASCONST(StackedInfoFrame::auxoptions))
+    for(auto const &opt: QASCONST(AuxTypeOption::auxoptions))
     {
-        QString s = StackedInfoFrame::getTrAuxTypeString(opt.type);
+        QString s = AuxTypeOption::getTrAuxTypeString(opt.type);
         ui->auxTypeCombo->addItem(s, opt.type);
         ui->auxTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
@@ -160,13 +169,22 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     ui->auxTypeCombo->setModel(proxy);
     // sort
     ui->auxTypeCombo->model()->sort(0); // Column 0
+
+    if (getType() != sctAux)
+    {
+        ui->auxTypeCombo->setVisible(false);
+    }
+    adjustMargins(layout(), 0, 0, 0, 0, 0);
 }
 
 ScreenConfigElement::~ScreenConfigElement()
 {
     delete ui;
 }
-
+void ScreenConfigElement::resetFont()
+{
+    setFontSize(100);
+}
 void ScreenConfigElement::setType(SCType t)
 {
     QString s = getTrScreenHint(t);
@@ -180,14 +198,14 @@ SCType ScreenConfigElement::getType() const
     return static_cast<SCType>(t);
 }
 
-void ScreenConfigElement::setAuxType(AuxEntries ae)
+void ScreenConfigElement::setAuxType(AuxEntryType ae)
 {
-    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getTrAuxTypeString(ae));
+    ui->auxTypeCombo->setCurrentText(AuxTypeOption::getTrAuxTypeString(ae));
 }
-AuxEntries ScreenConfigElement::getAuxType() const
+AuxEntryType ScreenConfigElement::getAuxType() const
 {
     int t = ui->auxTypeCombo->itemData(ui->auxTypeCombo->currentIndex()).toInt();
-    return static_cast<AuxEntries>(t);
+    return static_cast<AuxEntryType>(t);
 }
 
 void ScreenConfigElement::on_elementTypeCombo_activated(int /*arg1*/)
@@ -247,16 +265,16 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     trace("ScreenConfigElement::on_splitAboveButton_clicked");
 
     SCType t = getType();
-    AuxEntries aux = getAuxType();
+    AuxEntryType aux = getAuxType();
     setIsSplitElement(true);
     setType(sctSplit);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 0, baseRow);
+    vmsplit->insertWidget( 0, baseRow);
     baseRow->addLeft(nullptr );
 
     ScreenConfigRow *newRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 1, newRow);
+    vmsplit->insertWidget( 1, newRow);
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
     e->setType(t);
@@ -274,16 +292,16 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     // and replace "this" with the new one
 
     SCType t = getType();
-    AuxEntries aux = getAuxType();
+    AuxEntryType aux = getAuxType();
     setIsSplitElement(true);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 0, baseRow);
+    vmsplit->insertWidget( 0, baseRow);
     ScreenConfigElement *e = baseRow->addLeft(nullptr );
 
 
     ScreenConfigRow *newRow = new ScreenConfigRow(this);
-    vbl->insertWidget( 1, newRow);
+    vmsplit->insertWidget( 1, newRow);
     newRow->addLeft(nullptr);
 
     e->setType(t);
@@ -292,16 +310,22 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    if (!vmsplit)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+    for (int i = 0; i < vmsplit->count(); i++)
+    {
+        if (vmsplit->widget(i) == r)
         {
             pos = i;
             break;
         }
     }
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( pos, baseRow);
+    vmsplit->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->curScreen->checkAddButtons();
@@ -310,26 +334,31 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
 {
     int pos = 0;
-    int vct = vbl->count();
+    if (!vmsplit)
+    {
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+
+    int vct = vmsplit->count();
     for (int i = 0; i < vct; i++)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        if (vmsplit->widget(i)  == r)
         {
             pos = i;
             break;
         }
     }
-    QLayoutItem *taken = vbl->takeAt(pos);
+    QObject *taken = vmsplit->widget(pos) ;
     if (taken)
     {
-        // From the source, I don't think the deleting the layout item deletes the widget
-        taken->widget()->deleteLater();
         delete taken;
     }
 
     else if (getIsSplitElement())
     {
-        if (vbl->count() == 0)
+        if (vmsplit->count() == 0)
         {
             parentRow->remove(this);
         }
@@ -342,9 +371,16 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
 {
     int pos = 0;
     int offset = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    if (!vmsplit)
     {
-        if (vbl->itemAt(i)->widget() == r)
+        vmsplit = new MinosSplitter(nullptr);
+        vmsplit->setOrientation(Qt::Vertical);
+        eleSplitter->addWidget(vmsplit);
+    }
+
+    for (int i = 0; i < vmsplit->count(); i++)
+    {
+        if (vmsplit->widget(i)  == r)
         {
             pos = i;
             offset = 1;
@@ -352,7 +388,7 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
         }
     }
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
-    vbl->insertWidget( pos + offset, baseRow);
+    vmsplit->insertWidget( pos + offset, baseRow);
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->curScreen->checkAddButtons();

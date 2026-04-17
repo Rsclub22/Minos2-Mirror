@@ -60,6 +60,15 @@ QVariant KstPlanesModel::headerData(int section, Qt::Orientation orientation, in
             return tr("Mins");
         }
     }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = "Memxx";
+            QSize r = delegate->docSize(s);
+            return r;
+        }
+    }
     return QVariant();
 }
 

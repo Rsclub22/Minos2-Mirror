@@ -5,49 +5,15 @@
 #include "ContestApp.h"
 #include "MTrace.h"
 #include "cutils.h"
-
+#include "auxentries.h"
 #include "StackedInfoFrame.h"
 #include "ui_StackedInfoFrame.h"
-
-QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
-    {aeClock, QT_TR_NOOP("Clock"), QT_TR_NOOP("Clock")},
-    {aeDXCC, QT_TR_NOOP("DXCC"), QT_TR_NOOP("DXCC")},
-    {aeDistrict, QT_TR_NOOP("District"), QT_TR_NOOP("District")},
-    {aeMemories, QT_TR_NOOP("Memories"), QT_TR_NOOP("Memories")},
-    {aeLocatorMap, QT_TR_NOOP("Locator Map"), QT_TR_NOOP("Locator Map")},
-    {aeLocatorTree, QT_TR_NOOP("Locator Tree"), QT_TR_NOOP("Locator Tree")},
-    {aeStats, QT_TR_NOOP("Stats"), QT_TR_NOOP("Stats")},
-};
-
-AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
-{
-    for(auto const &opt: QASCONST(auxoptions))
-    {
-        if (tr(opt.s) == s || (opt.s == s))
-            return opt.type;
-    }
-    return aeClock;
-}
-
-const char * StackedInfoFrame::getRawAuxTypeString(AuxEntries t)
-{
-    for(auto const &opt: QASCONST(auxoptions))
-    {
-        if (opt.type == t)
-            return opt.s;
-    }
-    return getRawAuxTypeString(aeClock);
-}
-QString StackedInfoFrame::getTrAuxTypeString(AuxEntries t)
-{
-    return tr(getRawAuxTypeString(t));
-}
 
 bool showWorked = false;
 bool showUnworked = false;
 
 StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t) :
-    QFrame(parent),
+    MinosPanel(parent),
     tslf(t),
     ui(new Ui::StackedInfoFrame),
     stackInstance(instance)
@@ -74,7 +40,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFram
 
     ui->infoCombo->clear();
     int i = 0;
-    for(auto const &opt:QASCONST( auxoptions))
+    for(auto const &opt:QASCONST( AuxTypeOption::auxoptions))
     {
         ui->infoCombo->addItem(tr(opt.s), opt.type);
         ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
@@ -170,7 +136,7 @@ void StackedInfoFrame::setTabVisibility()
 
     QString a = ui->infoCombo->currentText();
 
-    switch ( getAuxEntryType(a) )
+    switch ( AuxTypeOption::getAuxEntryType(a) )
     {
     case aeClock:
         setTabsVisible = false;
@@ -225,7 +191,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 
     QString a = ui->infoCombo->currentText();
 
-    switch ( getAuxEntryType(a) )
+    switch ( AuxTypeOption::getAuxEntryType(a) )
     {
     case aeClock:
         clockFrame = new TClockFrame(this);
@@ -280,8 +246,8 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     if (contest && stackInstance < STACKITEMS)
     {
         QString a = ui->infoCombo->currentText();
-        AuxEntries ae = getAuxEntryType(a);
-        contest->currentStackItems[stackInstance].setValue(auxoptions[ae].s);
+        AuxEntryType ae = AuxTypeOption::getAuxEntryType(a);
+        contest->currentStackItems[stackInstance].setValue(AuxTypeOption::auxoptions[ae].s);
         contest->commonSave(false);
     }
     setTabVisibility();

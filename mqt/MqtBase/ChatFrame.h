@@ -3,12 +3,13 @@
 
 #include <QFrame>
 #include "ChatServer.h"
+#include "minospanel.h"
 
 namespace Ui {
 class ChatFrame;
 }
 
-class ChatFrame : public QFrame
+class ChatFrame : public MinosPanel
 {
     Q_OBJECT
 

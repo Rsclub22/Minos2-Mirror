@@ -30,8 +30,9 @@ class HtmlDelegate : public QStyledItemDelegate
         qreal wmult = 1.0;
         qreal hmult = 1.0;
         QString table;
+        QWidget *widget;
     public:
-        HtmlDelegate(const QString &t, qreal wmult, qreal hmult);
+        HtmlDelegate(const QString &t, qreal wmult, qreal hmult, QWidget *w);
         virtual ~HtmlDelegate() override;
         QSize docSize(QString text) const;
     protected:
@@ -45,7 +46,7 @@ class TestDelegate : public HtmlDelegate
     Q_OBJECT
 
     public:
-        TestDelegate(const QString &t, qreal wmult, qreal hmult):HtmlDelegate(t, wmult, hmult){}
+        TestDelegate(const QString &t, qreal wmult, qreal hmult, QWidget *w):HtmlDelegate(t, wmult, hmult, w){}
         QSize docSize(QString text) const;
     protected:
         void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;

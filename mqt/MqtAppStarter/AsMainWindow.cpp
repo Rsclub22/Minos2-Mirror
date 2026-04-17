@@ -162,11 +162,11 @@ void MainWindow::FontEditAcceptActionExecute()
         {
             QApplication::setFont( f );
 
-            for(auto &widget: QApplication::allWidgets() )
-            {
-                widget->setFont(f);
-                widget->update();
-            }
+            // for(auto &widget: QApplication::allWidgets() )
+            // {
+            //     widget->setFont(f);
+            //     widget->update();
+            // }
 
             RegSettings settings;
             settings.getSettings().setValue( "font", font() );

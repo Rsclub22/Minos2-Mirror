@@ -12,7 +12,6 @@
 
 #include <QSettings>
 #include <QNetworkInterface>
-//#include "kstcallgridmodel.h"
 #include "MTrace.h"
 
 enum ASBand {

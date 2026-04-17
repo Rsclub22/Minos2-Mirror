@@ -2114,6 +2114,7 @@ QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, F
         BandList &bl = BandList::getBandList();
         QSharedPointer<BandInfo>  b1;
         bool b1Ok = bl.findBand(targetFreq, b1);
+
         QSharedPointer<BandInfo>  b2;
         /*bool b2Ok =*/ bl.findBand(refFreq, b2);
 

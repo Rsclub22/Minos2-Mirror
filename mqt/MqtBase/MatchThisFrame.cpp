@@ -36,11 +36,11 @@ void MatchThisFrame::on_ReplaceThisLogList(SharedMatchCollection matchCollection
     if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showThisMatchQSOs( matchCollection );
 }
-void MatchThisFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchThisFrame::doMatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::SendMatchTreeSelected(ThisMatch, contest, baseName, selected);
 }
-void MatchThisFrame::afterMatchTreeClicked()
+void MatchThisFrame::doAfterMatchTreeClicked()
 {
     if ( treeClickIndex.isValid() )
     {
@@ -56,7 +56,7 @@ void MatchThisFrame::afterMatchTreeClicked()
         }
     }
 }
-void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
+void MatchThisFrame::doDoubleClick(const QModelIndex &index)
 {
     MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem *>(index.internalPointer());
 
@@ -74,7 +74,7 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
                 setCurrentModel(true);
 
 
-                QItemSelectionModel *ism = selectionModel();
+                QItemSelectionModel *ism = getTreeView()->selectionModel();
                 QItemSelection selected = ism-> selection();
 
                 MinosLoggerEvents::SendMatchTreeSelected(ThisMatch, contest, baseName, selected);
@@ -93,7 +93,7 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
     }
 }
 
-void MatchThisFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
+void MatchThisFrame::doMatchTreeSelected(MatchType m, BaseContestLog *c, QString b, const QItemSelection &selected)
 {
     if (contest == c && b == baseName)
     {

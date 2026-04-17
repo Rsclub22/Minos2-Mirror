@@ -1,4 +1,5 @@
 #include "AppStartup.h"
+#include "ScreenConfigManager.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
 #include "Calendar.h"
@@ -11,6 +12,7 @@
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "ScreenConfigFile.h"
+#include "MTrace.h"
 
 #include "contestdetails.h"
 #include "ui_contestdetails.h"
@@ -535,8 +537,9 @@ void ContestDetails::setDetails(  )
 
    QString curConfigName = contestTransferObject->screenLayout.getValue();
    if (curConfigName.isEmpty())
+   {
        curConfigName = defaultLayoutName();
-
+   }
    int j = 0;
    int crow = 0;
 
@@ -721,7 +724,9 @@ void ContestDetails::setBandBoxes(QString bandStr, QString bandsList)
     {
         if (bandOK && bi && !bi->enabled)
         {
-            MinosParameters::getMinosParameters()->mshowMessage(tr("Band %1 is set as unwanted.").arg(bandStr));
+            QString msg = tr("Band %1 is set as unwanted.").arg(bandStr);
+            trace(msg);
+            MinosParameters::getMinosParameters()->mshowMessage(msg);
         }
         ui->BandComboBox->setCurrentText(bandStr);
     }

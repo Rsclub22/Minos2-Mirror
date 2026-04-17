@@ -47,11 +47,12 @@ public:
     int ASPort;
     int ASTimeout;
 
+    int lcf = 0;
+
 public Q_SLOTS:
         virtual int exec() override;
 
 private slots:
-
 
     void on_cancelButton_clicked();
 

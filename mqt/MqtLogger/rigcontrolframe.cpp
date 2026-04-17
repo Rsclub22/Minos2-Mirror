@@ -31,7 +31,7 @@
 #include "ui_rigcontrolframe.h"
 
 RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::RigControlFrame),
     ct(nullptr),
     tslf(parent),
@@ -159,7 +159,7 @@ void RigControlFrame::on_QSOMargins()
 
 void RigControlFrame::on_FontChanged()
 {
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     qreal fs = cf.pointSizeF();
     int fsi = static_cast<int>(fs * 1.25);
     cf.setPointSize(fsi);

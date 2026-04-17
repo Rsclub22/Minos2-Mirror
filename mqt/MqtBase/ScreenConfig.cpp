@@ -1,8 +1,11 @@
 #include <QScrollBar>
 #include <QScrollArea>
+#include <QSettings>
+#include "QtUtils.h"
+#include "cutils.h"
 #include "regsettings.h"
-#include "ContestApp.h"
-#include "tlogcontainer.h"
+//#include "../MqtLogger/ContestApp.h"
+//#include "../MqtLogger/tlogcontainer.h"
 #include "baseconstants.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
@@ -35,6 +38,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     SC sc = scf.configs[curConfigName];
 
     curScreen = buildScreens(sc);
+    adjustMargins(layout(), 0, 0, 0, 0, 0); // don't think this works!
 
     if (curScreen)
     {
@@ -78,7 +82,7 @@ ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s, int pos)
 
     if (s.baseElement)
     {
-        scr->buildRows(s.baseElement->rows, scr->baseElement, scr->vbl);
+        scr->buildRows(s.baseElement->rows, scr->baseElement, scr->vmsplit);
     }
 
     if (pos == -1)
@@ -172,8 +176,7 @@ void ScreenConfig::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    LogContainer->selectLayout(curConfigName);
-    LogContainer->selectSession(TContestApp::getContestApp()->currSession);
+    emit screenConfigApply(curConfigName);
 }
 
 void ScreenConfig::on_cancelButton_clicked()
@@ -245,5 +248,11 @@ void ScreenConfig::on_screenTabs_currentChanged(int index)
 void ScreenConfig::setScreenName(ScreenConfigScreen *scr)
 {
     ui->screenTabs->setTabText(ui->screenTabs->currentIndex(), scr->name);
+}
+
+
+void ScreenConfig::on_resetFontButton_clicked()
+{
+    emit resetFont();
 }
 

@@ -11,15 +11,8 @@
 #include "clustercommon.h"
 #include "profiles.h"
 
-//#include "ScreenConfigFile.h"
-QString defaultLayoutName()
-{
-    return QCoreApplication::translate("Default Screen Config", "default");
-}
-QString defaultProtectedLayoutName()
-{
-    return QCoreApplication::translate("Default Protected Screen Config", "protected");
-}
+#include "ScreenConfigManager.h"
+
 QString defaultSessionName()
 {
     return QCoreApplication::translate("Default Contest Set", "Default Set");
@@ -122,6 +115,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowQSOMapLines, "ShowQSOMapLines", true, QT_TR_NOOP("Show QSO Map Lines"), QT_TR_NOOP("Show QSO Map Lines"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapLoc, "ShowQSOMapLocs", true, QT_TR_NOOP("Show QSO Map Locators"), QT_TR_NOOP("Show QSO Map Locators"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapCalls, "ShowQSOMapCalls", true, QT_TR_NOOP("Show QSO Map Callsigns"), QT_TR_NOOP("Show QSO Map Callsigns"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapTLLoc, "ShowQSOMapLocTL", "IP40", QT_TR_NOOP("Show QSO Map Locators Top Left"), QT_TR_NOOP("Show QSO Map Locators Top Left"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapBRLoc, "ShowQSOMapLocBR", "KM40", QT_TR_NOOP("Show QSO Map Locators Bottom Right"), QT_TR_NOOP("Show QSO Map Locators Bottom Right"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowMapNav, "ShowQSOMapNav", true, QT_TR_NOOP("Show QSO Map Navigation Buttons"), QT_TR_NOOP("Show QSO Map Navigation Buttons"), false ) ) );

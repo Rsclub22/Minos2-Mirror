@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>WsjtxFrame</class>
- <widget class="QFrame" name="WsjtxFrame">
+ <widget class="MinosPanel" name="WsjtxFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -355,6 +355,12 @@
    <header>minossplitter.h</header>
    <container>1</container>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

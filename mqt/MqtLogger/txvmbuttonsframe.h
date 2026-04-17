@@ -7,6 +7,7 @@
 #include <QGridLayout>
 
 #include "PubSubName.h"
+#include "minospanel.h"
 #include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
@@ -66,7 +67,7 @@ private:
 
 };
 
-class TxVmButtonsFrame : public QGroupBox
+class TxVmButtonsFrame : public MinosPanel
 {
     Q_OBJECT
 

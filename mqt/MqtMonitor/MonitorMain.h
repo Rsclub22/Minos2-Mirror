@@ -38,6 +38,7 @@ public:
     bool QSOLines = true;
     bool mapShowSpots = true;
     bool showLoc = true;
+    bool showCalls = true;
     QString locTL;
     QString locBR;
     bool showNav = true;
@@ -94,6 +95,7 @@ private slots:
     void onLogChanged(QSharedPointer<MonitoredLog>);
     void on_showNav_stateChanged(int arg1);
 
+    void on_showCalls_stateChanged(int);
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;

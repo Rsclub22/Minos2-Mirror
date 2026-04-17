@@ -10,6 +10,8 @@ class ScreenConfigManager;
 
 class QListWidgetItem;
 
+extern QString defaultLayoutName();
+extern QString defaultProtectedLayoutName();
 
 class ScreenConfigManager : public QDialog
 {
@@ -18,7 +20,7 @@ class ScreenConfigManager : public QDialog
 public:
     static const char * defLayoutText;
     static const char * protectedLayoutText;
-    explicit ScreenConfigManager(QWidget *parent = nullptr);
+    explicit ScreenConfigManager(QWidget *parent, QString ccname, QString def, QString prot);
     ~ScreenConfigManager() override;
 
     int exec() override;
@@ -54,6 +56,7 @@ private slots:
 
     void on_protectedButton_clicked();
 
+    void onScreenConfigApply(QString curConfigName);
 private:
     Ui::ScreenConfigManager *ui;
     bool suppressItemSelect = false;
@@ -67,6 +70,10 @@ private:
 
     void doCloseEvent();
     bool getNewName(QString &Value);
+signals:
+    void screenConfigApply(QString curConfigName);
+    void setDefaultName(QString defaultConfigName);
+    void setProtectedName(QString protectedName);
 };
 
 #endif // SCREENCONFIGMANAGER_H

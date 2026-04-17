@@ -117,6 +117,7 @@ private:
     QString radioMode;
 
     QColor cursorColour;
+    QFont panelFont;
 
     void changeZoom(bool direction);
 

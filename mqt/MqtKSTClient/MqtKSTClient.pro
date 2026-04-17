@@ -11,17 +11,27 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosKST.ico
 macx:ICON=../MinosKST.icns
 
-win32:LIBS += -lWs2_32
+win32{ LIBS += -lWs2_32 -lUser32 -lole32 -luuid -lshlwapi}
 
 SOURCES += \
     KSTMinosParameters.cpp \
     airscoutlink.cpp \
     changename.cpp \
+    kstasactiveframe.cpp \
+    kstbuttonsframe.cpp \
     kstcallgridmodel.cpp \
+    kstcallsframe.cpp \
     kstconfigure.cpp \
+    kstloginframe.cpp \
     kstmessagegridmodel.cpp \
     kstmonitoredlogs.cpp \
+    kstmsgframe.cpp \
+    kstpageframe.cpp \
+    kstplanesframe.cpp \
     kstplanesmodel.cpp \
+    kstscreenoptions.cpp \
+    kstsendmeepframe.cpp \
+    ksttomeframe.cpp \
     main.cpp \
     kstmainwindow.cpp
 
@@ -29,15 +39,34 @@ HEADERS += \
     KSTMinosParameters.h \
     airscoutlink.h \
     changename.h \
+    kstasactiveframe.h \
+    kstbuttonsframe.h \
     kstcallgridmodel.h \
+    kstcallsframe.h \
     kstconfigure.h \
+    kstloginframe.h \
     kstmainwindow.h \
     kstmessagegridmodel.h \
     kstmonitoredlogs.h \
-    kstplanesmodel.h
+    kstmsgframe.h \
+    kstpageframe.h \
+    kstplanesframe.h \
+    kstplanesmodel.h \
+    kstscreenoptions.h \
+    kstsendmeepframe.h \
+    ksttomeframe.h
 
 FORMS += \
     changename.ui \
+    kstasactiveframe.ui \
+    kstbuttonsframe.ui \
+    kstcallsframe.ui \
     kstconfigure.ui \
+    kstloginframe.ui \
     kstmainwindow.ui \
-    kstmonitoredlogs.ui
+    kstmonitoredlogs.ui \
+    kstmsgframe.ui \
+    kstpageframe.ui \
+    kstplanesframe.ui \
+    kstsendmeepframe.ui \
+    ksttomeframe.ui

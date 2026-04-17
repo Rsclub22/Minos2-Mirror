@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
+#include <QDirIterator>
 #include <QStyle>
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -17,6 +18,7 @@
 #ifdef Q_OS_UNIX
 #include <unistd.h>
 #endif
+
 #include "regsettings.h"
 #include "fileutils.h"
 #include "MTrace.h"
@@ -24,7 +26,8 @@
 
 #include "AppStartup.h"
 #include "frequency.h"
-#include "qdiriterator.h"
+
+AppStart appStart;
 
 static bool appClosing = false;
 static QString appStartupName;
@@ -482,6 +485,10 @@ void appStartup(const QString &pappName)
     QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
     parser.addOption(languageOption);
 
+    QStringList s12 = {"1", "2"};
+    QCommandLineOption secondOption(s12);
+    parser.addOption(secondOption);
+
     QStringList args = QCoreApplication::arguments();
     trace("Arguments " + args.join("|"));
 
@@ -520,8 +527,19 @@ void setAppFont()
     if ( qfont != QVariant() )
     {
         QApplication::setFont( qfont.value<QFont>() );
+/*#if (!defined( Q_OS_WIN) || (QT_VERSION > QT_VERSION_CHECK(6, 0, 0)))
+        // as timings are different under linux, and Qt 6!
+        for ( auto const &widget: QApplication::allWidgets() )
+        {
+
+            widget->setFont(qfont.value<QFont>());
+            widget->update();
+        }
+#endi*/
+        appStart.emitFontChanged();
     }
 }
+
 void setAppFont(QString fs)
 {
     if (fs.startsWith("Font "))
@@ -533,14 +551,15 @@ void setAppFont(QString fs)
     {
         trace(QString("Setting font to %1").arg(fs));
         QApplication::setFont( f );
-#ifndef Q_OS_WIN
-// as timings are different under linux
-        for ( auto const &widget: QApplication::allWidgets() )
-        {
-            widget->setFont(f);
-            widget->update();
-        }
-#endif
+// #if (!defined( Q_OS_WIN) || (QT_VERSION > QT_VERSION_CHECK(6, 0, 0)))
+// // as timings are different under linux, and Qt 6!
+//         for ( auto const &widget: QApplication::allWidgets() )
+//         {
+//             widget->setFont(f);
+//             widget->update();
+//         }
+// #endif
+        appStart.emitFontChanged();
     }
     else
     {
@@ -750,4 +769,13 @@ QString getDirectoryLocation(DirectoryLocation dl, QString runDir /* = "."*/)
     }
     //trace(QString("%1: %2").arg(dltype, dirLoc));
     return dirLoc;
+}
+
+void AppStart::emitFontChanged()
+{
+    emit fontChanged();
+}
+void AppStart::emitListCompressionChanged(qreal hmult)
+{
+    emit listCompressionChanged(hmult);
 }

@@ -34,7 +34,7 @@ void RigMemoryFrame::traceMsg(QString msg)
     trace("RigMemoryFrame: " + msg);
 }
 RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
-    QFrame(parent)
+    MinosPanel(parent)
     , tslf(parent->tslf)
     , ui(new Ui::RigMemoryFrame)
     , ct(nullptr)
@@ -52,7 +52,7 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("RigMemoryFrame", 1.0, lcf/100.0)) ;
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("RigMemoryFrame", 1.0, lcf/100.0, this)) ;
     model.delegate = delegate;
     ui->rigMemTable->setItemDelegate( delegate.data());
 

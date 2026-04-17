@@ -2,6 +2,7 @@
 #define SKYSCANPRESETSFRAME_H
 
 #include <QFrame>
+#include "minospanel.h"
 #include "presetbutton.h"
 
 
@@ -9,7 +10,7 @@ namespace Ui {
 class skyScanPresetsFrame;
 }
 
-class skyScanPresetsFrame : public QFrame
+class skyScanPresetsFrame : public MinosPanel
 {
     Q_OBJECT
 

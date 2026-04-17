@@ -9,7 +9,7 @@
 #include "ui_BandsSelect.h"
 
 BandsSelect::BandsSelect(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::BandsSelect)
 {
     ui->setupUi(this);

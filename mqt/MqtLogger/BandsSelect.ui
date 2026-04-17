@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>BandsSelect</class>
- <widget class="QFrame" name="BandsSelect">
+ <widget class="MinosPanel" name="BandsSelect">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -103,6 +103,13 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>MinosPanel</class>
+   <extends>QFrame</extends>
+   <header>minospanel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets> <resources/>
  <connections/>
 </ui>

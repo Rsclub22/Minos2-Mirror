@@ -6,6 +6,7 @@
 #include  "MTrace.h"
 
 #include "ScreenConfigRow.h"
+#include "minossplitter.h"
 #include "ui_ScreenConfigRow.h"
 
 ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
@@ -13,15 +14,24 @@ ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
   , ui(new Ui::ScreenConfigRow)
   , parentElement(parentc)
 {
+    static int rollingTag = 0;
+    tag = rollingTag++;
     ui->setupUi(this);
-    hbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
-    hbl->setContentsMargins(1, 1, 1, 1);
+    QHBoxLayout *hbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
     ui->scrollAreaWidgetContents->setLayout(hbl);
+
+    hmsplit = new MinosSplitter(ui->scrollAreaWidgetContents);
+    hmsplit->setOrientation(Qt::Horizontal);
+    hmsplit->setContentsMargins(0, 0, 0, 0);
+    hbl->addWidget(hmsplit);
 
     setStyleSheet("background-color: light grey;");
 
     // colours from https://www.december.com/html/spec/colorsvg.html
-    setStyleSheet("#ScreenConfigRow { border: 2px solid darkcyan; }");
+//    setStyleSheet("#ScreenConfigRow { border: 2px solid darkcyan; }");
+//    setStyleSheet("#ScreenConfigRow { border: 1px solid blue; }");
+
+    setContentsMargins(0, 0, 0, 0);
 }
 
 ScreenConfigRow::~ScreenConfigRow()
@@ -50,44 +60,42 @@ void ScreenConfigRow::on_addRowAfterButton_clicked()
 ScreenConfigElement * ScreenConfigRow::addLeft(ScreenConfigElement *e)
 {
     int pos = 0;
-    for (int i = 0; i < hbl->count(); i++)
+    for (int i = 0; i < hmsplit->count(); i++)
     {
-        if (hbl->itemAt(i)->widget() == e)
+        if (hmsplit->widget(i) == e)
         {
             pos = i;
             break;
         }
     }
     ScreenConfigElement *baseElement = new ScreenConfigElement(this);
-    hbl->insertWidget( pos, baseElement);
+    hmsplit->insertWidget( pos, baseElement);
 
     return baseElement;
 }
 void ScreenConfigRow::remove(ScreenConfigElement *e)
 {
     int pos = 0;
-    for (int i = 0; i < hbl->count(); i++)
+    for (int i = 0; i < hmsplit->count(); i++)
     {
-        if (hbl->itemAt(i)->widget() == e)
+        if (hmsplit->widget(i) == e)
         {
             pos = i;
             break;
         }
     }
-    QLayoutItem *taken = hbl->takeAt(pos);
+    QObject *taken = hmsplit->widget(pos);
     if (taken)
     {
-        // From the source, I don't think the deleting the layout item deletes the widget
-        taken->widget()->deleteLater();
         delete taken;
     }
-    if (hbl->count() == 0)
+    if (hmsplit->count() == 0)
     {
         parentElement->removeRow(this);
     }
-    else if (hbl->count() == 1)
+    else if (hmsplit->count() == 1)
     {
-        QWidget *w = hbl->itemAt(0)->widget();
+        QObject *w = hmsplit->widget(0);
         ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
         if (ele->getIsSplitElement())
         {
@@ -104,14 +112,14 @@ void ScreenConfigRow::unsplit()
     // parent element should be the next level up
 
     int prowno = -1;
-    int ct = parentElement->vbl->count();
+    int ct = (parentElement->vmsplit)?parentElement->vmsplit->count():0;
     ScreenConfigRow *rl = nullptr;
     QWidget *pw = nullptr;
-    QWidget *wl = nullptr;
+    QObject *wl = nullptr;
     ScreenConfigElement *pelement = nullptr;
     for (int i = 0; i < ct; i++)
     {
-        wl = parentElement->vbl->itemAt(i)->widget();
+        wl = parentElement->vmsplit->widget(i);
         if (wl == this)
         {
             rl = dynamic_cast<ScreenConfigRow *>(wl);
@@ -122,45 +130,54 @@ void ScreenConfigRow::unsplit()
         }
     }
 
-    QWidget *we = hbl->itemAt(0)->widget();
+    QObject *we = hmsplit->widget(0);
     ScreenConfigElement *splitele = dynamic_cast<ScreenConfigElement *>(we);    // and this is its split widget
 
     int inc = 1;
-    while (QLayoutItem *l = splitele->vbl->takeAt(0)) // ele->parentElement
+    if (splitele->vmsplit)
     {
-        parentElement->vbl->insertItem(prowno + inc, l);
-        QWidget *w = l->widget();
-        ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(w);
-        scr->parentElement = pelement;
-        w->setParent(pw);
-        w->setVisible(true);        // why isn't it visible?
-        inc++;
+        while (QObject *l = splitele->vmsplit->widget(0)) // ele->parentElement
+        {
+            l->setParent(nullptr);
+            QWidget *w = dynamic_cast<QWidget *>(l);
+            parentElement->vmsplit->insertWidget(prowno + inc, w);
+            ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(w);
+            if (scr)
+            {
+                scr->parentElement = pelement;
+            }
+            w->setParent(pw);
+            w->setVisible(true);        // why isn't it visible?
+            inc++;
+
+        }
     }
-    // and get rid of the split element/row (which is "this" so use deleteLater)
-    QLayoutItem *item = parentElement->vbl->takeAt(prowno);
-    QWidget* widget = item->widget();
-    widget->deleteLater();
-    delete item;
+    // and get rid of the split element/row
+    if (parentElement->vmsplit)
+    {
+        QObject *item = parentElement->vmsplit->widget(prowno);
+        delete item;
+    }
 }
 ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
 {
     int pos = 0;
     int offset = 0;
-    for (int i = 0; i < hbl->count(); i++)
+    for (int i = 0; i < hmsplit->count(); i++)
     {
-        if (hbl->itemAt(i)->widget() == e)
+        if (hmsplit->widget(i) == e)
         {
             pos = i;
             offset = 1;
             break;
         }
     }
-    if (e == nullptr && hbl->count() > 0)
+    if (e == nullptr && hmsplit->count() > 0)
     {
         offset = 1;
     }
     ScreenConfigElement *baseElement = new ScreenConfigElement(this);
-    hbl->insertWidget( pos + offset, baseElement);
+    hmsplit->insertWidget( pos + offset, baseElement);
 
     return baseElement;
 }

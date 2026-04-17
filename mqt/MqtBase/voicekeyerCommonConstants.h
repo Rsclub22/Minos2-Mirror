@@ -74,6 +74,8 @@ namespace voiceKeyerCommon
 
 QString VOICE_KEYER_PATH();
 QString VOICEKEYER_COMMON_PARAMS_PATH();
+bool readDisableESCKeyerStopFromIni();
+void writeDisableESCKeyerStopToIni(bool disable);
 bool readSaveVoiceCWMemoryButtonByRadioNameFromIni(voiceKeyerCommon::VoiceKeyerId id);
 void writeSaveVoiceCWMemoryButtonByRadioNameToIni(bool data, voiceKeyerCommon::VoiceKeyerId id);
 void getListOfRadioNamesForMemoryButtons(QStringList &radioNames, voiceKeyerCommon::VoiceKeyerId id);

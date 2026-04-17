@@ -67,7 +67,7 @@ signals:
    void bandMapLimitsChanged();
    void fKey(BaseContestLog *c, int e, int carr);
    void redrawQSOMap(bool grid, bool lines, bool cluster,
-                     bool showLoc, QString tl, QString br, bool showNav);
+                     bool showLoc, bool showCalls, QString tl, QString br, bool showNav);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -99,7 +99,6 @@ signals:
    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
 
    void FontChanged();
-   void listCompressionChanged(qreal hmult);
 
    void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
    void wsjtxDatagram(int instance, QByteArray *);
@@ -171,7 +170,6 @@ public:
     static void SendXferEnabled(bool s, BaseContestLog *c, QString basename);
     static void SendXferPressed(BaseContestLog *c, QString basename);
     static void SendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
-    static void SendListCompressionChanged(qreal hmult);
 
     static void SendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
     static void SendWsjtxDatagram(int instance, QByteArray *);
@@ -183,7 +181,7 @@ public:
     static void SendShowCribBand();
     static void sendBandmapLimitsChanged();
 
-    static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, QString tl, QString br, bool showNav);
+    static void SendRedrawQSOMap(bool grid, bool lines, bool cluster, bool showloc, bool showCalls, QString tl, QString br, bool showNav);
 
     static void SendFKey(BaseContestLog *c, int event, int mfreq);
     static void SendSandPClicked(BaseContestLog *c, bool sandp);

@@ -6,7 +6,7 @@
 
 const int checkInterval = 10;
 TStatsDispFrame::TStatsDispFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::TStatsDispFrame),
     ct(nullptr), lastCheckTime(QDateTime::currentDateTime().addSecs(-1000)),
     suppressPeriodChange(false)

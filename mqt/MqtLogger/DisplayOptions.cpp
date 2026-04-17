@@ -40,6 +40,7 @@ void DisplayOptions::initialise()
     ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
     ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
     ShowQSOMapShowLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapLoc, ui->QSOMapShowLoc);
+    ShowQSOMapShowCalls.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapCalls, ui->QSOMapShowCalls);
     ShowQSOMapTLLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapTLLoc, ui->QSOMapTLLoc, "IP40");
     ShowQSOMapBRLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapBRLoc, ui->QSOMapBRLoc, "KM00");
     ShowQSOMapShowNav.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowMapNav, ui->QSOMapShowNav);
@@ -211,11 +212,13 @@ void DisplayOptions::finalise()
     bool mcdchanged = MapClusterDistance.finalise();
 
     bool showLocChanged = ShowQSOMapShowLoc.finalise();
+    bool showCallsChanged = ShowQSOMapShowCalls.finalise();
     bool mapTLChanged = ShowQSOMapTLLoc.finalise();
     bool mapBRChanged = ShowQSOMapBRLoc.finalise();
     bool showNavChanged = ShowQSOMapShowNav.finalise();
 
-    if (gchanged || lchanged || mscchanged || mcdchanged
+
+    if (gchanged || lchanged || mscchanged || mcdchanged || showCallsChanged
         || showLocChanged || mapTLChanged || mapBRChanged || showNavChanged)
     {
         MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(),
@@ -223,6 +226,7 @@ void DisplayOptions::finalise()
                                             MapShowCluster.value(),
 //                                            MapClusterDistance.iValue(),
                                             ShowQSOMapShowLoc.value(),
+                                            ShowQSOMapShowCalls.value(),
                                             ShowQSOMapTLLoc.sValue(),
                                             ShowQSOMapBRLoc.sValue(),
                                             ShowQSOMapShowNav.value()
@@ -283,7 +287,7 @@ void DisplayOptions::finalise()
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, nlcf);
         TContestApp::getContestApp() ->displayBundle.flushProfile();
-        MinosLoggerEvents::SendListCompressionChanged(nlcf/100.0);
+        appStart.emitListCompressionChanged(nlcf/100.0);
         doSelectSession = true;
     }
 
@@ -389,14 +393,15 @@ void DisplayOptions::doFontChange()
         bool routerRunning = checkRouterReady();
         QApplication::setFont( nf );
 
-        for ( auto &widget: QApplication::allWidgets() )
-        {
-            widget->setFont(nf);
-            widget->update();
-        }
+        // for ( auto &widget: QApplication::allWidgets() )
+        // {
+        //     widget->setFont(nf);
+        //     widget->update();
+        // }
 
         RegSettings settings;
         settings.getSettings().setValue( "font", font() );
+        appStart.emitFontChanged();
 
         MinosLoggerEvents::SendFontChanged();
         if (routerRunning)

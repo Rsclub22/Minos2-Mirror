@@ -56,7 +56,7 @@ private:
     QHBoxLayout *mmvariHb = nullptr;
     QVBoxLayout* mvb = nullptr;
 
-    QString fname;
+    QString engineName;
     int mmvariWnd;
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -84,6 +84,8 @@ private:
     QLabel *rxCarrier;
     QLabel *txCarrier;
     QLabel *snLabel;
+
+    QSlider *txLevelSlider = nullptr;
 
     QAction *newAction(int n, QMenu *m, void (MMVARIFrame::*slotparam)());
     QAction *newAction(const char *text, QMenu *m, void (MMVARIFrame::*slotparam)() );
@@ -126,6 +128,7 @@ private slots:
     void OnError(int);
 
     void onSetSpeeds(QString b, QString m);
+    void txLevelChanged(int v);
 signals:
     void txChanged(bool);
 

@@ -175,6 +175,33 @@ void EngineConfigure::setEnginePTT(QSettings &settings,QString engine, int l)
 {
     settings.setValue("PTTL/" + engine, l);
 }
+int EngineConfigure::getTxLevel(QSettings &settings, QString engine)
+{
+    int p = settings.value("TxLevel/" + engine, 16384).toInt();
+    return p;
+}
+int EngineConfigure::getTxLevel(QString engine)
+{
+    QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+    QString configFile = csettings.value("ConfigurationFile").toString();
+
+    QSettings settings(configFile, QSettings::IniFormat);
+    return getTxLevel(settings, engine);
+}
+void EngineConfigure::setTxLevel(QSettings &settings, QString engine, int level)
+{
+    settings.setValue("TxLevel/" + engine, level);
+}
+void EngineConfigure::setTxLevel(QString engine, int level)
+{
+    QSettings csettings(getDirectoryLocation(dlConfiguration) + "/DataModeSelect.ini", QSettings::IniFormat);
+    QString configFile = csettings.value("ConfigurationFile").toString();
+
+    QSettings settings(configFile, QSettings::IniFormat);
+
+    return setTxLevel(settings, engine, level);
+
+}
 
 void EngineConfigure::checkEnginePath(QLineEdit *ele, QCheckBox *ecb)
 {

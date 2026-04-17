@@ -25,32 +25,14 @@
 #include "rotatorcommon.h"
 #include "MTrace.h"
 
-
-
-
-
-
 RotControlFrameBase::RotControlFrameBase(QWidget *parent):
-    QFrame(parent)
+    MinosPanel(parent)
     , ct(nullptr)
 {
-
-
-
-
 }
-
-
-
 RotControlFrameBase::~RotControlFrameBase()
 {
-
-
 }
-
-
-
-
 void RotControlFrameBase::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);

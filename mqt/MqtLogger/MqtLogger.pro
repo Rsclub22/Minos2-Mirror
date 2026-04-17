@@ -60,12 +60,6 @@ SOURCES += \
     QSOTextEditFrame.cpp \
     RigMemoryFrame.cpp \
     RotPresets.cpp \
-    ScreenConfig.cpp \
-    ScreenConfigElement.cpp \
-    ScreenConfigFile.cpp \
-    ScreenConfigManager.cpp \
-    ScreenConfigRow.cpp \
-    ScreenConfigScreen.cpp \
     SendRPCDM.cpp \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
@@ -87,6 +81,7 @@ SOURCES += \
     freqlineedit.cpp \
     locTreeFrame.cpp \
     locframe.cpp \
+    loggerscreenoptions.cpp \
     main.cpp \
     manageadifdialog.cpp \
     managebandmapspotsdb.cpp \
@@ -168,12 +163,6 @@ HEADERS  += \
     QSOTextEditFrame.h \
     RigMemoryFrame.h \
     RotPresets.h \
-    ScreenConfig.h \
-    ScreenConfigElement.h \
-    ScreenConfigFile.h \
-    ScreenConfigManager.h \
-    ScreenConfigRow.h \
-    ScreenConfigScreen.h \
     SendRPCDM.h \
     StackedInfoFrame.h \
     TClockFrame.h \
@@ -195,6 +184,7 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    loggerscreenoptions.h \
     manageadifdialog.h \
     managebandmapspotsdb.h \
     n1mmbroadcast.h \
@@ -262,7 +252,6 @@ FORMS    += \
     DisplayOptions.ui \
     OptionsDialog.ui \
     RotPresets.ui \
-    ScreenConfigScreen.ui \
     checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
@@ -287,10 +276,6 @@ FORMS    += \
     rotatorskyscanframe.ui \
     rotcontrolframe.ui \
     runbuttondialog.ui \
-    ScreenConfig.ui \
-    ScreenConfigElement.ui \
-    ScreenConfigManager.ui \
-    ScreenConfigRow.ui \
     StackedInfoFrame.ui \
     runbuttonsframe.ui \
     skyscanpresetsframe.ui \

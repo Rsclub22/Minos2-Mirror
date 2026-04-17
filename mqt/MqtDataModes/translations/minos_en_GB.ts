@@ -225,12 +225,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="439"/>
+        <location filename="../engineconfigure.cpp" line="466"/>
         <source>Decode Engine Files (*.ocx *.exe);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../engineconfigure.cpp" line="443"/>
+        <location filename="../engineconfigure.cpp" line="470"/>
         <source>%1 Decode Engine Executable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,23 +294,28 @@
 <context>
     <name>MMVARIFrame</name>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="76"/>
+        <location filename="../MMVARIFrame.cpp" line="85"/>
         <source>RX/TX state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="85"/>
+        <location filename="../MMVARIFrame.cpp" line="94"/>
         <source>Move the cursor to keep it centered on a signal if the frequency changes slightly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="92"/>
+        <location filename="../MMVARIFrame.cpp" line="101"/>
         <source>When NET is on the TX frequency follows the RX frequency </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MMVARIFrame.cpp" line="98"/>
+        <location filename="../MMVARIFrame.cpp" line="107"/>
         <source>Align the transmit frequency to the receive frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MMVARIFrame.cpp" line="145"/>
+        <source>Tx Level</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

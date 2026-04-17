@@ -28,7 +28,7 @@
 
 
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::ClusterClientFrame),
     purgeTimer(nullptr),
     timeToLive(0),
@@ -61,10 +61,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
-    dxDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("dxDelegate", 1.0, lcf/100.0)) ;
-    searchDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("searchDelegate", 1.0, lcf/100.0)) ;
-    callsignDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("callsignDelegate", 1.0, lcf/100.0)) ;
-    locatorDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("locatorDelegate", 1.0, lcf/100.0)) ;
+    dxDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("dxDelegate", 1.0, lcf/100.0, this)) ;
+    searchDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("searchDelegate", 1.0, lcf/100.0, this)) ;
+    callsignDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("callsignDelegate", 1.0, lcf/100.0, this)) ;
+    locatorDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate("locatorDelegate", 1.0, lcf/100.0, this)) ;
 
     setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);

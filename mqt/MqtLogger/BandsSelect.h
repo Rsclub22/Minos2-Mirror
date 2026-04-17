@@ -2,6 +2,7 @@
 #define BANDSSELECT_H
 
 #include "BandList.h"
+#include "minospanel.h"
 #include <QFrame>
 class QCheckBox;
 
@@ -9,7 +10,7 @@ namespace Ui {
 class BandsSelect;
 }
 
-class BandsSelect : public QFrame
+class BandsSelect : public MinosPanel
 {
     Q_OBJECT
 

@@ -46,6 +46,8 @@ private slots:
 
     void on_removeScreenButton_clicked();
 
+    void on_resetFontButton_clicked();
+
 private:
     Ui::ScreenConfig *ui;
 
@@ -58,6 +60,11 @@ private:
     ScreenConfigScreen *buildScreen(SCScreen &s, int pos);
 
     void checkScreens();
+
+signals:
+    void  screenConfigApply(QString curConfigName);
+
+    void resetFont();
 };
 
 extern ScreenConfig *screenConfigDialog;

@@ -34,7 +34,7 @@ extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #include "ui_qsomapframe.h"
 
 QSOMapFrame::QSOMapFrame(QWidget *parent) :
-    QFrame(parent),
+    MinosPanel(parent),
     ui(new Ui::QSOMapFrame)
 {
 #ifdef INC_MAP
@@ -62,7 +62,9 @@ QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
-void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines, bool spots, bool sl, QString tl, QString br, bool sn)
+void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool lines,
+                             bool spots, bool sl, bool showCalls,
+                             QString tl, QString br, bool sn)
 {
     // NB maps that aren't displayed never get ct set
 
@@ -119,7 +121,7 @@ void QSOMapFrame::setContest(BaseContestLog *c, bool monitor, bool grid, bool li
         bmonitor = monitor;
         startMap();
 
-        doRedraw(c, grid, lines, spots, sl, tl, br, sn);
+        doRedraw(c, grid, lines, spots, sl, showCalls, tl, br, sn);
     }
     else
     {
@@ -133,8 +135,16 @@ void QSOMapFrame::onContestBandChanged(BaseContestLog *c)
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
     }
+}
+void QSOMapFrame::setPanelFont()
+{
+    MinosPanel::setPanelFont();
+
+    int fs = panelFont.pointSize();
+    emit setFontSize(fs);
+    doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
 }
 void QSOMapFrame::startMap()
 {
@@ -208,9 +218,11 @@ void QSOMapFrame::startMap()
         connect(this, SIGNAL(drawLines(QVariant)), qmlObj, SLOT(setDrawLines(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(drawGrid(QVariant)), qmlObj, SLOT(setDrawGrid(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showLocs(QVariant)), qmlObj, SLOT(setShowLocs(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(showCallsb(QVariant)), qmlObj, SLOT(setShowCalls(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showLocsTL(QVariant)), qmlObj, SLOT(setShowLocsTL(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showLocsBR(QVariant)), qmlObj, SLOT(setShowLocsBR(QVariant)), Qt::UniqueConnection);
         connect(this, SIGNAL(showNavb(QVariant)), qmlObj, SLOT(setShowNav(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(setFontSize(QVariant)), qmlObj, SLOT(setFontSize(QVariant)), Qt::UniqueConnection);
 
         connect(this, SIGNAL(clearAll()), qmlObj, SLOT(clearAll()), Qt::UniqueConnection);
 
@@ -238,7 +250,7 @@ void QSOMapFrame::filterButtonClicked()
             {
                 filterSettings = fd.getFilterSettings();
                 ct->saveQSOMapFilter(filterSettings);
-                doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
+                doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
             }
         }
     }
@@ -306,7 +318,7 @@ void QSOMapFrame::saveParams()
     }
 }
 void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, bool spots
-                           ,bool sl, QString tl, QString br, bool sn)
+                           ,bool sl, bool sc, QString tl, QString br, bool sn)
 {
     trace(QString("QSOMapFrame doRedraw grid %1 lines %2 spots %3").arg(grid).arg(lines).arg(spots));
     if (ct == nullptr || ctest != ct)
@@ -349,6 +361,12 @@ void QSOMapFrame::doRedraw(const BaseContestLog *ctest, bool grid, bool lines, b
 
     showNav = sn;
     emit showNavb(showNav);
+
+    showCall = sc;
+    emit showCallsb(showCall);
+
+    int fs = panelFont.pointSize();
+    emit setFontSize(fs);
 
     locTL = tl;
 
@@ -492,7 +510,37 @@ QPair<double, double> QSOMapFrame::calcPosition(QString loc, bool &drawLine)
         n = 1;
         locs[loc] = n;
     }
-    if (fourLoc)
+    if (!fourLoc)
+    {
+
+        // offset from the centre position
+
+        if (n > 1)
+        {
+            n -= 1;
+            QPair<int, int> offsets[] = {
+                {0, 1},
+                {1, 1},
+                {1, 0},
+                {1, -1},
+                {0, -1},
+                {-1, -1},
+                {-1, 0},
+                {-1, 1}
+            };
+
+            int offset = n%8;
+            int mult = (n + 7)/8;
+            lon += 0.01 * mult * offsets[offset].first;
+            lat += 0.01 * mult * offsets[offset].second;
+            drawLine = false;
+        }
+        else
+        {
+            drawLine = true;
+        }
+    }
+    else
     {
         if (lon < 0)
         {
@@ -628,7 +676,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         {
             emit clearAll();
             locs.clear();
-            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
+            doRedraw(c, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
         }
         else
         {
@@ -638,7 +686,7 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
 }
 
 void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots,
-                                    bool sl, QString tl, QString br, bool sn)
+                                    bool sl, bool showCalls, QString tl, QString br, bool sn)
 {
     if (ct != nullptr)
     {
@@ -647,7 +695,7 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines, bool spots,
         emit clearAll();
         locs.clear();
 
-        doRedraw(ct, grid, lines, spots, sl, tl, br, sn);
+        doRedraw(ct, grid, lines, spots, sl, showCalls, tl, br, sn);
     }
 }
 
@@ -849,7 +897,7 @@ void QSOMapFrame::purgeSpots()
     {
         emit clearAll();
         locs.clear();
-        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, locTL, locBR, showNav);
+        doRedraw(ct, bdrawGrid, bdrawLines, drawSpots, showLoc, showCall, locTL, locBR, showNav);
     }
 }
 

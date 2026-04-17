@@ -8,6 +8,7 @@
 
 #include "dmFKeydef.h"
 #include "frequency.h"
+#include "minospanel.h"
 
 class QPushButton;
 class QFileSystemWatcher;
@@ -19,7 +20,7 @@ namespace Ui {
 class DMButtonFrame;
 }
 
-class DMButtonFrame : public QFrame
+class DMButtonFrame : public MinosPanel
 {
     Q_OBJECT
 

@@ -11,42 +11,6 @@
 
 enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
-class Aircraft;
-class KstUser
-{
-public:
-    int chat;
-    Callsign call;
-    QString loc;
-    QString name;
-    QString prefix;
-    QString country;
-    QString dxcc;
-    bool away = false;
-    bool recent = false;
-    int distance = -1;
-    int bearing = -1;
-    int messageCount = 0;
-
-    QString lastCalcTime;
-    QString fromCall;
-    QString fromLoc;
-    QString toCall;
-    QString toLoc;
-    QVector<Aircraft> planes;
-    bool planeResponseSeen = false;
-
-    KstUser()
-    {}
-    KstUser(const Callsign &c, int achat):call(c),chat(achat)
-    {}
-
-    bool operator< ( const KstUser& rhs ) const;
-    bool operator== ( const KstUser& rhs ) const;
-
-    qHashRet qHash() const;
-};
-extern bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j);
 
 class KstCallGridModel: public QAbstractItemModel
 {
@@ -103,6 +67,7 @@ class KstCallGridSortFilterModel: public QSortFilterProxyModel
     int chatFilter = 0;
     bool awayFilter = false;
     bool inactiveFilter = false;
+    bool workedFilter = false;
     bool filterDxcc = false;
     bool isFiltered() const
     {
@@ -118,6 +83,7 @@ public:
 
     void setAwayFilter(bool value);
     void setInactiveFilter(bool value);
+    void setWorkedFilter(bool value);
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };

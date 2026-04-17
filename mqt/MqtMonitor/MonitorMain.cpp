@@ -121,6 +121,10 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     showLoc = isettings.value("mapShowLoc", true).toBool();
     ui->showLocs->setChecked(showLoc);
+
+    showCalls = isettings.value("mapShowCalls", true).toBool();
+    ui->showCalls->setChecked(showCalls);
+
     locTL = isettings.value("mapShowLocTL", "IP40").toString();
     ui->locTL->setText(locTL);
     locBR = isettings.value("mapShowLocBR", "KM40").toString();
@@ -478,7 +482,7 @@ void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
     QSOGrid = ui->showGridcb->isChecked();
     settings.setValue("showQSOGrid", QSOGrid);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 
 
@@ -488,7 +492,9 @@ void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
     QSOLines = ui->showLinescb->isChecked();
     settings.setValue("showQSOLines", QSOLines);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc
+                                        , showCalls
+                                        , locTL, locBR, showNav);
 }
 
 
@@ -498,7 +504,7 @@ void MonitorMain::on_mapShowSpots_stateChanged(int /*arg1*/)
     mapShowSpots = ui->mapShowSpots->isChecked();
     settings.setValue("mapShowSpots", mapShowSpots);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 
 void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
@@ -507,7 +513,15 @@ void MonitorMain::on_showLocs_stateChanged(int /*arg1*/)
     showLoc = ui->showLocs->isChecked();
     settings.setValue("mapShowLoc", showLoc);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
+}
+void MonitorMain::on_showCalls_stateChanged(int /*arg1*/)
+{
+    QSettings settings(iniName, QSettings::IniFormat);
+    showCalls = ui->showCalls->isChecked();
+    settings.setValue("mapShowCalls", showCalls);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 
 
@@ -517,7 +531,7 @@ void MonitorMain::on_showNav_stateChanged(int /*arg1*/)
     showNav = ui->showNav->isChecked();
     settings.setValue("mapShowNav", showNav);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 void MonitorMain::on_locTL_editingFinished()
 {
@@ -525,7 +539,7 @@ void MonitorMain::on_locTL_editingFinished()
     locTL = ui->locTL->text();
     settings.setValue("mapShowLocTL", locTL);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 
 
@@ -535,7 +549,7 @@ void MonitorMain::on_locBR_editingFinished()
     locBR = ui->locBR->text();
     settings.setValue("mapShowLocBR", locBR);
     MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines, mapShowSpots
-                                        , showLoc, locTL, locBR, showNav);
+                                        , showLoc, showCalls, locTL, locBR, showNav);
 }
 
 

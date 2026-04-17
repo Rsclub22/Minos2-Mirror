@@ -20,7 +20,7 @@
 
 
 RotatorSkyScanFrame::RotatorSkyScanFrame(QWidget *parent):
-    QFrame(parent),
+    MinosPanel(parent),
     ct(nullptr),
     ui(new Ui::RotatorSkyScanFrame)
 {

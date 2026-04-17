@@ -59,7 +59,7 @@ QString QSOLogFrame::getFKeyLabel(int n)
 }
 
 QSOLogFrame::QSOLogFrame(QWidget *parent) :
-    QFrame(parent)
+    MinosPanel(parent)
     , ui(new Ui::QSOLogFrame)
     , partialContact(nullptr)
     , oldTimeOK(true)
@@ -277,12 +277,12 @@ void QSOLogFrame::onContestBandChanged(BaseContestLog *c)
 }
 void QSOLogFrame::on_FontChanged()
 {
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcf);
+    int lcfont;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcfont);
 
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     qreal fs = cf.pointSizeF();
-    int fsi = static_cast<int>(fs * lcf/100.0);
+    int fsi = static_cast<int>(fs * lcfont/100.0);
     cf.setPointSize(fsi);
 
     ui->callBox->setFont(cf);
@@ -306,7 +306,7 @@ void QSOLogFrame::on_FontChanged()
     }
     else
     {
-        cf = QApplication::font();
+        cf = panelFont;
     }
     ui->CallsignFrame->getTextEditlabel()->setFont(cf);
     ui->RSTTxFrame->getTextEditlabel()->setFont(cf);
@@ -522,6 +522,7 @@ QSOLogFrame::~QSOLogFrame()
     }
     killPartial();
 }
+
 void QSOLogFrame::on_TimeDisplayTimer()
 {
     updateQSOTime(true);

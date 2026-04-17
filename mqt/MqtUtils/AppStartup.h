@@ -2,6 +2,7 @@
 #define APPSTARTUP_H
 
 #include <QApplication>
+#include <QFont>
 
 class Translation
 {
@@ -36,4 +37,19 @@ enum DirectoryLocation {dlBinaries
 extern QString getDirectoryLocation(DirectoryLocation, QString runDir = ".");
 extern void setDefLogDir(QString l);
 extern void setDefListDir(QString l);
+
+class AppStart:public QObject
+{
+    Q_OBJECT
+public:
+    AppStart(){}
+    void emitFontChanged();
+
+    void emitListCompressionChanged(qreal hmult);
+signals:
+    void fontChanged();
+    void listCompressionChanged(qreal hmult);
+};
+
+extern AppStart appStart;
 #endif // APPSTARTUP_H

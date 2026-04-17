@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>RotatorCompassFrame</class>
- <widget class="QFrame" name="RotatorCompassFrame">
+ <widget class="MinosPanel" name="RotatorCompassFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -295,6 +295,12 @@
    <extends>QLineEdit</extends>
    <header location="global">bearinglineedit.h</header>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

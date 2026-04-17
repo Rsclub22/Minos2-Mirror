@@ -42,7 +42,7 @@ const QStringList vmButtonShortCutKeys = {
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
-    QGroupBox(parent),
+    MinosPanel(parent),
     ui(new Ui::TxVmButtonsFrame),
     buttonNumSent(NO_VM_BUTTON_ON),
     radioConnected(false),
@@ -862,7 +862,7 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
     if (getRigCWKeyerMacroCharacter(cwMacroCharList, radioManufacturer, CWKEYER_RADIO_COMMON_PARAMS_FILENAME))
     {
         cwMacroCharOk = true;
-        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList).arg(radioManufacturer));
+        trace(QString("[TxVmButtonsFrame] Retrieved CW Macro Chars %1 for manufacturer %2").arg(cwMacroCharList, radioManufacturer));
     }
     else
     {
@@ -878,12 +878,12 @@ void TxVmButtonsFrame::initCwTextEntryBox(QString radioManufacturer, QString fil
         if (cwMacroCharOk)
         {
             validCharCwList = validCharCwList.append(cwMacroCharList);
-            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            trace(QString("[TxButtons Frame] Supported CW Chars and Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
         else
         {
 
-            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList).arg(radioManufacturer));
+            trace(QString("[TxVmButtonsFrame] Supported CW Chars with no Macro chars %1 for manufacturer %2").arg(validCharCwList, radioManufacturer));
         }
 
     }
@@ -997,10 +997,23 @@ void TxVmButtonsFrame::clearButtonLabels()
 void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 {
     if((voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
-        || (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isPcCwKeyerLoaded())
+        || (voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] && !isPcCwKeyerLoaded())
         || (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio)))
     {
-        logMessage(QString("editActionSelected - rigControl voice or cw Keyer Selected, but not available for this radio or no keyer selected"));
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+            logMessage(QString("editActionSelected - voice rigcontrol - selectedRadio = %1, voiceMemAvail = %2").arg(selectedRadio.getLocalName(), isVoiceMemAvail(selectedRadio) ? "True" : "False"));
+        }
+        else if ((voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer]))
+        {
+            logMessage(QString("editActionSelected - pcCwKeyer - isPcCwKeyerLoaded = %1").arg(isPcCwKeyerLoaded() ? "True" : "False"));
+        }
+        else if ((voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]))
+        {
+            logMessage(QString("editActionSelected - cwRigControl - selectedRadio = %1, isCwMemTypeAvail = %2").arg(selectedRadio.getLocalName()).arg(isCwMemTypeAvail(selectedRadio) ? "True" : "False"));
+        }
+
+
         return;
     }
 
@@ -2318,7 +2331,9 @@ void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
 {
     // FKey event received by log frame (or ctrl/FKey)
 
-    if (c && ct == c && isVoiceMode())
+    if (c && ct == c && (isVoiceMode() ||
+        voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer] ||
+        voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl]))
     {
         int mem = key - Qt::Key_F1;
         if (mem > 10)
@@ -2334,23 +2349,7 @@ void TxVmButtonsFrame::fKey(BaseContestLog *c, int key, int /*carrier*/)
             readActionSelected(mem);
         }
     }
-    else if (c && ct == c && voiceKeyerType == keyerTypes[VoiceKeyerId::PcCwKeyer])
-    {
-        // for test...
-        int mem = key - Qt::Key_F1;
-        if (mem > 10)
-        {
 
-        }
-        else if (mem == 10)
-        {
-            onVmStopClicked();
-        }
-        else
-        {
-            readActionSelected(mem);
-        }
-    }
 }
 
 void TxVmButtonsFrame::setMode(const QString m)
@@ -2527,8 +2526,10 @@ bool TxVmButtonsFrame::eventFilter(QObject *obj, QEvent *event)
         // -- Handle Escape globally --
         if (keyEvent->key() == Qt::Key_Escape)
         {
-            if (isMessagePlaying())
+            logMessage("ESC keypressed - txVmButtonFrame");
+            if (isMessagePlaying() && !readDisableESCKeyerStopFromIni()) // stop message if ESC key pressed, message playing  and ESC not disabled
             {
+                logMessage("ESC keypressed - txVmButtonFrame, message playing stop!");
                 onVmStopClicked();
                 return true;                // consume Esc
             }

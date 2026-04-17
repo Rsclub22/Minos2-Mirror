@@ -2,6 +2,7 @@
 #include "airscoutlink.h"
 #include "delayedaction.h"
 
+#include "kstasactiveframe.h"
 #include "kstmainwindow.h"
 
 // frequencies are in 100 hz unit
@@ -51,15 +52,11 @@ AirScoutLink::~AirScoutLink()
 }
 void AirScoutLink::onTimeout()
 {
-    if (mainWindow && mainWindow->getASActive())
+    if (mainWindow && mainWindow->kstASActiveFrame->getASActive())
     {
-        //QDateTime now = QDateTime::currentDateTime();
-        //QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
-        {
-            // send again...
-            assetPathInProgress = false;
-            askNearest(-1);
-        }
+        // send again...
+        assetPathInProgress = false;
+        askNearest(-1);
     }
 }
 bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
@@ -227,7 +224,7 @@ void AirScoutLink::onReadyRead()
             if (args[2] == '"' + mainWindow->getASMyName() + '"' && args[1] =='"' + mainWindow->getASServerName() + '"' && args[0] == "ASNEAREST:")
             {
                 assetPathInProgress = false;
-                trace ("assetPathInProgress = false;");
+                //trace ("assetPathInProgress = false;");
                 if (args[3].startsWith("\""))
                 {
                     args[3].remove(0, 1);
@@ -303,7 +300,7 @@ void AirScoutLink::onReadyRead()
 
 void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector)
 {
-    if (mainWindow && mainWindow->getASActive())
+    if (mainWindow->kstASActiveFrame->getASActive())
     {
         watchList.clear();
         for(auto const &user: QASCONST(*callVector))
@@ -324,7 +321,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
         std::sort(watchList.begin(), watchList.end(), WatchCompare);
         watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );
 
-        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstASActiveFrame->getASActiveBand()];        // band
 
         if (watchList.count() > 0)
         {
@@ -353,7 +350,7 @@ void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
 {
     if (user)
     {
-        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstASActiveFrame->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
                 + mainWindow->getMyCallsign().getFullCall() + "," + mainWindow->getMyLoc() + ","
                 + user->call.realCall + "," + user->loc /*+ "\""*/;
@@ -370,7 +367,7 @@ void AirScoutLink::asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUs
 {
     if (user && other)
     {
-        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstASActiveFrame->getASActiveBand()];        // band
         QString getpath = /*"\""  +*/ watchFreq + ","
                 + user->call.realCall+ "," + user->loc + ","
                 + other->call.realCall + "," + other->loc /*+ "\""*/;
@@ -383,13 +380,13 @@ void AirScoutLink::askNearest(int row)
     if (assetPathInProgress)
         return;
 
-    if (mainWindow && mainWindow->getASActive() && watchList.size())
+    if (mainWindow && mainWindow->kstASActiveFrame->getASActive() && watchList.size())
     {
         if ((row < 0) || (++row > watchList.size() - 1))
         {
             row = 0;
         }
-        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString watchFreq = bandFreqStrings[mainWindow->kstASActiveFrame->getASActiveBand()];        // band
 
         QSharedPointer<KstUser> user = watchList[row];
         QString getpath = /*"\""  +*/ watchFreq + ","
@@ -397,11 +394,11 @@ void AirScoutLink::askNearest(int row)
                 + user->call.realCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSETPATH", getpath);
         assetPathInProgress = true;
-        trace ("assetPathInProgress = true;");
+        //trace ("assetPathInProgress = true;");
     }
     else
     {
-        trace ("assetPathInProgress = false;");
+        //trace ("assetPathInProgress = false;");
         assetPathInProgress = false;
     }
 }

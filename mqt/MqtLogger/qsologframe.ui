@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QSOLogFrame</class>
- <widget class="QFrame" name="QSOLogFrame">
+ <widget class="MinosPanel" name="QSOLogFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -1130,6 +1130,12 @@ to</string>
    <header>QSOTextEditFrame.h</header>
    <container>1</container>
   </customwidget>
+   <customwidget>
+    <class>MinosPanel</class>
+    <extends>QFrame</extends>
+    <header>minospanel.h</header>
+    <container>1</container>
+   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

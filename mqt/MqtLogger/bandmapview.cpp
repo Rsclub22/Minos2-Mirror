@@ -87,6 +87,7 @@ void BandmapView::setContest(BaseContestLog *c)
 }
 void BandmapView::onFontChanged(QFont cf)
 {
+    panelFont = cf;
     dial->onFontChanged(cf);
     QFontMetrics fm(cf);
     if (fontHeight != fm.height())
@@ -714,7 +715,7 @@ void BandmapView::drawBandMapSpots()
     int dialWidth = dial->getCurWidth();
     int dialHeight = dial->getCurHeight();
 
-    QFont cf = QApplication::font();
+    QFont cf = panelFont;
     QFontMetrics fm(cf);
     fontHeight = fm.height();
 

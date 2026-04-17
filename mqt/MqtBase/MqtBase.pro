@@ -38,6 +38,7 @@ SOURCES += \
     MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
+    auxentries.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapcommon.cpp \
     bandmapmarkerdetails.cpp \
@@ -111,8 +112,15 @@ SOURCES += \
     rotControlFrameBase.cpp \
     rotatorcommon.cpp \
     rotpresetdialog.cpp \
+    ScreenConfig.cpp \
+    ScreenConfigElement.cpp \
+    ScreenConfigFile.cpp \
+    ScreenConfigManager.cpp \
+    ScreenConfigRow.cpp \
+    ScreenConfigScreen.cpp \
     ScreenContact.cpp \
     StartConfig.cpp \
+    screenconfigtypes.cpp \
     serialdata.cpp \
     serialtvswitch.cpp \
     spotbasedata.cpp \
@@ -143,6 +151,7 @@ HEADERS += \
     MonitoredLog.h \
     StartConfigManager.h \
     StatisticsDisplay.h \
+    auxentries.h \
     bandmapclientfilterdialog.h \
     bandmapmarkerdetails.h \
     CacheSelection.h \
@@ -220,8 +229,15 @@ HEADERS += \
     rotControlFrameBase.h \
     rotatorcommon.h \
     rotpresetdialog.h \
+    ScreenConfig.h \
+    ScreenConfigElement.h \
+    ScreenConfigFile.h \
+    ScreenConfigManager.h \
+    ScreenConfigRow.h \
+    ScreenConfigScreen.h \
     ScreenContact.h \
     StartConfig.h \
+    screenconfigtypes.h \
     serialCommonData.h \
     serialdata.h \
     serialtvswitch.h \
@@ -252,6 +268,11 @@ FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \
+    ScreenConfig.ui \
+    ScreenConfigElement.ui \
+    ScreenConfigManager.ui \
+    ScreenConfigRow.ui \
+    ScreenConfigScreen.ui \
     StartConfigManager.ui \
     StatisticsDisplay.ui \
     bandmapclientfilterdialog.ui \

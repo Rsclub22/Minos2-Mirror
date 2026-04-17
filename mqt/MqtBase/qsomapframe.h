@@ -6,6 +6,7 @@
 
 #include "clustercommon.h"
 #include "contacts.h"
+#include "minospanel.h"
 
 class BaseContestLog;
 class QTimer;
@@ -15,7 +16,7 @@ namespace Ui {
 class QSOMapFrame;
 }
 
-class QSOMapFrame : public QFrame
+class QSOMapFrame : public MinosPanel
 {
     Q_OBJECT
 
@@ -24,7 +25,7 @@ public:
     ~QSOMapFrame();
 
     void setContest(BaseContestLog *, bool monitor, bool grid, bool lines
-                    , bool spots, bool sl, QString tl, QString br
+                    , bool spots, bool sl, bool showCalls, QString tl, QString br
                     , bool sn);
 
 private:
@@ -39,6 +40,7 @@ private:
     bool bdrawLines = true;
     bool drawSpots = true;
     bool showLoc = true;
+    bool showCall = true;
     QString locTL;
     QString locBR;
     bool showNav = true;
@@ -57,8 +59,9 @@ private:
 
     void startMap();
     void stopMap();
-    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, bool sl, QString tl, QString br, bool sn);
+    void doRedraw(const BaseContestLog *c, bool grid, bool lines, bool spots, bool sl, bool showCalls, QString tl, QString br, bool sn);
     void drawSpot(QSharedPointer<ClusterSpotData>);
+    virtual void setPanelFont() override;
 
     void showContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
     bool checkSpotInTable(QSharedPointer<ClusterSpotData> spot);
@@ -75,9 +78,12 @@ signals:
     void drawLines(QVariant dl);
     void drawGrid(QVariant dg);
     void showLocs(QVariant sl);
+    void showCalls(QVariant sl);
     void showLocsTL(QVariant tl);
     void showLocsBR(QVariant br);
     void showNavb(QVariant sn);
+    void setFontSize(QVariant sn);
+    void showCallsb(QVariant sc);
     void clearAll();
 
 private slots:
@@ -90,7 +96,7 @@ private slots:
     void filterButtonClicked();
 public slots:
     void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
-    void on_redrawQSOMap(bool grid, bool lines, bool spots, bool sl, QString tl, QString br, bool sn);
+    void on_redrawQSOMap(bool grid, bool lines, bool spots, bool sl, bool showCalls, QString tl, QString br, bool sn);
 
 };
 

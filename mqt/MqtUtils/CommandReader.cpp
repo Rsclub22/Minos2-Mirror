@@ -88,6 +88,7 @@ void CommandReader::executeCommand(QString cmd)
     if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
     {
         setAppFont(cmd);
+        emit fontChanged();
     }
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {

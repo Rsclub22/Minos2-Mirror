@@ -189,6 +189,15 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
         }
         return cell;
     }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = "Memxx";
+            QSize r = delegate->docSize(s);
+            return r;
+        }
+    }
     return QVariant();
 }
 int KstMessageGridModel::columnCount( const QModelIndex & /*parent*/ ) const
@@ -336,11 +345,11 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     {
         if (!showLine && kstmsg->call.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
-        if (!showLine && kstmsg->name.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+        if (!showLine && !toFromMeFilter && kstmsg->name.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
         if (!showLine && kstmsg->otherCall.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
-        if (!showLine && kstmsg->message.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+        if (!showLine && !toFromMeFilter && kstmsg->message.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
             showLine = true;
     }
 
@@ -352,11 +361,11 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
             {
                 if (!showLine && kstmsg->call.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
-                if (!showLine && kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (!showLine && !toFromMeFilter && kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
                 if (!showLine && kstmsg->otherCall.getFullCall().indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
-                if (!showLine && kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                if (!showLine && !toFromMeFilter && kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                     showLine = true;
             }
         }
@@ -371,6 +380,11 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 void KstMeepGridSortFilterModel::setMyCsFilterString(QString f)
 {
     myCSfilterString = f;
+    invalidateFilter();
+}
+void KstMeepGridSortFilterModel::setToFromFilter(bool s)
+{
+    toFromMeFilter = s;
     invalidateFilter();
 }
 

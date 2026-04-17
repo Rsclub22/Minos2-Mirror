@@ -52,6 +52,8 @@ int KSTConfigure::exec()
     ui->ASTimeout->setText(QString::number( ASTimeout));
     ui->ASTimeout->setValidator(new QIntValidator(1, 60, this));
 
+    ui->ListCompressionSpinner->setValue(lcf);
+
     return QDialog::exec();
 }
 KSTConfigure::~KSTConfigure()
@@ -92,10 +94,10 @@ void KSTConfigure::on_OKButton_clicked()
     ASPort = ui->ASPort->text().toInt();
     ASTimeout = ui->ASTimeout->text().toInt();
 
+    lcf = ui->ListCompressionSpinner->value();
+
     if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty())
         return;
-
-
 
     accept();
 }
@@ -126,9 +128,7 @@ void KSTConfigure::on_meepBrowse_clicked()
         meepSoundFile = fname;
         ui->meepSound->setText(fname);
     }
-
 }
-
 
 void KSTConfigure::on_testButton_clicked()
 {
@@ -144,9 +144,7 @@ void KSTConfigure::on_testButton_clicked()
         trace(QString("%1 doesn't exist").arg(fname));
 
     }
-
 }
-
 
 void KSTConfigure::on_volumeSpinBox_valueChanged(int arg1)
 {

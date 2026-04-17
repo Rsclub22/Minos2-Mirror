@@ -5,6 +5,7 @@
 #include <QMenu>
 
 #include "MinosTableView.h"
+#include "minospanel.h"
 #include "qsogridmodel.h"
 #include "contacts.h"
 #include "htmldelegate.h"
@@ -16,7 +17,7 @@ class QSOTableFrame;
 class BaseContestLog;
 class QTableView;
 
-class QSOTableFrame : public QFrame
+class QSOTableFrame : public MinosPanel
 {
     Q_OBJECT
 
@@ -36,6 +37,8 @@ public:
 
     void insertRow(int rowNum);
     void restoreQSOTableColumns();
+    virtual void setPanelFont() override;
+
 private:
     Ui::QSOTableFrame *ui;
     BaseContestLog *contest = nullptr;

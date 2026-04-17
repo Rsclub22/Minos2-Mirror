@@ -28,7 +28,7 @@ static void wtrace(QString m)
     trace(m);
 }
 WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
-    QFrame(parent)
+    MinosPanel(parent)
     , ui(new Ui::WsjtxFrame)
     , tslf(parent)
   , decodes_model_ {new DecodesModel()}
@@ -47,7 +47,7 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("WsjtxFrame", 1.0, lcf/100.0));
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate("WsjtxFrame", 1.0, lcf/100.0, this));
     ui->decodes_table_view_->setItemDelegate( delegate.data());
 
 
@@ -397,7 +397,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     }
 
-    if (de_call != ct->mycall.getFullCall() || de_grid != ct->myloc.getLoc())
+    if (de_call != ct->mycall.getFullCall() || de_grid.left(4) != ct->myloc.getLoc().left(4))
     {
         QString mess = tr("Call/grid does not match contest (%1/%2 %3/%4")
                            .arg(de_call, de_grid, ct->mycall.getFullCall(), ct->myloc.getLoc());
@@ -727,7 +727,7 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
 
-#ifdef TESTCODE
+#ifndef TESTCODE
             QTime now = QTime::currentTime();
 
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ M/ZL1DRI", false, true);
@@ -793,13 +793,16 @@ void WsjtxFrame::on_testButton_clicked()
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G2FFF IO93", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3FFF IO92", false, true);
 
-            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
+            Frequency freq(144174000);
+//            Frequency freq(3570000);
+
+            update_status ("test", freq, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");
-            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, true, false, 0, 0
+            update_status ("test", freq, "FT8", "","0", "FT8", false, true, false, 0, 0
                           , "G0GJV", "IO91", "JO01"
                           , false, "", false, 0, 0, 0, "", "G4DDN G0GJV +01");
-            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
+            update_status ("test", freq, "FT8", "","0", "FT8", false, false, false, 0, 0
                           , "G0GJV", "IO91", "JO01"
                           , false, "", false, 0, 0, 0, "", "G4DDN G0GJV +01");
 #endif

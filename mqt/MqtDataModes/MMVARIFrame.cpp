@@ -1,6 +1,8 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QSplitter>
+#include <QSpacerItem>
+
 #include "QtUtils.h"
 #include "MTrace.h"
 #include "rxbuffer.h"
@@ -9,12 +11,19 @@
 #include "engineconfigure.h"
 #include "MMVARIFrame.h"
 
+// We need to use wModGain to give output level
+
+//         wModGain As Integer
+//     ~~~~~~~~~~~~~~~~
+//     This property specifies the digital output level in the rage of 0 to 32767. The default is 16384.
+
 MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
                          QLineEdit *sendEdit,
                          int inId, int outId, QString name) :
     QObject(cwl),
     engineWindow(p),
-    sendEdit(sendEdit)
+    sendEdit(sendEdit),
+    engineName(name)
 {
     connect(mainWindow, &DMMainWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
     connect(engineWindow, &EngineWindow::setSpeeds, this, &MMVARIFrame::onSetSpeeds);
@@ -129,6 +138,38 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
 
     mmvariVb->addLayout(mmvariButtons);
 
+    QFrame *lFrame = new QFrame();
+    lFrame->setFrameShape(QFrame::Box);
+    QHBoxLayout *levelhb = new QHBoxLayout();
+
+    QLabel *ll = new QLabel(tr("Tx Level"));
+
+    txLevelSlider = new QSlider();
+    txLevelSlider->setOrientation(Qt::Horizontal);
+
+    txLevelSlider->setMinimum(0);
+    txLevelSlider->setMaximum(32767);
+
+    int level = EngineConfigure::getTxLevel(engineName);
+    txLevelSlider->setValue(level);
+
+    // need to add marker ticks
+    int tickInterval = 32768/16;
+    txLevelSlider->setTickInterval(tickInterval);
+    txLevelSlider->setTickPosition(QSlider::TicksAbove);
+
+    connect(txLevelSlider, &QSlider::valueChanged, this, &MMVARIFrame::txLevelChanged);
+
+    mmvari->setWModGain(level);
+
+    levelhb->addWidget(ll);
+    levelhb->addWidget(txLevelSlider);
+
+    lFrame->setLayout(levelhb);
+    mmvariVb->addWidget(lFrame);
+
+    // and add a volume slider in a horizontal layout
+
     modeCombo->setCurrentIndex(0);
     onModeComboChanged(modeCombo->currentText());
 
@@ -230,6 +271,11 @@ MMVARIFrame::MMVARIFrame(QFrame *cwl, EngineWindow *p,
 MMVARIFrame::~MMVARIFrame()
 {
 
+}
+void MMVARIFrame::txLevelChanged(int level)
+{
+    EngineConfigure::setTxLevel(engineName, level);
+    mmvari->setWModGain(level);
 }
 void MMVARIFrame::onSetSpeeds(QString b, QString r)
 {

@@ -103,9 +103,11 @@ void MinosLoggerEvents::SendShowCribBand()
 }
 void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines
                                          , bool cluster
-                                         , bool showloc, QString tl, QString br, bool showNav)
+                                         , bool showloc
+                                         , bool showCalls
+                                         , QString tl, QString br, bool showNav)
 {
-    emit mle.redrawQSOMap(grid, lines, cluster, showloc, tl, br, showNav);
+    emit mle.redrawQSOMap(grid, lines, cluster, showloc, showCalls, tl, br, showNav);
 }
 void MinosLoggerEvents::sendBandmapLimitsChanged()
 {
@@ -328,11 +330,6 @@ void MinosLoggerEvents::SendXferPressed(BaseContestLog *c, QString basename)
 void MinosLoggerEvents::SendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected)
 {
     emit mle.MatchTreeSelected(m, c, basename, selected);
-}
-//---------------------------------------------------------------------------
-void MinosLoggerEvents::SendListCompressionChanged(qreal hmult)
-{
-    emit mle.listCompressionChanged(hmult);
 }
 //---------------------------------------------------------------------------
 

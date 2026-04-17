@@ -105,7 +105,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
    ui->QSOTable->horizontalHeader() ->setSectionsMovable( true );
    ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
 
-   QSharedPointer<HtmlDelegate> delegate( new HtmlDelegate("MonitoringFrame",1.0, 1.0));
+   QSharedPointer<HtmlDelegate> delegate( new HtmlDelegate("MonitoringFrame",1.0, 1.0, this));
    qsoModel.delegate = delegate;
    
    qsoModel.setContest(contest);
@@ -189,10 +189,11 @@ void MonitoringFrame::on_mapButton_clicked()
         bool spots = monitorMain->mapShowSpots;
 
         bool showLoc = monitorMain->showLoc;
+        bool showCalls = monitorMain->showCalls;
         QString tl = monitorMain->locTL;
         QString br = monitorMain->locBR;
         bool showNav = monitorMain->showNav;
-        qsoMapFrame->setContest(ct, true, grid, lines, spots, showLoc, tl, br, showNav );
+        qsoMapFrame->setContest(ct, true, grid, lines, spots, showLoc, showCalls, tl, br, showNav );
         qsoMapFrame->setVisible(true);
     }
     else

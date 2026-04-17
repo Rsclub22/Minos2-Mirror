@@ -1,0 +1,37 @@
+#ifndef KSTLOGINFRAME_H
+#define KSTLOGINFRAME_H
+
+#include "minospanel.h"
+#include <QFrame>
+#include <QCheckBox>
+
+namespace Ui {
+class KSTLoginFrame;
+}
+
+class KSTLoginFrame : public MinosPanel
+{
+    Q_OBJECT
+
+public:
+    explicit KSTLoginFrame(QWidget *parent = nullptr);
+    ~KSTLoginFrame();
+
+    void on_FontChanged();
+
+    void setLogins(QStringList selections);
+    void setLoginTexts(QStringList services);
+    void do_logincb_stateChanged();
+    void setActive(int chat);
+    void checkActive();
+    void resetVectors(QCheckBox *cb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
+
+private slots:
+    void activerb_clicked();
+    void logincb_stateChanged(int);
+
+private:
+    Ui::KSTLoginFrame *ui;
+};
+
+#endif // KSTLOGINFRAME_H

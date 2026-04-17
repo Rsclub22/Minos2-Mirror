@@ -10,6 +10,7 @@ class ScreenConfigScreen;
 class ScreenConfigRow;
 class ScreenConfigElement;
 class ScreenConfigAddColumn;
+class MinosSplitter;
 
 namespace Ui {
 class ScreenConfigScreen;
@@ -22,7 +23,7 @@ class ScreenConfigScreen : public QFrame
 public:
     explicit ScreenConfigScreen(ScreenConfig *parentc);
     ~ScreenConfigScreen();
-    QVBoxLayout *vbl = nullptr;
+    MinosSplitter *vmsplit = nullptr;
     ScreenConfig *parentElement = nullptr;
     ScreenConfigElement *baseElement = nullptr;
 
@@ -38,7 +39,7 @@ public:
     void addColumnRight(ScreenConfigElement * e, int top, int bottom);
     void procRowSel(ScreenConfigRow *row, QVector<ScreenConfigRow *> &sel);
     QVector<ScreenConfigRow *> getSelected();
-    void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
+    void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, MinosSplitter *vmsplit);
     void getConfig(SCScreen &sc);
     bool checkScreenOk(ScreenConfigElement *e, int auxCount);
 public slots:

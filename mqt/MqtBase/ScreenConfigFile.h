@@ -1,38 +1,14 @@
 #ifndef SCREENCONFIGFILE_H
 #define SCREENCONFIGFILE_H
 #include <QCoreApplication>
-#include "StackedInfoFrame.h"
+#include <QSharedPointer>
+#include <QMap>
+#include "auxentries.h"
+#include "screenconfigtypes.h"
+//#include "StackedInfoFrame.h"
+
 class ScreenConfigScreen;
-enum SCType
-{
-    sctMainScreen,
-    sctScreen,
-    sctAux,
-    sctLog,
-    sctRigControl,
-    sctRunButtons,
-    sctBandSwitch,
-    sctRotControl,
-    sctSkyScanControl,
-    sctRotCompassDisplay,
-    sctRotPresets,
-    sctRotSkyScanPresets,
-    sctQSOEdit,
-    sctNextQSODetails,
-    sctThisMatch,
-    sctOtherMatch,
-    sctArchiveMatch,
-    sctChat,
-    sctCluster,
-    sctWsjtx,
-    sctBandmap,
-	sctSplit,
-    sctTxVmButtons,
-    sctQrzDisplay,
-    sctQsoMap,
-    sctDMButtons,
-    sctNone
-};
+
 class SCElement;
 class SCRow
 {
@@ -60,7 +36,8 @@ class SCElement
 {
 public:
     SCType type = sctNone;
-    AuxEntries auxType = aeClock;
+    AuxEntryType auxType = aeClock;
+    int fontSize = 100;
     QVector<SCRow> rows;
     QVector<SCScreen> screens;
 };
@@ -77,6 +54,8 @@ class ScreenConfigFile
     Q_DECLARE_TR_FUNCTIONS(ScreenConfigFile)
 
     static ScreenConfigFile scf;
+    static QString cfileName;
+
     bool loaded = false;
 
     static QString defaultConfig;
@@ -92,8 +71,11 @@ public:
         }
         return scf;
     }
+    static void setFileName(QString c);
     ScreenConfigFile();
     ~ScreenConfigFile();
+
+    static void setDefProt(QString d, QString prot);
     void loadFile(QWidget *parent);
     bool dumpFile();
 

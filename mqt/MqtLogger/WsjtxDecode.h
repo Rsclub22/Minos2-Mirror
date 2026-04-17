@@ -42,7 +42,8 @@ public:
     int points = 0;
     int mults = 0;
     int bonus = 0;
-    int csret = CS_OK;
+    int fromCsret = CS_OK;
+    int toCsret = CS_OK;
     int colOffset;
     bool oldmsg;
 

@@ -4,6 +4,7 @@
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include "airscoutlink.h"
+#include "htmldelegate.h"
 
 enum PlaneColumns {eplcCall, eplcCategory, eplcDistance, eplcPotential, eplcMinutes, eplcMax};
 
@@ -17,6 +18,7 @@ public:
     explicit KstPlanesModel(QObject *parent = nullptr);
 
     void setPlanesVector(QVector<Aircraft> &p);
+    QSharedPointer<HtmlDelegate> delegate;
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

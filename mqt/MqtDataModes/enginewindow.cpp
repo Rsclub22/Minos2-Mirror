@@ -1,5 +1,5 @@
-#include <QSettings>
-#include <QTimer>
+//#include <QSettings>
+//#include <QTimer>
 #include <QKeyEvent>
 #include "QtUtils.h"
 

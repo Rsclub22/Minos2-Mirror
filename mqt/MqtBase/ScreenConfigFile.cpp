@@ -7,96 +7,21 @@
 #include "QtUtils.h"
 #include "AppStartup.h"
 #include "MShowMessageDlg.h"
-#include "profiles.h"
 #include "MTrace.h"
-
+#include "auxentries.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
+QString ScreenConfigFile::defaultConfig;
 
-/*
-[{"name": "default",
-"rows":[
-[{"type": "Log"},{"type": "Aux"}],
-[{"type": "Rig"},{"type": "Run"},{"type": "Rot"},{"type": "RotP"}],
-[{"type": "QSO"},{"type": "Crib"}],
-[{"type": "This"},{"type": "Other"},{"type": "Arch"}]
-]}]
-*/
-/*
-[{"name": "protected",
-"rows":[[
-[{"rows": [
-[{"type": "Log List"}],
-[{"type": "QSO Edit"}],
-[{"type": "This Contest Match"}]
-],"type": "HSplit"},{
-"rows": [
-[{"auxtype": "Stats","type": "Auxiliary"}],
-[{"auxtype": "Locator Map","type": "Auxiliary"}],
-[{"auxtype": "Clock","type": "Auxiliary"}]
-],"type": "HSplit"}]
-]}
-*/
-// test example for multiple screen layout
-/*
-[
-    {
-        "name": "multiscreen",
-          "screens": [
-            [
-              { "mainscreen": "Main Screen" },
-              { "rows": [
-                  [
-                    { "type": "Log" },
-                    { "type": "Aux" }
-                  ],
-                  [
-                    { "type": "Rig" },
-                    { "type": "Run" },
-                    { "type": "Rot" },
-                    { "type": "RotP" }
-                  ],
-                  [
-                    { "type": "QSO" },
-                    { "type": "Crib" }
-                  ],
-                  [
-                    { "type": "This" },
-                    { "type": "Other" },
-                    { "type": "Arch" }
-                  ]
-                ]
-              }
-            ],
-            [
-              { "screen": "WSJT-X Screen" },
-              { "rows": [
-                  [
-                    { "type": "WSJT-X Connector" }
-                  ]
-                ]
-              }
-            ]
-          ]
-    }
-]
-*/
-QString ScreenConfigFile::defaultConfig = "[{\"name\": \"%1\","
-        "\"rows\":["
-        "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
-        "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"},{\"type\": \"%7\"}],"
-        "[{\"type\": \"%8\"},{\"type\": \"%9\"}],"
-        "[{\"type\": \"%10\"},{\"type\": \"%11\"},{\"type\": \"%12\"}]"
-        "]}]";
-
-QString ScreenConfigFile::protectedConfig  = "[{\"name\": \"%1\","
-                               "\"rows\":["
-                               "[{\"type\": \"%2\"}],"
-                               "[{\"type\": \"%3\"}],"
-                               "[{\"type\": \"%4\"}]"
-                               "]}]";
+QString ScreenConfigFile::protectedConfig;
 
 ScreenConfigFile ScreenConfigFile::scf;
+QString ScreenConfigFile::cfileName;
+void ScreenConfigFile::setFileName(QString c)
+{
+    cfileName = c;
+}
+
 
 ScreenConfigFile::ScreenConfigFile()
 {
@@ -106,14 +31,20 @@ ScreenConfigFile::~ScreenConfigFile()
 {
 
 }
+void ScreenConfigFile::setDefProt(QString d, QString prot)
+{
+    defaultConfig = d;
+    protectedConfig = prot;
+}
+
 void ScreenConfigFile::loadFile(QWidget *parent)
 {
-    readFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json", parent);
+    readFile(getDirectoryLocation(dlConfiguration) + "/" + cfileName, parent);
     loaded = true;
 }
 bool ScreenConfigFile::dumpFile()
 {
-    return writeFile(getDirectoryLocation(dlConfiguration) + "/ScreenConfigs.json");
+    return writeFile(getDirectoryLocation(dlConfiguration) + "/" + cfileName);
 }
 void ScreenConfigFile::procScreens(QVector<SCScreen> &elescr, QJsonArray &screens)
 {
@@ -191,12 +122,18 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             else if (scele.type == sctAux)
             {
                 QString auxtype = ele.value("auxtype").toString();
-                scele.auxType = StackedInfoFrame::getAuxEntryType(auxtype);
+                scele.auxType = AuxTypeOption::getAuxEntryType(auxtype);
             }
             else
             {
                 scele.auxType = aeClock;
             }
+            int eleSize = ele.value("fontSize").toInt();
+            if (eleSize == 0)
+            {
+                eleSize = 100;
+            }
+            scele.fontSize = eleSize;
             scrow.elements.push_back(scele);
         }
         elerows.push_back(scrow);
@@ -204,40 +141,21 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
 }
 void ScreenConfigFile::readFile(QString f, QWidget *parent)
 {
-    QString s;
-
     configs.clear();
 
     trace("Using default configuration");
-    s = defaultConfig
-            .arg(defaultLayoutName())
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctRunButtons))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctRotControl))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctRotPresets))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctNextQSODetails))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctOtherMatch))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctArchiveMatch));
-    parseConfigString(s);
+    parseConfigString(defaultConfig);
 
     trace("Using default protectected configuration");
-    s = protectedConfig
-            .arg(defaultProtectedLayoutName())
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch));
-    parseConfigString(s);
+    parseConfigString(protectedConfig);
+
 
     bool retval = false;
 
     QFile jf(f);
     if (jf.open(QIODevice::ReadOnly))
     {
-        s = jf.readAll();
+        QString s = jf.readAll();
         retval = parseConfigString(s);
         if (retval == false)
         {
@@ -251,6 +169,11 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
 }
 bool ScreenConfigFile::parseConfigString(QString s)
 {
+    if (s.isEmpty())
+    {
+        trace("Config string is empty");
+        return false;
+    }
     QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
@@ -316,8 +239,9 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
     }
     else if (sctype == sctAux)
     {
-        scele.insert("auxtype", StackedInfoFrame::getRawAuxTypeString(e.auxType));
+        scele.insert("auxtype", AuxTypeOption::getRawAuxTypeString(e.auxType));
     }
+    scele.insert("fontSize", e.fontSize);
     scrow.append(scele);
 }
 void ScreenConfigFile::getScreenConfig(const SCScreen &scb, QJsonObject &scr)

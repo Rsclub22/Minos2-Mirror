@@ -66,6 +66,7 @@ enum LOGGERPROFILE {
     elpShowQSOMapGrid,
     elpShowQSOMapLines,
     elpShowMapLoc,
+    elpShowMapCalls,
     elpShowMapTLLoc,
     elpShowMapBRLoc,
     elpShowMapNav,

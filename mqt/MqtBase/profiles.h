@@ -16,8 +16,6 @@
 #include "ProfileEnums.h"
 #include "minositem.h"
 //----------------------------------------------------------------------------
-extern QString defaultLayoutName();
-extern QString defaultProtectedLayoutName();
 
 class SettingsBundle;
 class ProfileEntry

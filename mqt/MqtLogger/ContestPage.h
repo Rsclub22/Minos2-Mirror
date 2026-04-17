@@ -1,6 +1,7 @@
 #ifndef CONTESTPAGE_H
 #define CONTESTPAGE_H
 
+#include "minospanel.h"
 #include <QFrame>
 
 class QVBoxLayout;
@@ -42,7 +43,7 @@ class ContestPage;
 // this is all the per window instance stuff
 // overall action is in TSingleLogFrame
 
-class ContestPage : public QFrame
+class ContestPage : public MinosPanel
 {
     friend class TSendDM;
     Q_OBJECT
@@ -69,7 +70,7 @@ private:
     Ui::ContestPage *ui;
     bool splittersChanged;
     int splitterHandleWidth;
-    MinosSplitter *singleLogFrameSplitter = nullptr;
+    MinosSplitter *logPageSplitter = nullptr;
 
 
     TSingleLogFrame *tslf = nullptr;

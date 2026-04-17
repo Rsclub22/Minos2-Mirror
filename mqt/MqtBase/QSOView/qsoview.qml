@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtPositioning 5.15
 import QtLocation 5.15
+import QtQuick.Controls.Fusion 2.15
 
 Frame {
 
@@ -15,11 +16,13 @@ Frame {
     property bool showLines: false
 
     property bool showLocs: true
+    property bool showCalls: true
     property int locTLLat: 0
     property int locTLLon: 0
     property int locBRLat: 0
     property int locBRLon: 0
     property bool showNav: true
+    property int fontSize: 10
 
     property string homeLat: "0.0"
     property string homeLon: "0.0"
@@ -190,12 +193,13 @@ Frame {
     {
         if (showGrid)
         {
+            QmlCppLink.qmltrace("drawGrid")
             // If we don't do it in chunks, the whole thing
             // can get cropped
 
             drawLatitude(-85, 85, -180, -90)
-            drawLatitude(-85, 85, -90, /*-0.000001*/0)
-            drawLatitude(-85, 85, /*0.000001*/0, 90)
+            drawLatitude(-85, 85, -90, 0)
+            drawLatitude(-85, 85, 0, 90)
             drawLatitude(-85, 85, 90, 180)
 
             drawLongitude(-85, 85, -180, -90)
@@ -203,9 +207,6 @@ Frame {
             drawLongitude(-85, 85, 0, 90)
             drawLongitude(-85, 85, 90, 180)
 
-            // for (var latPos = -84; latPos < 85; latPos += 1 )
-            // {
-            //     for (var lonPos = -180; lonPos < 180; lonPos += 2)
             if (showLocs)
             {
                 for (var latPos = locBRLat; latPos < locTLLat; latPos += 1 )
@@ -221,6 +222,28 @@ Frame {
         }
     }
 
+    function drawCallsign(lat, lon, call, colour)
+    {
+        var cmqra = Qt.createQmlObject(
+'import QtQuick 2.15
+import QtLocation 5.15
+
+MapQuickItem {
+    id: qraItem
+sourceItem: Text {
+        id: qraText
+        text: ""
+}
+}', mapOfEurope);
+
+        cmqra.sourceItem.color=colour
+        cmqra.sourceItem.font.pointSize = fontSize
+        cmqra.sourceItem.text = call;
+        let p = QtPositioning.coordinate(lat, lon)
+        cmqra.coordinate = p;
+        mapOfEurope.addMapItem(cmqra);
+
+    }
     function drawQRA(lat, lon)
     {
         var cmqra = Qt.createQmlObject(
@@ -273,7 +296,7 @@ MapPolyline
         }
     }
     mapOfEurope.addMapItem(cmlat)
-    }
+}
     function drawLongitude(minlat, maxlat, minlong, maxlong)
     {
         var cmlong = Qt.createQmlObject(
@@ -333,6 +356,11 @@ MapPolyline
 
         mapOfEurope.addMapItem(cm)
 
+        if (showCalls)
+        {
+            drawCallsign(coord.latitude, coord.longitude, callsign, "red")
+        }
+
     }
     function addSpot(coord, callsign, loc)
     // Add the new callsign at coord to the map
@@ -347,6 +375,10 @@ MapPolyline
 
         mapOfEurope.addMapItem(cm)
 
+        if (showCalls)
+        {
+            drawCallsign(coord.latitude, coord.longitude, callsign, "grey")
+        }
     }
 
     function addHome(coord, callsign, loc)
@@ -388,7 +420,7 @@ MapPolyline
     }
     function newCall(callInfo)
     // slot to receive signal callSig(QVariant)
-    // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc"]
+    // callInfo is a QStringList ["callsign", "latitude", "longitude", "loc", showLines]
     {
         //console.log(callInfo)
         var call = callInfo[0]
@@ -396,6 +428,8 @@ MapPolyline
         var loc = callInfo[3]
         var doDrawLine = callInfo[4] === String("true")
         addCall(coord, call, loc)
+
+        QmlCppLink.qmltrace("doDrawLine " + doDrawLine)
         if (showLines && doDrawLine)
         {
             drawLine(QtPositioning.coordinate(homeLat, homeLon), coord)
@@ -464,6 +498,10 @@ MapPolyline
     {
         showLocs = sl;
     }
+    function setShowCalls(sl)
+    {
+        showCalls = sl;
+    }
     function setShowNav(sn)
     {
         showNav = sn;
@@ -477,6 +515,11 @@ MapPolyline
     {
         locBRLat = parseInt(br[0], 10)
         locBRLon = parseInt(br[1], 10)
+    }
+
+    function setFontSize(fs)
+    {
+        fontSize = fs;
     }
 
     function clearAll()
