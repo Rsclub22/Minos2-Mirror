@@ -40,6 +40,8 @@ public:
     bool remoteOK = false;
     bool defaultHide = false;
 
+    bool operator <(const AppConfigElement &rhs);
+    bool operator !=(const AppConfigElement &rhs);
 };
 
 class Connectable
@@ -133,6 +135,7 @@ private:  	// User declarations
 
     void initialise();
 
+    QVector<AppConfigElement> appConfigListINI;
     QVector<AppConfigElement> appConfigList;
 
     void buildAppConfigList();

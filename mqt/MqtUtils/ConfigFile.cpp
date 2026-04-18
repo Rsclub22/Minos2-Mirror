@@ -1,3 +1,4 @@
+#include "MShowMessageDlg.h"
 #include "QtUtils.h"
 #include <QTimer>
 #include <QHostInfo>
@@ -814,9 +815,31 @@ QStringList MinosConfig::getAppTypes()
     apps.removeDuplicates();
     return apps;
 }
+bool AppConfigElement::operator<(const AppConfigElement &rhs)
+{
+    return name < rhs.name;
+}
+
+bool AppConfigElement::operator !=(const AppConfigElement &rhs)
+{
+    if (name == rhs.name &&
+        appType == rhs.appType &&
+        appPath == rhs.appPath &&
+        requiresApps == rhs.requiresApps &&
+        router == rhs.router &&
+        localOK == rhs.localOK &&
+        remoteOK == rhs.remoteOK &&
+        defaultHide == rhs.defaultHide)
+    {
+        return false;
+    }
+    return true;
+}
 void MinosConfig::buildAppConfigList()
 {
     trace(GetCurrentDir());
+#ifdef USE_APPCONFIG_INI
+    {
     INIFile appConfig(getDirectoryLocation(dlConfiguration) + "/AppConfig.ini");
     /*
 [BandMap]
@@ -824,6 +847,17 @@ Path=./mqtBandMap
 Enabled=false
 Requires=Server
 Server=false
+
+JSON
+{
+  "None": {
+    "Name": "",
+    "Path": "",
+    "Enabled": true,
+    "Requires": "",
+    "Server": false,
+    "HideApp": true
+  },
 
    */
     appConfig.startGroup();
@@ -908,10 +942,152 @@ Server=false
             for(auto& str : ac.requiresApps)    // trim all elements of leading and trailing spaces
                 str = str.trimmed();
 
-            appConfigList.append(ac);
+            appConfigListINI.append(ac);
         }
     }
     appConfig.endGroup();
+    std::sort(appConfigListINI.begin(),appConfigListINI.end());
+    }
+#else
+    {
+    QString f = getDirectoryLocation(dlConfiguration) + "/AppConfig.json";
+    QFile jf(f);
+    if (jf.open(QIODevice::ReadOnly))
+    {
+        QString s = jf.readAll();
+        QJsonParseError err;
+        QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
+        if (!err.error && json.isObject())
+        {
+            QJsonObject ac = json.object();
+            for (QJsonObject::const_iterator cf = ac.begin(); cf != ac.end(); cf++)
+            {
+                QString a = cf.key();
+                QJsonObject v = cf.value().toObject();
+
+                /*
+JSON
+{
+  "None": {
+    "Name": "",
+    "Path": "",
+    "Enabled": true,
+    "Requires": "",
+    "Server": false,
+    "HideApp": true
+    "Where": "local, remote"
+  },
+                 */
+                QString Name = v.value( "Name").toString();
+                QString Path = v.value( "Path").toString();
+                bool Enabled = v.value( "Enabled").toBool();
+                QString Requires = v.value( "Requires").toString();
+                bool Server = v.value( "Server").toBool();
+                bool HideApp = v.value( "HideApp").toBool();
+                QString Where = v.value("Where").toString();
+
+                if (a == appNone)
+                    a = tr(appNone);
+                if (a == appOther)
+                    a = tr(appOther);
+
+                bool otherApp = false;
+
+                bool enabled = Enabled;
+                if (a == tr(appOther))
+                {
+                    otherApp = true;
+                    enabled = true;
+                }
+
+                if (enabled)  // only include those elements we are allowed to as possibilities
+                {
+                    AppConfigElement ac;
+
+                    ac.appType = a.trimmed();
+                    ac.name = Name;
+                    ac.appPath = Path;
+
+#ifdef Q_OS_WIN
+                    if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".exe", Qt::CaseInsensitive) != 0)
+                    {
+                        ac.appPath += ".exe";
+                    }
+#endif
+#ifdef Q_OS_MACOS
+                    if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".app", Qt::CaseInsensitive) != 0)
+                    {
+                        ac.appPath += ".app";
+                        ac.appPath = QCoreApplication::applicationDirPath()+"/../Resources/"+ac.appPath;
+                    }
+#endif
+                    ac.router = Server;
+                    ac.defaultHide = HideApp;
+
+                    QString whereString = Where;
+                    if (whereString.isEmpty())
+                    {
+                        whereString = "Remote,Local";
+                    }
+
+                    if (whereString.contains("local", Qt::CaseInsensitive))
+                    {
+                        ac.localOK = true;
+                    }
+                    else
+                    {
+                        ac.localOK = false;
+                    }
+                    if (whereString.contains("remote", Qt::CaseInsensitive))
+                    {
+                        ac.remoteOK = true;
+                    }
+                    else
+                    {
+                        ac.remoteOK = false;
+                    }
+                    if (otherApp)
+                    {
+                        ac.router = true;
+                        ac.defaultHide = false;
+                        ac.localOK = true;
+                        ac.remoteOK = true;
+                    }
+
+                    // NB using comma in value give a string list! Single value will also go to list if desired
+                    QString reqs = Requires;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                    ac.requiresApps = reqs.split(',', Qt::SkipEmptyParts);
+#else
+                    ac.requiresApps = reqs.split(',', QString::SkipEmptyParts);
+#endif
+
+                    for(auto& str : ac.requiresApps)    // trim all elements of leading and trailing spaces
+                        str = str.trimmed();
+
+                    appConfigList.append(ac);
+                }
+            }
+        }
+    }
+    else
+    {
+        QString mess = QString("Failed to open %1 - %2");
+        trace(mess);
+
+        mShowMessage(mess, nullptr);
+    }
+    std::sort(appConfigList.begin(),appConfigList.end());
+    }
+#endif
+
+    // for (int i = 0; i < appConfigListINI.count();i++)
+    // {
+    //     if (appConfigList[i] != appConfigListINI[i])
+    //     {
+    //         int ba;
+    //     }
+    // }
 }
 QString MinosConfig::checkConfig(QString name)
 {
