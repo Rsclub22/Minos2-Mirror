@@ -89,6 +89,7 @@ private:
     QTimer LogTimer;
     QString geoStr;         // geometry registry location
     QString splitterStr;
+    QString dataSplitterStr;
 
 #ifdef Q_OS_WIN
     MMVARIFrame *mmvariFrame = nullptr;
@@ -150,7 +151,9 @@ private slots:
     void onWatchdogTimer();
 
     void on_splitter_splitterMoved(int pos, int index);
+    void on_dataSplitter_splitterMoved(int, int);
     void on_setTestButton_clicked();
     void on_testButton_clicked();
+    void on_placeHolderList_clicked(const QModelIndex &index);
 };
 #endif // ENGINEWINDOW_H

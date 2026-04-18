@@ -65,8 +65,7 @@ class TSendDM : public QObject
       PubSubName getSelectedRig(QString loggerUuid);
       PubSubName getSelectedRot(QString loggerUuid);
 
-      //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
-
+      void publishPlaceHolders(QStringList);
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const QString bandMask, const QString &uuid);
       void sendReconnectFlagToClusterServer(const bool state);

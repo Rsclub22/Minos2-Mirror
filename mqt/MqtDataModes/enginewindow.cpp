@@ -1,6 +1,7 @@
 //#include <QSettings>
 //#include <QTimer>
 #include <QKeyEvent>
+#include "MShowMessageDlg.h"
 #include "QtUtils.h"
 
 #ifdef Q_OS_WIN
@@ -168,6 +169,9 @@ void EngineWindow::selectEngine(QString name)
     engineName = name;
     setWindowTitle(name);
 
+    ui->dataSplitter->setStretchFactor(0, 20);
+    ui->dataSplitter->setStretchFactor(1, 1);
+
     RegSettings settings;
     geoStr = QString("dataModes/%1/geometry").arg(name);
     QByteArray geometry = settings.getSettings().value(geoStr).toByteArray();
@@ -179,6 +183,9 @@ void EngineWindow::selectEngine(QString name)
     state = settings.getSettings().value(splitterStr).toByteArray();
     ui->splitter->restoreState(state);
 
+    dataSplitterStr = QString("dataModes/%1/dataSplitter").arg(name);
+    state = settings.getSettings().value(dataSplitterStr).toByteArray();
+    ui->dataSplitter->restoreState(state);
 
 }
 QString EngineWindow::getSelectedRadio()
@@ -312,8 +319,22 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             QStringList cb = populateRig();
             comboSetUniqueNames(cb, ui->mainRigComboBox);
         }
+        else if (an.getCategory() == rpcConstants::LoggerCategory && an.getKey() == rpcConstants::placeHolders)
+        {
+            // ; separated list of "near" calls
+            ui->placeHolderList->clear();
+
+            QStringList placeHolders = an.getValue().split(";");
+
+            for (auto &p:QASCONST(placeHolders))
+            {
+                QStringList pl = p.split("|");
+                ui->placeHolderList->addItem(pl[1]);
+            }
+        }
 
         RigState &selState = rigCache.getState(mainRig);
+
 
         if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
         {
@@ -791,8 +812,13 @@ void EngineWindow::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
     settings.getSettings().setValue(splitterStr , state);
 
 }
+void EngineWindow::on_dataSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    RegSettings settings;
+    QByteArray state = ui->dataSplitter->saveState();
+    settings.getSettings().setValue(dataSplitterStr , state);
 
-
+}
 void EngineWindow::on_setTestButton_clicked()
 {
     EngineConfigure::setTestString(ui->sendEdit->text().trimmed());
@@ -811,5 +837,15 @@ void EngineWindow::on_testButton_clicked()
 
     doSendButton_clicked(data, 0);
 
+}
+
+
+void EngineWindow::on_placeHolderList_clicked(const QModelIndex &index)
+{
+    if (index.isValid())
+    {
+        QString p = ui->placeHolderList->item(index.row())->text();
+        wordSelected(p, rigFreq);
+    }
 }
 

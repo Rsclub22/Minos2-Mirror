@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QApplication>
 
+#include "SendRPCDM.h"
 #include "bandmapdatamodel.h"
 #include "bandmapgraphicspanel.h"
 #include "MinosLoggerEvents.h"
@@ -929,6 +930,8 @@ void BandmapView::drawBandMapSpots()
 
             //xxxxxxxx here post nearMatches so that DataModes see them
             // Do we publish, or send to interested parties?
+
+            LogContainer->sendDM->publishPlaceHolders(nearMatches);
         }
     }
     traceMsg(QString("drawBandMapSpots: finished"));

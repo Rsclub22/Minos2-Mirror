@@ -137,6 +137,10 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     QStringList svs = {};
     rpc->findProviders(rpcConstants::DMCat, svs);
 
+    QStringList svp = {rpcConstants::placeHolders};
+    rpc->findProviders(rpcConstants::LoggerCategory, svp);
+
+
     // let the logger know we exist
     rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, "me", psPublished);
 

@@ -155,6 +155,17 @@ PubSubName TSendDM::getSelectedRot(QString loggerUuid)
     return rotatorCache.getSelected(loggerUuid);
 }
 
+void TSendDM::publishPlaceHolders(QStringList placeHolders)
+{
+    static QString old("xxx");  // so it isn't initially empty
+    QString sp = placeHolders.join(";");
+    if (sp != old)
+    {
+        old = sp;
+        RPCPubSub::publish(rpcConstants::LoggerCategory, rpcConstants::placeHolders, sp, psPublished);
+    }
+}
+
 //---------------------------------------------------------------------------
 void TSendDM::sendKeyerUser()
 {
