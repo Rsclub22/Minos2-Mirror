@@ -40,8 +40,8 @@ public:
     bool remoteOK = false;
     bool defaultHide = false;
 
-    bool operator <(const AppConfigElement &rhs);
-    bool operator !=(const AppConfigElement &rhs);
+    bool operator <(const AppConfigElement &rhs) const;
+    bool operator !=(const AppConfigElement &rhs) const;
 };
 
 class Connectable

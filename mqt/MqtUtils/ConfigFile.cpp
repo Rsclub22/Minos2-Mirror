@@ -815,12 +815,12 @@ QStringList MinosConfig::getAppTypes()
     apps.removeDuplicates();
     return apps;
 }
-bool AppConfigElement::operator<(const AppConfigElement &rhs)
+bool AppConfigElement::operator<(const AppConfigElement &rhs) const
 {
     return name < rhs.name;
 }
 
-bool AppConfigElement::operator !=(const AppConfigElement &rhs)
+bool AppConfigElement::operator !=(const AppConfigElement &rhs) const
 {
     if (name == rhs.name &&
         appType == rhs.appType &&
