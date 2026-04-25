@@ -33,7 +33,9 @@ public:  		// User declarations
    bool doEdit( );
    void enableBundle( bool );
 
-private slots:
+   void setBundleName(QString bn);
+   QString getBundleName() const;
+   private slots:
    void on_BundleEdit_clicked();
    void on_BundleSection_currentIndexChanged(int arg1);
 };

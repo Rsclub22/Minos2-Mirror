@@ -1,5 +1,7 @@
 #include "AppStartup.h"
+#include "ConfigFile.h"
 #include "ScreenConfigManager.h"
+#include "managecontestsettings.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
 #include "Calendar.h"
@@ -123,7 +125,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(allowLoc8FW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
 
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
-    connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_RotatorList);
+    connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_SetRotatorList);
 
 }
 void ContestDetails::doCloseEvent()
@@ -508,7 +510,7 @@ void ContestDetails::setDetails(  )
    ui->PowerEdit->setText(contestTransferObject->power.getValue());
 
    on_SetRadioList();
-   on_RotatorList();
+   on_SetRotatorList();
 
    ui->ageProtectedcb->setChecked(contestTransferObject->isAgeProtected());
 
@@ -1865,13 +1867,14 @@ void ContestDetails::setSelectedAntenna(QString s)
     int c = findPubSubInCombo(s, ui->antennaNameSel);
     ui->antennaNameSel->setCurrentIndex(c);
 }
-void ContestDetails::on_RotatorList()
+void ContestDetails::on_SetRotatorList()
 {
     QStringList rots = LogContainer->sendDM->rotators();
     comboSetUniqueNames(rots, ui->antennaNameSel);
     if (contestTransferObject)
     {
-        setSelectedAntenna(contestTransferObject->antennaName.getValue().toString());
+        QString ant = contestTransferObject->antennaName.getValue().toString();
+        setSelectedAntenna(ant);
     }
 }
 
@@ -1881,18 +1884,30 @@ QString ContestDetails::getSelectedRadio()
 }
 int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
 {
+    // we need to be able to find a unique rig name in here as well
+    trace(QString("findPubSubInCombo %1 %2").arg(name, cb->objectName()));
     int found = -1;
     for(int r = 0; r < cb->count(); r++)
     {
         QString data = cb->itemData(r).toString();
+        trace(QString("data %1 %2").arg(data).arg(r));
         if (data.contains(name, Qt::CaseInsensitive))
         {
-            if (found != -1)
+            PubSubName combo(data);
+            QString ck = combo.key();
+            PubSubName fname(name);
+            QString nk = fname.key();
+            if (ck.compare(nk, Qt::CaseInsensitive) == 0)
             {
-                found = -1;
+                trace(QString("found"));
+
+                found = r;
                 break;
             }
-            found = r;
+            else
+            {
+                trace(QString("not found"));
+            }
         }
     }
 
@@ -1911,7 +1926,8 @@ void ContestDetails::on_SetRadioList()
     comboSetUniqueNames(names, ui->radioNameSel);
     if (contestTransferObject)
     {
-        setSelectedRadio(contestTransferObject->radioName.getValue().toString());
+        QString radio = contestTransferObject->radioName.getValue().toString();
+        setSelectedRadio(radio);
     }
 }
 
@@ -1952,4 +1968,137 @@ void ContestDetails::on_ExchangeComboBox_activated(int /*arg1*/)
 
 }
 
+
+
+void ContestDetails::on_saveSettingsButton_clicked()
+{
+    // dialog to manage contest settings
+
+    QString cname = ui->ContestNameEdit->text();
+    if (cname.isEmpty())
+    {
+        cname = ManageContestSettings::defaultContestSettings;
+    }
+    ManageContestSettings mcs(this, cname);
+
+    if (mcs.exec() == QDialog::Accepted)
+    {
+        // transfer the details ???
+    }
+}
+void ContestDetails::on_manageSettings_clicked()
+{
+    ManageContestSettings mcs(this, QString());
+
+    if (mcs.exec() == QDialog::Accepted)
+    {
+        // transfer the details ???
+    }
+}
+void ContestDetails::on_getSettings_clicked()
+{
+    ManageContestSettings::getSettings(ui->ContestNameEdit->text(), this) ;
+}
+void ContestDetails::toSettings(ContestSettings *settings)
+{
+    if (settings)
+    {
+        // get the settings from the display
+        for (int i = 0; i < ecsMaxVal; i++)
+        {
+            eCSettings s = static_cast<eCSettings>(i);
+            switch(s)
+            {
+            case ecsStation:
+                settings->setVal(s, ui->StationBundleFrame->getBundleName());
+                break;
+            case ecsEntry:
+                settings->setVal(s, ui->EntryBundleFrame->getBundleName());
+                break;
+            case ecsQTH:
+                settings->setVal(s, ui->QTHBundleFrame->getBundleName());
+                break;
+            case ecsSection:
+                settings->setVal(s, ui->SectionComboBox->currentText());
+                break;
+            case ecsRadio:
+                settings->setVal(s, getSelectedRadio());
+                break;
+            case ecsRotator:
+                settings->setVal(s, getSelectedAntenna());
+                break;
+            case ecsMainOp:
+                settings->setVal(s, ui->MainOpComboBox->currentText());
+                break;
+            case ecsSecondOp:
+                settings->setVal(s, ui->SecondOpComboBox->currentText());
+                break;
+            case ecsScreenLayout:
+                settings->setVal(s, ui->screenLayoutCombo->currentText());
+                break;
+            case ecsLogSet:
+                settings->setVal(s, LogContainer->getCurrSession());
+                break;
+            case ecsStartApps:
+            {
+                MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+                settings->setVal(s, minosConfig->getCurrConfig().configName);
+            }
+                break;
+            case ecsMaxVal:
+                break;
+            }
+        }
+    }
+}
+void ContestDetails::fromSettings(ContestSettings *settings)
+{
+    // set the display from settings
+    if (settings)
+    {
+        for (int i = 0; i < ecsMaxVal; i++)
+        {
+            eCSettings s = static_cast<eCSettings>(i);
+            QString val = settings->getVal(s);
+            switch(s)
+            {
+            case ecsStation:
+                ui->StationBundleFrame->setBundleName(val);
+                break;
+            case ecsEntry:
+                ui->EntryBundleFrame->setBundleName(val);
+                break;
+            case ecsQTH:
+                ui->QTHBundleFrame->setBundleName(val);
+                break;
+            case ecsSection:
+                ui->SectionComboBox->setCurrentText(val);
+                break;
+            case ecsRadio:
+                setSelectedRadio(val);
+                break;
+            case ecsRotator:
+                setSelectedAntenna(val);
+                break;
+            case ecsMainOp:
+                ui->MainOpComboBox->setCurrentText(val);
+                break;
+            case ecsSecondOp:
+                ui->SecondOpComboBox->setCurrentText(val);
+                break;
+            case ecsScreenLayout:
+                ui->screenLayoutCombo->setCurrentText(val);
+                break;
+            case ecsLogSet:
+                // not at the moment...
+                break;
+            case ecsStartApps:
+                // not at the moment...
+                break;
+            case ecsMaxVal:
+                break;
+            }
+        }
+    }
+}
 

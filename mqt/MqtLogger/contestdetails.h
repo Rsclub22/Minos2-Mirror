@@ -13,6 +13,7 @@ class ContestDetails;
 
 class LoggerContestLog;
 class IndividualContest;
+class ContestSettings;
 
 class ContestDetails : public QDialog
 {
@@ -79,7 +80,10 @@ public:   		// User declarations
    void bundleChanged();
 
    virtual int exec() override;
-private slots:
+   void toSettings(ContestSettings *settings);
+   void fromSettings(ContestSettings *settings);
+
+   private slots:
    void focusChange(QObject *, bool, QFocusEvent *event);
    void on_OKButton_clicked();
    void on_EntDetailButton_clicked();
@@ -93,13 +97,16 @@ private slots:
    void on_ProtectedOption_clicked();
    void on_BonusComboBox_currentIndexChanged(int index);
    void on_MGMCheckBox_stateChanged(int arg1);
-   void on_RotatorList();
+   void on_SetRotatorList();
    void on_SetRadioList();
    void on_ageProtectedcb_stateChanged(int arg1);
    void on_BandComboBox_activated(int arg1);
    void on_ExchangeComboBox_activated(int arg1);
    void on_UKSMGCalendarButton_clicked();
    void on_BARTGCalendarButton_clicked();
+   void on_saveSettingsButton_clicked();
+   void on_getSettings_clicked();
+   void on_manageSettings_clicked();
 };
 
 #endif // CONTESTDETAILS_H

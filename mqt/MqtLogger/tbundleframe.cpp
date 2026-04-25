@@ -103,3 +103,15 @@ void TBundleFrame::on_BundleSection_currentIndexChanged(int /*arg1*/)
     }
 
 }
+void TBundleFrame::setBundleName(QString bn)
+{
+    QStringList slist = bundle->getSections( );
+    if (slist.contains(bn))
+    {
+        ui->BundleSection->setCurrentText(bn);
+    }
+}
+QString TBundleFrame::getBundleName() const
+{
+    return ui->BundleSection->currentText();
+}

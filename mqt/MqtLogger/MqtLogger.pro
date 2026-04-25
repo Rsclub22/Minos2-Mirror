@@ -85,6 +85,7 @@ SOURCES += \
     main.cpp \
     manageadifdialog.cpp \
     managebandmapspotsdb.cpp \
+    managecontestsettings.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
     pccwmessagekeyer.cpp \
@@ -187,6 +188,7 @@ HEADERS  += \
     loggerscreenoptions.h \
     manageadifdialog.h \
     managebandmapspotsdb.h \
+    managecontestsettings.h \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
     pccwmessagekeyer.h \
@@ -264,6 +266,7 @@ FORMS    += \
     locTreeFrame.ui \
     manageadifdialog.ui \
     managebandmapspotsdb.ui \
+    managecontestsettings.ui \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \
