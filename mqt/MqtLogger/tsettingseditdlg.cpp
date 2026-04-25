@@ -62,7 +62,7 @@ TSettingsEditDlg::~TSettingsEditDlg()
 {
     delete ui;
 }
-bool sectionLessThan(SettingsBundle *b, const QString &s1, const QString &s2)
+bool TSettingsEditDlg::sectionLessThan(SettingsBundle *b, const QString &s1, const QString &s2)
 {
     if (s1 == b->noneBundle)
         return true;

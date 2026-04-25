@@ -24,6 +24,7 @@ class TSettingsEditDlg : public QDialog
     void showDetails();
     void getDetails();
     void doCloseEvent();
+    static bool sectionLessThan(SettingsBundle *b, const QString &s1, const QString &s2);
 public:
     explicit TSettingsEditDlg(QWidget *parent , SettingsBundle *bundle);
     void ShowCurrentSectionOnly();

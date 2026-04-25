@@ -3,10 +3,6 @@
 #include <QTimer>
 #include <QKeyEvent>
 
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <QFileDialog>
 
 #ifdef Q_OS_WIN

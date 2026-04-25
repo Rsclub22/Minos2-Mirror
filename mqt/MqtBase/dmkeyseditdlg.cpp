@@ -86,7 +86,7 @@ DMKeysEditDlg::~DMKeysEditDlg()
     delete ui;
 }
 
-bool sectionLessThan(const QString &s1, const QString &s2)
+bool DMKeysEditDlg::sectionLessThan(const QString &s1, const QString &s2)
 {
     return s1.toLower() < s2.toLower();
 }

@@ -55,5 +55,7 @@ public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
 
+private:
+    static bool sectionLessThan(const QString &s1, const QString &s2);
 };
 #endif // DMKEYSEDITDLG_H
