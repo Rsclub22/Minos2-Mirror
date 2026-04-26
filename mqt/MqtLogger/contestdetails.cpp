@@ -1885,32 +1885,23 @@ QString ContestDetails::getSelectedRadio()
 int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
 {
     // we need to be able to find a unique rig name in here as well
-    trace(QString("findPubSubInCombo %1 %2").arg(name, cb->objectName()));
     int found = -1;
     for(int r = 0; r < cb->count(); r++)
     {
         QString data = cb->itemData(r).toString();
-        trace(QString("data %1 %2").arg(data).arg(r));
         if (data.contains(name, Qt::CaseInsensitive))
         {
             PubSubName combo(data);
             QString ck = combo.key();
-            PubSubName fname(name);
+            PubSubName fname(name);     // NB if name is NOT a PubSub string, this won't be correct
             QString nk = fname.key();
             if (ck.compare(nk, Qt::CaseInsensitive) == 0)
             {
-                trace(QString("found"));
-
                 found = r;
                 break;
             }
-            else
-            {
-                trace(QString("not found"));
-            }
         }
     }
-
     return found;
 }
 
@@ -1997,7 +1988,12 @@ void ContestDetails::on_manageSettings_clicked()
 }
 void ContestDetails::on_getSettings_clicked()
 {
-    ManageContestSettings::getSettings(ui->ContestNameEdit->text(), this) ;
+    QString cname = ui->ContestNameEdit->text();
+    if (cname.isEmpty())
+    {
+        cname = ManageContestSettings::defaultContestSettings;
+    }
+    ManageContestSettings::getSettings(cname, this) ;
 }
 void ContestDetails::toSettings(ContestSettings *settings)
 {

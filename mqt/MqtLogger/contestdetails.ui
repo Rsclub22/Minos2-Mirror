@@ -1047,6 +1047,9 @@ Score between 4 fig loc centres</string>
      </item>
      <item>
       <widget class="QPushButton" name="getSettings">
+       <property name="toolTip">
+        <string>get settings for current contest, or the default</string>
+       </property>
        <property name="text">
         <string>Get Settings</string>
        </property>
@@ -1067,8 +1070,11 @@ Score between 4 fig loc centres</string>
      </item>
      <item>
       <widget class="QPushButton" name="manageSettings">
+       <property name="toolTip">
+        <string>Edit the contest settings</string>
+       </property>
        <property name="text">
-        <string>Mange Settings</string>
+        <string>Manage Settings</string>
        </property>
       </widget>
      </item>
@@ -1087,6 +1093,9 @@ Score between 4 fig loc centres</string>
      </item>
      <item>
       <widget class="QPushButton" name="saveSettingsButton">
+       <property name="toolTip">
+        <string>Save current contest settings, or the default</string>
+       </property>
        <property name="text">
         <string>Save Settings</string>
        </property>
