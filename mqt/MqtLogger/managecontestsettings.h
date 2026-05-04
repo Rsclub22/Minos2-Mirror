@@ -56,6 +56,7 @@ class ManageContestSettings : public QDialog
     ContestDetails *parentDetails = nullptr;
     ContestSettings *settings = nullptr;
     QString geoString = QString("ContestSettings");
+    bool supressSelect = false;
 
     void showSettings();
     void showSetting();
@@ -63,19 +64,24 @@ class ManageContestSettings : public QDialog
     void getDetails();
     void doCloseEvent();
 public:
-    explicit ManageContestSettings(ContestDetails *parent , QString cname);
+    explicit ManageContestSettings(ContestDetails *parent );
     void ShowCurrentSectionOnly();
     ~ManageContestSettings() override;
 
     static QMap<QString, ContestSettings> allSettings;
     static const QString defaultContestSettings;
+    static QStringList getSettingsList();
     static void getAllSettings();
     static void saveAllSettings();
 
     int exec() override;
+    QString currentValue;
 
     static ContestSettings * getCurrentSettings(QString &cname);
     static void getSettings(QString cname, ContestDetails *parentDetails);
+    bool getNewName(QString &Value);
+    int save();
+    int edit();
 private slots:
     void on_CancelButton_clicked();
 
@@ -86,6 +92,8 @@ private slots:
     void on_settingsSplitter_splitterMoved(int pos, int index);
 
     void on_deleteButton_clicked();
+
+    void on_renameButton_clicked();
 
 public Q_SLOTS:
     virtual void accept() override;

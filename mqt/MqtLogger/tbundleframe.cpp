@@ -115,3 +115,14 @@ QString TBundleFrame::getBundleName() const
 {
     return ui->BundleSection->currentText();
 }
+
+QStringList TBundleFrame::getBundleNames() const
+{
+    QStringList slist = bundle->getSections( );
+    return slist;
+}
+
+int TBundleFrame::getBundleOffset() const
+{
+    return ui->BundleSection->currentIndex();
+}

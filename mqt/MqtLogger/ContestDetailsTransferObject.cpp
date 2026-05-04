@@ -182,6 +182,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     suppressProtected = ct->suppressProtected;
     unwriteable = ct->unwriteable;
 
+    contestSettings = ct->contestSettings;
+
     entryBundle = ct->entryBundle;
     entryBundleName = ct->entryBundleName;
     QTHBundle = ct->QTHBundle;
@@ -298,6 +300,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->suppressProtected = suppressProtected;
     ct->unwriteable = unwriteable;
+
+    ct->contestSettings = contestSettings;
 
     ct->entryBundle = entryBundle;
     ct->entryBundleName = entryBundleName;

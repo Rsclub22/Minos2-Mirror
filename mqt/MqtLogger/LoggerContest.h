@@ -85,6 +85,8 @@ protected:
 
       // The contest details
 
+      MinosStringItem<QString> contestSettings;
+
       // Bundles are specific to the off disk logs, not the monitored logs
 
       SettingsBundle entryBundle;      // individual LoggerContestLog

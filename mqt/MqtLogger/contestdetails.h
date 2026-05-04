@@ -14,6 +14,7 @@ class ContestDetails;
 class LoggerContestLog;
 class IndividualContest;
 class ContestSettings;
+class TBundleFrame;
 
 class ContestDetails : public QDialog
 {
@@ -71,6 +72,7 @@ private:
    void loadClubNames(QString groupName);
    void doCalendarButton(QString dtitle, CalType calt);
    int findPubSubInCombo(QString name, QComboBox *cb);
+   void fillSettingsCombo(QString def);
    public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
@@ -83,6 +85,9 @@ public:   		// User declarations
    void toSettings(ContestSettings *settings);
    void fromSettings(ContestSettings *settings);
 
+   TBundleFrame *getStationBundle();
+   TBundleFrame *getQTHBundle();
+   TBundleFrame *getEntryBundle();
    private slots:
    void focusChange(QObject *, bool, QFocusEvent *event);
    void on_OKButton_clicked();
@@ -105,8 +110,8 @@ public:   		// User declarations
    void on_UKSMGCalendarButton_clicked();
    void on_BARTGCalendarButton_clicked();
    void on_saveSettingsButton_clicked();
-   void on_getSettings_clicked();
-   void on_manageSettings_clicked();
+   void on_settingsCombo_activated(int index);
+   void on_settingsEditButton_clicked();
 };
 
 #endif // CONTESTDETAILS_H

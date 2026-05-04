@@ -127,6 +127,9 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_SetRotatorList);
 
+    fillSettingsCombo(QString());
+    adjustMargins(layout(), 5, 2, 2, 2, 2);
+
 }
 void ContestDetails::doCloseEvent()
 {
@@ -173,6 +176,18 @@ int ContestDetails::exec()
 ContestDetails::~ContestDetails()
 {
     delete ui;
+}
+TBundleFrame *ContestDetails::getStationBundle()
+{
+    return ui->StationBundleFrame;
+}
+TBundleFrame *ContestDetails::getQTHBundle()
+{
+    return ui->QTHBundleFrame;
+}
+TBundleFrame *ContestDetails::getEntryBundle()
+{
+    return ui->EntryBundleFrame;
 }
 void ContestDetails::loadClubNames(QString groupName)
 {
@@ -334,6 +349,7 @@ void ContestDetails::setDetails(  )
 {
    setWindowTitle( (tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName)));
 
+    ui->settingsCombo->setCurrentText(contestTransferObject->contestSettings.getValue());
    ui->ContestNameEdit->setText(contestTransferObject->name.getValue());
 
    setBandBoxes(contestTransferObject->contestBands.getValue(), contestTransferObject->bandsList.getValue());
@@ -1237,6 +1253,7 @@ QWidget * ContestDetails::getDetails( )
 {
     QWidget *nextD = getNextFocus();
 
+    contestTransferObject->contestSettings.setValue(ui->settingsCombo->currentText());
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
     contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
     contestTransferObject->sectionList.setValue( sectionList );
@@ -1961,40 +1978,6 @@ void ContestDetails::on_ExchangeComboBox_activated(int /*arg1*/)
 
 
 
-void ContestDetails::on_saveSettingsButton_clicked()
-{
-    // dialog to manage contest settings
-
-    QString cname = ui->ContestNameEdit->text();
-    if (cname.isEmpty())
-    {
-        cname = ManageContestSettings::defaultContestSettings;
-    }
-    ManageContestSettings mcs(this, cname);
-
-    if (mcs.exec() == QDialog::Accepted)
-    {
-        // transfer the details ???
-    }
-}
-void ContestDetails::on_manageSettings_clicked()
-{
-    ManageContestSettings mcs(this, QString());
-
-    if (mcs.exec() == QDialog::Accepted)
-    {
-        // transfer the details ???
-    }
-}
-void ContestDetails::on_getSettings_clicked()
-{
-    QString cname = ui->ContestNameEdit->text();
-    if (cname.isEmpty())
-    {
-        cname = ManageContestSettings::defaultContestSettings;
-    }
-    ManageContestSettings::getSettings(cname, this) ;
-}
 void ContestDetails::toSettings(ContestSettings *settings)
 {
     if (settings)
@@ -2098,3 +2081,57 @@ void ContestDetails::fromSettings(ContestSettings *settings)
     }
 }
 
+
+void ContestDetails::on_settingsCombo_activated(int /*index*/)
+{
+    // we need to use the combo value
+    QString cname = ui->settingsCombo->currentText();
+    if (cname.isEmpty())
+    {
+        cname = ManageContestSettings::defaultContestSettings;
+    }
+    ManageContestSettings::getSettings(cname, this) ;
+}
+
+
+void ContestDetails::on_settingsEditButton_clicked()
+{
+    // we want to set focus onto the combo value
+    QString cname = ui->settingsCombo->currentText();
+    ManageContestSettings mcs(this);
+
+    mcs.currentValue = cname;
+    if (mcs.edit() == QDialog::Accepted)
+    {
+        QString currentValue = mcs.currentValue;
+        fillSettingsCombo(currentValue);
+    }
+}
+
+void ContestDetails::on_saveSettingsButton_clicked()
+{
+    // dialog to manage contest settings
+
+    ManageContestSettings mcs(this);
+    mcs.currentValue.clear();
+
+    if (mcs.save() == QDialog::Accepted)
+    {
+        QString currentValue = mcs.currentValue;
+        fillSettingsCombo(currentValue);
+    }
+}
+void ContestDetails::fillSettingsCombo(QString def)
+{
+    if (def.isEmpty())
+    {
+        def = ui->settingsCombo->currentText();
+    }
+    ui->settingsCombo->clear();
+    QStringList cs = ManageContestSettings::getSettingsList();
+    cs.prepend(QString());
+    ui->settingsCombo->addItems(cs);
+
+    ui->settingsCombo->setCurrentText(def);
+
+}

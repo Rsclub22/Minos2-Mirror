@@ -3,24 +3,38 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QComboBox>
 
 #include "AppStartup.h"
+#include "ConfigFile.h"
+#include "ContestApp.h"
+#include "ScreenConfigFile.h"
+#include "ScreenConfigManager.h"
+#include "enqdlg.h"
 #include "regsettings.h"
 #include "contestdetails.h"
 #include "MTrace.h"
+#include "MinosParameters.h"
 
 #include "managecontestsettings.h"
+#include "tbundleframe.h"
+#include "tlogcontainer.h"
 #include "ui_managecontestsettings.h"
+
+ // We need to change to "save as" withe contest name as default
+// and "select"; we need "rename", sace as and select to allow management
+ // Maybe represent this as anpther "bundle" but not saved in contest?
 
 QMap<QString, ContestSettings> ManageContestSettings::allSettings;
 QString const ManageContestSettings::defaultContestSettings = "default";
 
-ManageContestSettings::ManageContestSettings(ContestDetails *parent, QString cname) :
+ManageContestSettings::ManageContestSettings(ContestDetails *parent) :
     QDialog(parent),
     ui(new Ui::ManageContestSettings),
     parentDetails(parent)
 
 {
+    QString cname = currentValue;
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -56,6 +70,14 @@ ManageContestSettings::ManageContestSettings(ContestDetails *parent, QString cna
 ManageContestSettings::~ManageContestSettings()
 {
     delete ui;
+}
+QStringList ManageContestSettings::getSettingsList()
+{
+    getAllSettings();
+
+    QStringList sl = allSettings.keys();
+    return sl;
+
 }
 ContestSettings *ManageContestSettings::getCurrentSettings(QString &cname)
 {
@@ -188,14 +210,46 @@ void ManageContestSettings::on_settingsSplitter_splitterMoved(int /*pos*/, int /
     QString key = geoString + "/SplitterState/";
     rsettings.getSettings().setValue(key, state);
 }
-int ManageContestSettings::exec()
-{
+int ManageContestSettings::exec(){
     showSettings();
     showDetails();
 
-    return QDialog::exec();
+    int ret = QDialog::exec();
+    return ret;
 }
+int ManageContestSettings::save()
+{
+    ContestSettings saved;
+    parentDetails->toSettings(&saved);
+    QString newName = tr("new setting");
+    if (getNewName(newName))
+    {
+        allSettings[newName] = saved;
+        currentValue = newName;
+        settings = &allSettings[newName];
+        int ret = exec();
 
+        return ret;
+    }
+    return QDialog::Rejected;
+}
+int ManageContestSettings::edit()
+{
+    int ret = QDialog::Rejected;
+    if (allSettings.count())
+    {
+        if (currentValue.isEmpty())
+        {
+            settings = &(*allSettings.begin());
+        }
+        else
+        {
+            settings = &allSettings[currentValue];
+        }
+        ret = exec();
+    }
+    return ret;
+}
 void ManageContestSettings::showSettings()
 {
     ui->SettingsList->clear();
@@ -242,11 +296,145 @@ void ManageContestSettings::showDetails()
 
         for ( int i= 0; i < labels.size(); i++ )
         {
+            /*
 
-            QTableWidgetItem *it = new QTableWidgetItem(values[i]);
-            Qt::ItemFlags fl = it->flags() | Qt::ItemIsEditable;
-            it->setFlags(fl);
-            ui->OptionsTable->setItem(i, 0, it);
+      from
+
+https://stackoverflow.com/questions/1332110/selecting-qcombobox-in-qtablewidget
+
+for (each row in table ... ) {
+   QComboBox* combo = new QComboBox();
+   table->setCellWidget(row,col,combo);
+   combo->setCurrentIndex(node.type());
+   connect(combo, &QComboBox::currentIndexChanged,this, &TSettingsEditDlg::changed));
+   ....
+}
+
+Also
+When the combobox is created you can simply add two custom properties to it:
+
+combo->setProperty("row", (int) nRow);
+combo->setProperty("col", (int) nCol);
+In the handler function you can get a pointer back to the sender of the signal (your combobox).
+
+Now by asking for the properties you can have your row/col back:
+
+int nRow = sender()->property("row").toInt();
+int nCol = sender()->property("col").toInt();
+      */
+
+            if (i == ecsStation)
+            {
+                QComboBox* combo = new QComboBox();
+
+                combo->addItems(parentDetails->getStationBundle()->getBundleNames());
+                combo->setCurrentIndex(parentDetails->getStationBundle()->getBundleOffset());
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+            else if (i == ecsEntry)
+            {
+                QComboBox* combo = new QComboBox();
+
+                combo->addItems(parentDetails->getEntryBundle()->getBundleNames());
+                combo->setCurrentIndex(parentDetails->getEntryBundle()->getBundleOffset());
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+            else if (i == ecsQTH)
+            {
+                QComboBox* combo = new QComboBox();
+
+                combo->addItems(parentDetails->getQTHBundle()->getBundleNames());
+                combo->setCurrentIndex(parentDetails->getQTHBundle()->getBundleOffset());
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+            // else if (i == ecsRadio)
+            // {
+            //     QComboBox* combo = new QComboBox();
+
+            //     ui->OptionsTable->setCellWidget(i,0,combo);
+            // }
+            // else if (i == ecsRotator)
+            // {
+            //     QComboBox* combo = new QComboBox();
+
+            //     ui->OptionsTable->setCellWidget(i,0,combo);
+            // }
+            else if (i == ecsScreenLayout)
+            {
+                QComboBox* combo = new QComboBox();
+                ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
+
+                QString curConfigName = values[i];
+                if (curConfigName.isEmpty())
+                {
+                    curConfigName = defaultLayoutName();
+                }
+                int j = 0;
+                int crow = 0;
+
+                for(auto const &c: QASCONST(scf.configs) )
+                {
+                    if (c.name == curConfigName)
+                        crow = j;
+                    combo->addItem(c.name);
+                    j++;
+                }
+                combo->setCurrentIndex(crow);
+
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+             else if (i == ecsLogSet)
+            {
+                QComboBox* combo = new QComboBox();
+                QString sess = LogContainer->getCurrSession();
+                if (sess.isEmpty())
+                {
+                    TContestApp *app = TContestApp::getContestApp();
+                    sess = app->defaultSession;
+                }
+
+                QStringList sessionlst = LogContainer->getSessions();
+                if (sessionlst.count())
+                {
+                    combo->addItems(sessionlst);
+                }
+                else
+                {
+                    combo->addItem(sess);
+                }
+                combo->setCurrentText(sess);
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+            else if (i == ecsStartApps)
+            {
+                QComboBox* combo = new QComboBox();
+                MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+                QString curConfigName = minosConfig->getCurrConfig().configName;
+
+                int crow = -1;
+
+                int j = 0;
+                for(auto const &i: QASCONST(minosConfig->configs ))
+                {
+                    if (i.configName == curConfigName)
+                        crow = j;
+
+                    combo->addItem(i.configName);
+
+                    j++;
+                }
+                combo->setCurrentIndex(crow);
+
+                ui->OptionsTable->setCellWidget(i,0,combo);
+            }
+
+            else
+            {
+                QTableWidgetItem *it = new QTableWidgetItem(values[i]);
+                Qt::ItemFlags fl = it->flags() | Qt::ItemIsEditable;
+                it->setFlags(fl);
+                ui->OptionsTable->setItem(i, 0, it);
+            }
         }
         ui->OptionsTable->setVerticalHeaderLabels(labels);
 
@@ -272,6 +460,15 @@ void ManageContestSettings::getDetails()
                 {
                 default:
                     break;
+                }
+            }
+            else
+            {
+                QComboBox *cb = dynamic_cast<QComboBox *>(ui->OptionsTable->cellWidget(r, 0));
+                if (cb)
+                {
+                    QString val = cb->currentText();
+                    settings->setVal(static_cast<eCSettings>(r), val);
                 }
             }
         }
@@ -308,7 +505,7 @@ void ManageContestSettings::on_deleteButton_clicked()
 }
 void ManageContestSettings::on_SettingsList_itemSelectionChanged()
 {
-    if (settings)
+    if (settings && !supressSelect)
     {
         getDetails();  // save what is set already
 
@@ -493,3 +690,51 @@ QStringList ContestSettings::getValues() const
     }
     return h;
 }
+bool ManageContestSettings::getNewName(QString &Value)
+{
+    bool firsttime = true;
+    while (firsttime || allSettings.contains(Value))
+    {
+        firsttime = false;
+        if ( enquireDialog( this, tr("Please give a new name for the setting") , Value ) )
+        {
+            if (allSettings.contains(Value))
+            {
+                MinosParameters::getMinosParameters() ->mshowMessage(tr("%1 already exists").arg(Value), this );
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
+}
+
+void ManageContestSettings::on_renameButton_clicked()
+{
+    if (ui->SettingsList->count())
+    {
+        QString oldName = ui->SettingsList->currentItem()->text();
+        QString value = oldName;
+        if (getNewName(value))
+        {
+            supressSelect = true;
+            ContestSettings cs = allSettings[oldName];
+            allSettings.remove(oldName);
+            allSettings[value] = cs;
+            settings = &allSettings[value];
+
+            // and we need to redo the map
+            showSettings();
+            showDetails();
+            supressSelect = false;
+        }
+    }
+}
+
+

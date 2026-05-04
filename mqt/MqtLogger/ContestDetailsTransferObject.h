@@ -134,6 +134,8 @@ private:
     bool suppressProtected = false;
     bool unwriteable = false;
 
+    MinosStringItem<QString> contestSettings;
+
     SettingsBundle entryBundle;      // individual LoggerContestLog
     MinosStringItem<QString> entryBundleName;
     SettingsBundle QTHBundle;        // individual QTH

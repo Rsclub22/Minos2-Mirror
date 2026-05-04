@@ -35,6 +35,8 @@ public:  		// User declarations
 
    void setBundleName(QString bn);
    QString getBundleName() const;
+   QStringList getBundleNames() const;
+   int getBundleOffset() const;
    private slots:
    void on_BundleEdit_clicked();
    void on_BundleSection_currentIndexChanged(int arg1);

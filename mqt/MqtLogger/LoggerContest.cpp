@@ -64,6 +64,7 @@ void LoggerContestLog::initialiseINI()
 }
 void LoggerContestLog::clearDirty()
 {
+    contestSettings.clearDirty();
    entryBundleName.clearDirty();
    QTHBundleName.clearDirty();
    stationBundleName.clearDirty();
@@ -143,6 +144,7 @@ void LoggerContestLog::clearDirty()
 }
 void LoggerContestLog::setDirty()
 {
+    contestSettings.setDirty();
    entryBundleName.setDirty();
    QTHBundleName.setDirty();
    stationBundleName.setDirty();
@@ -1543,6 +1545,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
 
    if ( methodName == "MinosLogContest" )
    {
+       mt->getStructArgMemberValue("settings", contestSettings);
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
       mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
