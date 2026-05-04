@@ -69,7 +69,7 @@ void RunmodeController::chkRunFreq()
         // if current freq is sufficiently far from the run freq, turn run off
         // we should probably ose the band map frequency offset rules
 
-        if (!curRunFreq.isClear())
+        if (!curRunFreq.isClear() && !curRadioFreq.isClear())
         {
             bool oldRadioOffRunFreq = radioOffRunFreq;
 
@@ -97,7 +97,7 @@ bool RunmodeController::chkRadioFreqOnRunFreq()
     qint64 curRunF = curRunFreq;
     qint64 curF = curRadioFreq;
 
-    if (curRunF != 0)
+    if (curF != 0 && curRunF != 0)
     {
         if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
         {
@@ -251,7 +251,7 @@ void RunButtonsFrame::setFreq(Frequency freq)
         }
         rmc.setFreq(freq);
 
-        if (!rmc.chkRadioFreqOnRunFreq())
+        if (!rmc.chkRadioFreqOnRunFreq() && !freq.isClear())
         {
             trace(QString("RunButtonsFrame::setFreq returnFrequency clear both"));
             runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
