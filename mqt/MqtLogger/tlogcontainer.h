@@ -132,7 +132,7 @@ private:
     void clearMenus();
 
     void FileImportActionExecute(bool hf);
-    void FileNewActionExecute(bool hf);
+    bool FileNewActionExecute(bool hf);
 
     QAction *EnterAction = nullptr;
 

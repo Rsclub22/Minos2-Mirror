@@ -3,7 +3,10 @@
 #include <QFontDialog>
 #include <QFont>
 #include "AppStartup.h"
+#include "LoggerContest.h"
 #include "MTrace.h"
+#include "contest.h"
+#include "managecontestsettings.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
 #include "SecondInstall.h"
@@ -357,5 +360,42 @@ void TAboutBox::on_fontButton_clicked()
 
         MinosLoggerEvents::SendFontChanged();
     }
+}
+
+void TAboutBox::doNewContest(bool hf)
+{
+    bool ok = LogContainer->FileNewActionExecute(hf);
+    if (ok)
+    {
+        BaseContestLog *contest = TContestApp::getContestApp()->getCurrentContest();
+        LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>( contest);
+        QString settingsName = lcl->contestSettings.getValue();
+        if (!settingsName.isEmpty())
+        {
+            ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
+            QString sname = settings->getVal(ecsStartApps);
+            if (!sname.isEmpty())
+            {
+                LogContainer->setCurrSessionName(sname);
+            }
+        }
+        TContestApp::getContestApp() ->suppressWritePreload = true;
+        LogContainer->CloseAllActionExecute();
+        TContestApp::getContestApp() ->suppressWritePreload = false;
+
+        accept();
+    }
+}
+void TAboutBox::on_newHFButton_clicked()
+{
+    trace(QString("%1 entered").arg(__func__));
+    doNewContest(true);
+}
+
+
+void TAboutBox::on_newVHFButton_clicked()
+{
+    trace(QString("%1 entered").arg(__func__));
+    doNewContest(false);
 }
 

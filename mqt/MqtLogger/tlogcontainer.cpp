@@ -53,6 +53,7 @@
 #include "MinosConnection.h"
 #include "waitcursor.h"
 
+#include "managecontestsettings.h"
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
 
@@ -1027,7 +1028,7 @@ void TLogContainer::onSetMemoryActionExecute()
 
     emit MinosLoggerEvents::SendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
-void TLogContainer::FileNewActionExecute(bool hf)
+bool TLogContainer::FileNewActionExecute(bool hf)
 {
     QString InitialDir = getDirectoryLocation(dlLogs);
 
@@ -1066,7 +1067,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
        {
           MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg( initName) );
        }
-       return;
+       return false;
     }
     bool repeatDialog = true;
    QString suggestedfName;
@@ -1158,6 +1159,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
     }
     sendDM->subscribeApps();
     selectContest(c);
+    return c != nullptr;
 }
 void TLogContainer::VHFFileNewActionExecute()
 {
@@ -1785,6 +1787,23 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          }
          removeCurrentFile( fname );
       }
+   }
+   // we need to get the contest set from the contest settings
+   // so that we write the correct list
+
+   if (contest)
+   {
+       // Change the preload session
+       QString settingsName = contest->contestSettings.getValue();
+       if (!settingsName.isEmpty())
+       {
+           ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
+           QString sname = settings->getVal(ecsLogSet);
+           if (!sname.isEmpty())
+           {
+                setCurrSessionName(sname);
+           }
+       }
    }
    TContestApp::getContestApp() ->writeContestList();
    enableActions();

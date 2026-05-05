@@ -47,6 +47,10 @@ private slots:
     void on_ageCb_stateChanged(int arg1);
     void on_appSelectButton_clicked();
     void on_fontButton_clicked();
+    void on_newHFButton_clicked();
+    void on_newVHFButton_clicked();
+private:
+    void doNewContest(bool hf);
 };
 
 #endif // TABOUTBOX_H
