@@ -49,13 +49,13 @@ class TContestApp : public MinosParameters
       BaseContestLog * currentContest;
       static TContestApp *contestApp;
       int magneticVariation;
-      bool preloadComplete;
    public:
       static TContestApp *getContestApp();
       QString preloadsect;
       QString currSession;
       QString defaultSession;
       bool suppressWritePreload;
+      bool preloadComplete;
 
       void setPreloadComplete()
       {

@@ -885,7 +885,7 @@ void TLogContainer::openRecentFile()
         {
            setCurrentFile(FileName);
            ContestDetails pced( this );
-           BaseContestLog *ct = addSlot( &pced, FileName, false, -1, false );
+           BaseContestLog *ct = addSlot( &pced, FileName, false, -1, false, false );
            if (ct)
            {
               sendDM->subscribeApps();
@@ -1028,7 +1028,7 @@ void TLogContainer::onSetMemoryActionExecute()
 
     emit MinosLoggerEvents::SendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
-bool TLogContainer::FileNewActionExecute(bool hf)
+bool TLogContainer::FileNewActionExecute(bool hf, bool fromAbout)
 {
     QString InitialDir = getDirectoryLocation(dlLogs);
 
@@ -1059,7 +1059,7 @@ bool TLogContainer::FileNewActionExecute(bool hf)
 
     QString initName = creationDir + "/" + nfileName + letter + ".minos";
     ContestDetails pced( this );
-    BaseContestLog * c = addSlot( &pced, initName, true, -1, hf );
+    BaseContestLog * c = addSlot( &pced, initName, true, -1, hf, fromAbout );
 
     if (!c)
     {
@@ -1145,7 +1145,10 @@ bool TLogContainer::FileNewActionExecute(bool hf)
           }
 
           // we want to (re)open it WITHOUT using the dialog!
-          addSlot( nullptr, suggestedfName, false, -1, hf );
+          if (!fromAbout)
+          {
+            addSlot( nullptr, suggestedfName, false, -1, hf, fromAbout );
+          }
           repeatDialog = false;
        }
        else
@@ -1157,19 +1160,22 @@ bool TLogContainer::FileNewActionExecute(bool hf)
             }
        }
     }
-    sendDM->subscribeApps();
-    selectContest(c);
+   if (!fromAbout)
+    {
+        sendDM->subscribeApps();
+        selectContest(c);
+   }
     return c != nullptr;
 }
 void TLogContainer::VHFFileNewActionExecute()
 {
     trace(QString("%1 entered").arg(__func__));
-    FileNewActionExecute(false);
+    FileNewActionExecute(false, false);
 }
 void TLogContainer::HFFileNewActionExecute()
 {
     trace(QString("%1 entered").arg(__func__));
-    FileNewActionExecute(true);
+    FileNewActionExecute(true, false);
 }
 
 void TLogContainer::FileOpenActionExecute()
@@ -1197,7 +1203,7 @@ void TLogContainer::FileOpenActionExecute()
         if ( !fname.isEmpty() )
         {
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1, false );   // not automatically read only
+            ct = addSlot( &pced, fname, false, -1, false, false );   // not automatically read only
             if (ct)
             {
                 sendDM->subscribeApps();
@@ -1247,7 +1253,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
         {
             trace(QString("about to import %1 as %2").arg(fname, (hf?"HF":"VHF")));
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1, hf );   // not automatically read only
+            ct = addSlot( &pced, fname, false, -1, hf, false );   // not automatically read only
             if (ct)
             {
                 sendDM->subscribeApps();
@@ -1706,7 +1712,7 @@ void TLogContainer::selectTab(int curTab)
     }
 
 }
-BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno, bool hf )
+BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno, bool hf , bool fromAbout)
 {
     QString m;
 
@@ -1778,7 +1784,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
             if ( expName.size() )
             {
                closeSlot(tno, true );
-               addSlot( nullptr, expName, false, -1, false );
+               addSlot( nullptr, expName, false, -1, false, fromAbout );
             }
          }
          else
@@ -1788,6 +1794,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          removeCurrentFile( fname );
       }
    }
+#ifdef ABOUTNEWCONTEST
    // we need to get the contest set from the contest settings
    // so that we write the correct list
 
@@ -1805,6 +1812,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
            }
        }
    }
+#endif
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
 
@@ -2104,7 +2112,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             int slotno = slot.toInt(&ok);
             if ( ok )
             {
-                addSlot( nullptr, pathlst[ i ], false, slotno, false );
+                addSlot( nullptr, pathlst[ i ], false, slotno, false, false );
                 // spin the event loop...
                 QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
             }
@@ -2208,7 +2216,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         if (!TContestApp::getContestApp()->isContestOpen(conarg))
         {
             // open the "argument" one last - which will make it current
-            ct = addSlot( nullptr, conarg, false, -1, false );
+            ct = addSlot( nullptr, conarg, false, -1, false, false );
             app ->writeContestList();	// or this one will not get included
         }
     }

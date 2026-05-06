@@ -6,8 +6,10 @@
 #include <QComboBox>
 
 #include "AppStartup.h"
+#ifdef ABOUTNEWCONTEST
 #include "ConfigFile.h"
 #include "ContestApp.h"
+#endif
 #include "ScreenConfigFile.h"
 #include "ScreenConfigManager.h"
 #include "enqdlg.h"
@@ -81,6 +83,10 @@ QStringList ManageContestSettings::getSettingsList()
 }
 ContestSettings *ManageContestSettings::getCurrentSettings(QString &cname)
 {
+    if (allSettings.size() == 0)
+    {
+        getAllSettings();
+    }
     ContestSettings *settings = nullptr;
     if (!cname.isEmpty())
     {
@@ -147,9 +153,10 @@ void ManageContestSettings::getAllSettings()
                 cs.secondOp = v.value( "secondOp").toString();
 
                 cs.screenLayout = v.value( "screenLayout").toString();
-
+#ifdef ABOUTNEWCONTEST
                 cs.logSet = v.value( "logSet").toString();
                 cs.appSet = v.value( "appSet").toString();
+#endif
 
                 allSettings[a] = cs;
             }
@@ -180,9 +187,10 @@ void ManageContestSettings::saveAllSettings()
         set.insert("secondOp", csi->secondOp);
 
         set.insert("screenLayout", csi->screenLayout);
-
+#ifdef ABOUTNEWCONTEST
         set.insert("logSet", csi->logSet);
         set.insert("appSet", csi->appSet);
+#endif
 
 
         sets.insert(csi.key(), set);
@@ -383,6 +391,7 @@ int nCol = sender()->property("col").toInt();
 
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
+#ifdef ABOUTNEWCONTEST
              else if (i == ecsLogSet)
             {
                 QComboBox* combo = new QComboBox();
@@ -427,7 +436,7 @@ int nCol = sender()->property("col").toInt();
 
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
-
+#endif
             else
             {
                 QTableWidgetItem *it = new QTableWidgetItem(values[i]);
@@ -573,12 +582,14 @@ QString ContestSettings::getVal(eCSettings s) const
     case ecsScreenLayout:
         val = screenLayout;
         break;
+#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         val = logSet;
         break;
     case ecsStartApps:
         val = appSet;
         break;
+#endif
     case ecsMaxVal:
         break;
     }
@@ -616,12 +627,14 @@ void ContestSettings::setVal(eCSettings s, QString val)
     case ecsScreenLayout:
         screenLayout = val;
         break;
+#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         logSet = val;
         break;
     case ecsStartApps:
         appSet = val;
         break;
+#endif
     case ecsMaxVal:
         break;
     }
@@ -659,12 +672,14 @@ QString ContestSettings::headerName(eCSettings s) const
     case ecsScreenLayout:
         val = tr("Screen Layout");
         break;
+#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         val = tr("Contest Log Set");
         break;
     case ecsStartApps:
         val = tr("Start Applications");
         break;
+#endif
     case ecsMaxVal:
         break;
     }

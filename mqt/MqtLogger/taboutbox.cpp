@@ -3,9 +3,11 @@
 #include <QFontDialog>
 #include <QFont>
 #include "AppStartup.h"
-#include "LoggerContest.h"
 #include "MTrace.h"
+#ifdef ABOUTNEWCONTEST
 #include "contest.h"
+#include "LoggerContest.h"
+#endif
 #include "managecontestsettings.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -226,6 +228,11 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     {
         doStartup = true; // click the start button on form close
     }
+#ifdef ABOUTNEWCONTEST
+    ui->newContestFrame->setVisible(false);
+#else
+    ui->newContestFrame->setVisible(false);
+#endif
 }
 
 TAboutBox::~TAboutBox()
@@ -364,9 +371,14 @@ void TAboutBox::on_fontButton_clicked()
 
 void TAboutBox::doNewContest(bool hf)
 {
-    bool ok = LogContainer->FileNewActionExecute(hf);
+    bool oldpreloadComplete = TContestApp::getContestApp() ->preloadComplete;
+    TContestApp::getContestApp() ->preloadComplete = true;
+
+    bool ok = LogContainer->FileNewActionExecute(hf, true);
     if (ok)
     {
+#ifdef ABOUTNEWCONTEST
+
         BaseContestLog *contest = TContestApp::getContestApp()->getCurrentContest();
         LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>( contest);
         QString settingsName = lcl->contestSettings.getValue();
@@ -382,9 +394,10 @@ void TAboutBox::doNewContest(bool hf)
         TContestApp::getContestApp() ->suppressWritePreload = true;
         LogContainer->CloseAllActionExecute();
         TContestApp::getContestApp() ->suppressWritePreload = false;
-
+#endif
         accept();
     }
+    TContestApp::getContestApp() ->preloadComplete = oldpreloadComplete;
 }
 void TAboutBox::on_newHFButton_clicked()
 {

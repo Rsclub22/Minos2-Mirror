@@ -9,7 +9,11 @@
 class ContestDetails;
 
 enum eCSettings { ecsStation, ecsEntry, ecsQTH, ecsSection, ecsRadio, ecsRotator,
-       ecsMainOp, ecsSecondOp, ecsScreenLayout, ecsLogSet, ecsStartApps, ecsMaxVal
+       ecsMainOp, ecsSecondOp, ecsScreenLayout,
+#ifdef ABOUTNEWCONTEST
+                  ecsLogSet, ecsStartApps,
+#endif
+       ecsMaxVal
 } ;
 
 class ContestSettings
@@ -32,8 +36,10 @@ public:
 
     QString screenLayout;
 
+#ifdef ABOUTNEWCONTEST
     QString logSet;
     QString appSet;
+#endif
 
     QStringList getHeaders() const;
     QStringList getValues() const;

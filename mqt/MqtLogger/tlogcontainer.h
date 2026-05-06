@@ -114,7 +114,7 @@ private:
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
 
-    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno , bool hf);
+    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno , bool hf, bool fromAbout);
     void closeSlot(int t, bool addToMRU );
     TSingleLogFrame *findLogFrame(int t);
 
@@ -132,7 +132,7 @@ private:
     void clearMenus();
 
     void FileImportActionExecute(bool hf);
-    bool FileNewActionExecute(bool hf);
+    bool FileNewActionExecute(bool hf, bool fromAbout);
 
     QAction *EnterAction = nullptr;
 
