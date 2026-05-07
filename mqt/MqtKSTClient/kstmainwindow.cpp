@@ -464,7 +464,7 @@ void KSTMainWindow::applyScreenLayout()
 
     clearScreenLayout();
     buildScreenLayout();
-    mainWindow->setContentsMargins(0, 0, 0, 0);
+    adjustMargins(layout(), 2, 0, 2, 0, 2);
 
     delayedAction(this,  [=](){
         inApplyScreenLayout = false;
