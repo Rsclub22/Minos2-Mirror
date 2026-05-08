@@ -34,7 +34,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dmmainwindow.cpp" line="76"/>
+        <location filename="../dmmainwindow.cpp" line="72"/>
         <source>Default Device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -238,55 +238,55 @@
 <context>
     <name>EngineWindow</name>
     <message>
-        <location filename="../enginewindow.ui" line="52"/>
+        <location filename="../enginewindow.ui" line="64"/>
         <source>Start Transmission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="55"/>
+        <location filename="../enginewindow.ui" line="67"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="62"/>
+        <location filename="../enginewindow.ui" line="74"/>
         <source>Stop Transmission Immediately</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="65"/>
+        <location filename="../enginewindow.ui" line="77"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="76"/>
+        <location filename="../enginewindow.ui" line="88"/>
         <source>Set Test Transmission Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="83"/>
+        <location filename="../enginewindow.ui" line="95"/>
         <source>Send Test Transmission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="124"/>
+        <location filename="../enginewindow.ui" line="136"/>
         <source>Current Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enginewindow.ui" line="138"/>
-        <location filename="../enginewindow.ui" line="145"/>
-        <location filename="../enginewindow.ui" line="173"/>
-        <location filename="../enginewindow.ui" line="180"/>
-        <location filename="../enginewindow.ui" line="187"/>
-        <location filename="../enginewindow.ui" line="194"/>
-        <location filename="../enginewindow.ui" line="201"/>
-        <location filename="../enginewindow.ui" line="208"/>
-        <location filename="../enginewindow.ui" line="219"/>
-        <location filename="../enginewindow.ui" line="226"/>
-        <location filename="../enginewindow.ui" line="233"/>
-        <location filename="../enginewindow.ui" line="240"/>
-        <location filename="../enginewindow.ui" line="247"/>
-        <location filename="../enginewindow.ui" line="254"/>
+        <location filename="../enginewindow.ui" line="150"/>
+        <location filename="../enginewindow.ui" line="157"/>
+        <location filename="../enginewindow.ui" line="185"/>
+        <location filename="../enginewindow.ui" line="192"/>
+        <location filename="../enginewindow.ui" line="199"/>
+        <location filename="../enginewindow.ui" line="206"/>
+        <location filename="../enginewindow.ui" line="213"/>
+        <location filename="../enginewindow.ui" line="220"/>
+        <location filename="../enginewindow.ui" line="231"/>
+        <location filename="../enginewindow.ui" line="238"/>
+        <location filename="../enginewindow.ui" line="245"/>
+        <location filename="../enginewindow.ui" line="252"/>
+        <location filename="../enginewindow.ui" line="259"/>
+        <location filename="../enginewindow.ui" line="266"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>

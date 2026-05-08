@@ -891,48 +891,48 @@ entre Spot et autre indicatif d&apos;appel</translation>
 <context>
     <name>KSTSendMeepFrame</name>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="24"/>
+        <location filename="../kstsendmeepframe.ui" line="47"/>
         <source>General message</source>
         <translation type="unfinished">Message général</translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="31"/>
+        <location filename="../kstsendmeepframe.ui" line="40"/>
         <source>Meep</source>
         <translation type="unfinished">Meep</translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="38"/>
+        <location filename="../kstsendmeepframe.ui" line="33"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="66"/>
+        <location filename="../kstsendmeepframe.ui" line="102"/>
         <source>Callsign</source>
         <translation type="unfinished">Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="99"/>
+        <location filename="../kstsendmeepframe.ui" line="134"/>
         <source>Message</source>
         <translation type="unfinished">Message</translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="119"/>
+        <location filename="../kstsendmeepframe.ui" line="156"/>
         <source>Preset Salutation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="125"/>
+        <location filename="../kstsendmeepframe.ui" line="177"/>
         <source>Nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="132"/>
+        <location filename="../kstsendmeepframe.ui" line="184"/>
         <location filename="../kstsendmeepframe.cpp" line="86"/>
         <source>Hi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstsendmeepframe.ui" line="139"/>
+        <location filename="../kstsendmeepframe.ui" line="191"/>
         <source>Hi &lt;name&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -940,32 +940,37 @@ entre Spot et autre indicatif d&apos;appel</translation>
 <context>
     <name>KSTTomeFrame</name>
     <message>
-        <location filename="../ksttomeframe.ui" line="21"/>
-        <source>To/from my call</source>
+        <location filename="../ksttomeframe.ui" line="26"/>
+        <source>To my call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ksttomeframe.ui" line="37"/>
+        <location filename="../ksttomeframe.ui" line="50"/>
         <source>Look for any of these strings (space separated) in messages</source>
         <translation type="unfinished">Rechercher l&apos;une de ces chaînes (séparées par des espaces) dans les messages</translation>
     </message>
     <message>
-        <location filename="../ksttomeframe.ui" line="44"/>
+        <location filename="../ksttomeframe.ui" line="57"/>
         <source>X</source>
         <translation type="unfinished">X</translation>
     </message>
     <message>
-        <location filename="../ksttomeframe.ui" line="51"/>
+        <location filename="../ksttomeframe.ui" line="64"/>
         <source>Show read (ticked) messages</source>
         <translation type="unfinished">Afficher les messages lus (cochés)</translation>
     </message>
     <message>
-        <location filename="../ksttomeframe.cpp" line="187"/>
+        <location filename="../ksttomeframe.ui" line="71"/>
+        <source>Tick All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ksttomeframe.cpp" line="196"/>
         <source>Including %1</source>
         <translation type="unfinished">%1 Compris</translation>
     </message>
     <message>
-        <location filename="../ksttomeframe.cpp" line="187"/>
+        <location filename="../ksttomeframe.cpp" line="196"/>
         <source>my call</source>
         <translation type="unfinished"></translation>
     </message>

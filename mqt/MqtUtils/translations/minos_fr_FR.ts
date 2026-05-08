@@ -4,42 +4,42 @@
 <context>
     <name>MinosConfig</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="31"/>
+        <location filename="../ConfigFile.cpp" line="32"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="32"/>
+        <location filename="../ConfigFile.cpp" line="33"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="471"/>
+        <location filename="../ConfigFile.cpp" line="472"/>
         <source>Default App Config</source>
         <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="938"/>
+        <location filename="../ConfigFile.cpp" line="1114"/>
         <source>More than one server is defined and enabled</source>
         <translation>Plusieurs serveurs définis et active</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="947"/>
+        <location filename="../ConfigFile.cpp" line="1123"/>
         <source>A local server is required.</source>
         <translation>Un serveur local est requis.</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="962"/>
+        <location filename="../ConfigFile.cpp" line="1138"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="977"/>
+        <location filename="../ConfigFile.cpp" line="1153"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1016"/>
+        <location filename="../ConfigFile.cpp" line="1192"/>
         <source>%1 requires a local %2
 
 </source>
@@ -48,7 +48,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1029"/>
+        <location filename="../ConfigFile.cpp" line="1205"/>
         <source> Inferred Executable path does not exist or is not executable:</source>
         <translation> Le chemin exécutable déduit n&apos;existe pas ou n&apos;est pas exécutable&#xa0;: [why inferred???]</translation>
     </message>
@@ -59,12 +59,12 @@
         <translation type="obsolete">[???? what???]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1037"/>
+        <location filename="../ConfigFile.cpp" line="1213"/>
         <source> Executable path does not exist or is not executable:</source>
         <translation> Le chemin de l&apos;exécutable n&apos;existe pas ou n&apos;est pas exécutable&#xa0;:</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="1043"/>
+        <location filename="../ConfigFile.cpp" line="1219"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
@@ -76,7 +76,7 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="258"/>
+        <location filename="../ConfigFile.cpp" line="259"/>
         <source>:program is not executable:</source>
         <translation>:l&apos;exécutable n&apos;est pas exécutable&#xa0;:</translation>
     </message>
