@@ -39,6 +39,8 @@ private slots:
     void on_toFromMecb_stateChanged(int arg1);
 
     void onListCompressionChanged(qreal);
+    void on_tickAllButton_clicked();
+
 private:
     Ui::KSTTomeFrame *ui;
 };

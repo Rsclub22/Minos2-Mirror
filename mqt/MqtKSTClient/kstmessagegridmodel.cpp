@@ -343,14 +343,29 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     if (!myCSfilterString.isEmpty())
     {
-        if (!showLine && kstmsg->call.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
-            showLine = true;
-        if (!showLine && !toFromMeFilter && kstmsg->name.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
-            showLine = true;
-        if (!showLine && kstmsg->otherCall.getFullCall().indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
-            showLine = true;
-        if (!showLine && !toFromMeFilter && kstmsg->message.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
-            showLine = true;
+        if (toFromMeFilter)
+        {
+            // to me ONLY
+            if (!showLine && kstmsg->otherCall.getFullCall().compare(myCSfilterString, Qt::CaseInsensitive) == 0)
+                showLine = true;
+        }
+        else
+        {
+            //either call, or included in messge
+            if (!showLine && kstmsg->call.getFullCall().compare(myCSfilterString, Qt::CaseInsensitive) == 0)
+                showLine = true;
+            if (!showLine && kstmsg->name.compare(myCSfilterString, Qt::CaseInsensitive) == 0)
+                showLine = true;
+            if (!showLine && kstmsg->otherCall.getFullCall().compare(myCSfilterString, Qt::CaseInsensitive) == 0)
+                showLine = true;
+
+            if (!showLine)
+            {
+                QStringList ms = kstmsg->message.split(" ");
+                if (ms.contains(myCSfilterString, Qt::CaseInsensitive))
+                    showLine = true;
+            }
+        }
     }
 
     if (!showLine && !filterStrings.isEmpty())
@@ -379,7 +394,7 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 void KstMeepGridSortFilterModel::setMyCsFilterString(QString f)
 {
-    myCSfilterString = f;
+    myCSfilterString = f.trimmed();
     invalidateFilter();
 }
 void KstMeepGridSortFilterModel::setToFromFilter(bool s)

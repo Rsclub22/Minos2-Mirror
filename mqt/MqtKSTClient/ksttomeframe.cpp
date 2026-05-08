@@ -44,6 +44,15 @@ KSTTomeFrame::KSTTomeFrame(QWidget *parent)
 
     connect(&appStart, &AppStart::listCompressionChanged,
             this, &KSTTomeFrame::onListCompressionChanged, Qt::QueuedConnection);
+
+    ui->toMeFilter->setClearButtonEnabled(true);
+    QList<QAction*> actionList = ui->toMeFilter->findChildren<QAction*>();
+
+    if (!actionList.isEmpty()) {
+        connect(actionList.first(), &QAction::triggered, this, [this]() {
+            on_clearMeepFiltersButton_clicked();
+        });
+    }
 }
 
 KSTTomeFrame::~KSTTomeFrame()
@@ -190,3 +199,18 @@ void KSTTomeFrame::setConnected(bool c)
     //ui->includeMeCb->setText(QString());
     kstMeepFilterModel.setMyCsFilterString(QString());
 }
+
+void KSTTomeFrame::on_tickAllButton_clicked()
+{
+    for(int r = 0; r < mainWindow->messageVector->count(); r++)
+    {
+        bool filtered = kstMeepFilterModel.filterAcceptsRow(r, QModelIndex());
+        if (filtered)
+        {
+            mainWindow->messageVector->at(r)->markedRead = true;
+        }
+    }
+    kstMeepFilterModel.invalidate();
+}
+
+

@@ -23,7 +23,7 @@
      <item>
       <widget class="QCheckBox" name="toFromMecb">
        <property name="text">
-        <string>To/from my call</string>
+        <string>To my call</string>
        </property>
       </widget>
      </item>
@@ -62,6 +62,13 @@
       <widget class="QCheckBox" name="showReadcb">
        <property name="text">
         <string>Show read (ticked) messages</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="tickAllButton">
+       <property name="text">
+        <string>Tick All</string>
        </property>
       </widget>
      </item>
