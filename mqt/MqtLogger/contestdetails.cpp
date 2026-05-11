@@ -1,7 +1,5 @@
 #include "AppStartup.h"
-#ifdef ABOUTNEWCONTEST
 #include "ConfigFile.h"
-#endif
 #include "ScreenConfigManager.h"
 #include "managecontestsettings.h"
 #include "regsettings.h"
@@ -2017,7 +2015,6 @@ void ContestDetails::toSettings(ContestSettings *settings)
             case ecsScreenLayout:
                 settings->setVal(s, ui->screenLayoutCombo->currentText());
                 break;
-#ifdef ABOUTNEWCONTEST
             case ecsLogSet:
                 settings->setVal(s, LogContainer->getCurrSession());
                 break;
@@ -2027,7 +2024,6 @@ void ContestDetails::toSettings(ContestSettings *settings)
                 settings->setVal(s, minosConfig->getCurrConfig().configName);
             }
                 break;
-#endif
             case ecsMaxVal:
                 break;
             }
@@ -2072,14 +2068,12 @@ void ContestDetails::fromSettings(ContestSettings *settings)
             case ecsScreenLayout:
                 ui->screenLayoutCombo->setCurrentText(val);
                 break;
-#ifdef ABOUTNEWCONTEST
             case ecsLogSet:
                 // not at the moment...
                 break;
             case ecsStartApps:
                 // not at the moment...
                 break;
-#endif
             case ecsMaxVal:
                 break;
             }
@@ -2104,13 +2098,13 @@ void ContestDetails::on_settingsEditButton_clicked()
 {
     // we want to set focus onto the combo value
     QString cname = ui->settingsCombo->currentText();
-    ManageContestSettings mcs(this);
+    ManageContestSettings mcs(this, cname);
 
-    mcs.currentValue = cname;
     if (mcs.edit() == QDialog::Accepted)
     {
         QString currentValue = mcs.currentValue;
         fillSettingsCombo(currentValue);
+        ManageContestSettings::getSettings(currentValue, this) ;
     }
 }
 
@@ -2118,13 +2112,14 @@ void ContestDetails::on_saveSettingsButton_clicked()
 {
     // dialog to manage contest settings
 
-    ManageContestSettings mcs(this);
-    mcs.currentValue.clear();
+    QString cname = ui->settingsCombo->currentText();
+    ManageContestSettings mcs(this, cname);
 
     if (mcs.save() == QDialog::Accepted)
     {
         QString currentValue = mcs.currentValue;
         fillSettingsCombo(currentValue);
+        ManageContestSettings::getSettings(currentValue, this) ;
     }
 }
 void ContestDetails::fillSettingsCombo(QString def)

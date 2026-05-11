@@ -10,9 +10,7 @@ class ContestDetails;
 
 enum eCSettings { ecsStation, ecsEntry, ecsQTH, ecsSection, ecsRadio, ecsRotator,
        ecsMainOp, ecsSecondOp, ecsScreenLayout,
-#ifdef ABOUTNEWCONTEST
-                  ecsLogSet, ecsStartApps,
-#endif
+       ecsLogSet, ecsStartApps,
        ecsMaxVal
 } ;
 
@@ -36,10 +34,8 @@ public:
 
     QString screenLayout;
 
-#ifdef ABOUTNEWCONTEST
     QString logSet;
     QString appSet;
-#endif
 
     QStringList getHeaders() const;
     QStringList getValues() const;
@@ -70,7 +66,7 @@ class ManageContestSettings : public QDialog
     void getDetails();
     void doCloseEvent();
 public:
-    explicit ManageContestSettings(ContestDetails *parent );
+    explicit ManageContestSettings(ContestDetails *parent , QString cv);
     void ShowCurrentSectionOnly();
     ~ManageContestSettings() override;
 

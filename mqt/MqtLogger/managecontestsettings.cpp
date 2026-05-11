@@ -6,10 +6,9 @@
 #include <QComboBox>
 
 #include "AppStartup.h"
-#ifdef ABOUTNEWCONTEST
 #include "ConfigFile.h"
 #include "ContestApp.h"
-#endif
+#include "MMessageDialog.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigManager.h"
 #include "enqdlg.h"
@@ -30,30 +29,27 @@
 QMap<QString, ContestSettings> ManageContestSettings::allSettings;
 QString const ManageContestSettings::defaultContestSettings = "default";
 
-ManageContestSettings::ManageContestSettings(ContestDetails *parent) :
+ManageContestSettings::ManageContestSettings(ContestDetails *parent, QString cv) :
     QDialog(parent),
     ui(new Ui::ManageContestSettings),
     parentDetails(parent)
 
 {
-    QString cname = currentValue;
+    currentValue = cv;
+
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     getAllSettings();
 
-    QMap<QString, ContestSettings>::Iterator csi = allSettings.find(cname);
-    if (csi != allSettings.end())
+    if (!currentValue.isEmpty() )
     {
-        settings = &(*csi);
-    }
-    if (!cname.isEmpty())
-    {
-        if (!settings)
+        // empty implies "save" or no settings yet
+        QMap<QString, ContestSettings>::Iterator csi = allSettings.find(currentValue);
+        if ( csi != allSettings.end())
         {
-            settings = &allSettings[cname];
+            settings = &(*csi);
         }
-        parentDetails->toSettings(settings);
     }
 
     RegSettings rsettings;
@@ -153,10 +149,8 @@ void ManageContestSettings::getAllSettings()
                 cs.secondOp = v.value( "secondOp").toString();
 
                 cs.screenLayout = v.value( "screenLayout").toString();
-#ifdef ABOUTNEWCONTEST
                 cs.logSet = v.value( "logSet").toString();
                 cs.appSet = v.value( "appSet").toString();
-#endif
 
                 allSettings[a] = cs;
             }
@@ -187,11 +181,8 @@ void ManageContestSettings::saveAllSettings()
         set.insert("secondOp", csi->secondOp);
 
         set.insert("screenLayout", csi->screenLayout);
-#ifdef ABOUTNEWCONTEST
         set.insert("logSet", csi->logSet);
         set.insert("appSet", csi->appSet);
-#endif
-
 
         sets.insert(csi.key(), set);
     }
@@ -227,19 +218,31 @@ int ManageContestSettings::exec(){
 }
 int ManageContestSettings::save()
 {
+    QString newName;
+    if (!currentValue.isEmpty())
+    {
+        if (mShowYesNoMessage(parentDetails, tr("Do you want to overwrite setting %1?").arg(currentValue)))
+        {
+            newName = currentValue;
+        }
+        else
+        {
+            newName = tr("new setting");
+            if (!getNewName(newName))
+            {
+                return QDialog::Rejected;
+            }
+        }
+    }
     ContestSettings saved;
     parentDetails->toSettings(&saved);
-    QString newName = tr("new setting");
-    if (getNewName(newName))
-    {
-        allSettings[newName] = saved;
-        currentValue = newName;
-        settings = &allSettings[newName];
-        int ret = exec();
 
-        return ret;
-    }
-    return QDialog::Rejected;
+    allSettings[newName] = saved;
+    currentValue = newName;
+    settings = &allSettings[newName];
+    int ret = exec();
+
+    return ret;
 }
 int ManageContestSettings::edit()
 {
@@ -391,11 +394,10 @@ int nCol = sender()->property("col").toInt();
 
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
-#ifdef ABOUTNEWCONTEST
              else if (i == ecsLogSet)
             {
                 QComboBox* combo = new QComboBox();
-                QString sess = LogContainer->getCurrSession();
+                QString sess = values[i];
                 if (sess.isEmpty())
                 {
                     TContestApp *app = TContestApp::getContestApp();
@@ -418,7 +420,7 @@ int nCol = sender()->property("col").toInt();
             {
                 QComboBox* combo = new QComboBox();
                 MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-                QString curConfigName = minosConfig->getCurrConfig().configName;
+                QString curConfigName = values[i];
 
                 int crow = -1;
 
@@ -436,7 +438,6 @@ int nCol = sender()->property("col").toInt();
 
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
-#endif
             else
             {
                 QTableWidgetItem *it = new QTableWidgetItem(values[i]);
@@ -477,7 +478,8 @@ void ManageContestSettings::getDetails()
                 if (cb)
                 {
                     QString val = cb->currentText();
-                    settings->setVal(static_cast<eCSettings>(r), val);
+                    eCSettings s = static_cast<eCSettings>(r);
+                    settings->setVal(s, val);
                 }
             }
         }
@@ -582,14 +584,12 @@ QString ContestSettings::getVal(eCSettings s) const
     case ecsScreenLayout:
         val = screenLayout;
         break;
-#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         val = logSet;
         break;
     case ecsStartApps:
         val = appSet;
         break;
-#endif
     case ecsMaxVal:
         break;
     }
@@ -627,14 +627,12 @@ void ContestSettings::setVal(eCSettings s, QString val)
     case ecsScreenLayout:
         screenLayout = val;
         break;
-#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         logSet = val;
         break;
     case ecsStartApps:
         appSet = val;
         break;
-#endif
     case ecsMaxVal:
         break;
     }
@@ -672,14 +670,12 @@ QString ContestSettings::headerName(eCSettings s) const
     case ecsScreenLayout:
         val = tr("Screen Layout");
         break;
-#ifdef ABOUTNEWCONTEST
     case ecsLogSet:
         val = tr("Contest Log Set");
         break;
     case ecsStartApps:
         val = tr("Start Applications");
         break;
-#endif
     case ecsMaxVal:
         break;
     }

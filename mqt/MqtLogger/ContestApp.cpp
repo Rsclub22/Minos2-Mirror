@@ -521,14 +521,14 @@ QVector<BaseContestLog *> TContestApp::getContestList()
    }
    return logList;
 }
-LoggerContestLog * TContestApp::openFile( const QString &fn, bool newFile, int slotno, bool hf )
+LoggerContestLog * TContestApp::openFile( const QString &fn, int slotno, bool hf )
 {
    LoggerContestLog * contest = new LoggerContestLog(hf);
 
    trace(QString("contest uuid for %1 is %2").arg(fn, contest->uuid));
 
 
-   if ( !contest->initialise( fn, newFile, slotno ) )    // this adds it to the slot
+   if ( !contest->initialiseExisting( fn, slotno ) )    // this adds it to the slot
    {
       closeFile( contest );
       return nullptr;

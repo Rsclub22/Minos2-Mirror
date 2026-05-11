@@ -49,6 +49,7 @@ private slots:
     void on_fontButton_clicked();
     void on_newHFButton_clicked();
     void on_newVHFButton_clicked();
+
 private:
     void doNewContest(bool hf);
 };

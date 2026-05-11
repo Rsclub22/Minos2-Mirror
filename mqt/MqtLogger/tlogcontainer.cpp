@@ -411,20 +411,24 @@ bool TLogContainer::show(int argc, char *argv[])
 
     if ( contestAppLoadFiles() )
     {
-       // here need to pre-open the contest list
-       QString conarg;
-       for(int i = 1; i < argc; i++)
-       {
-           if ( argv[i][0] != '/' && argv[i][0] != '-' ) // i.e. not a switch character
-           {
-              conarg = argv[i];
-              break;
-           }
-       }
-       preloadLists();
-       preloadFiles( conarg );
-       enableActions();
+        // here need to pre-open the contest list
+        QString conarg = aboutBoxOpenFilename;
+        aboutBoxOpenFilename.clear();
+        if (conarg.isEmpty())
+        {
 
+            for(int i = 1; i < argc; i++)
+            {
+                if ( argv[i][0] != '/' && argv[i][0] != '-' ) // i.e. not a switch character
+                {
+                    conarg = argv[i];
+                    break;
+                }
+            }
+        }
+        preloadLists();
+        preloadFiles( conarg );
+        enableActions();
     }
     TContestApp::getContestApp()->setPreloadComplete();
     sendDM->subscribeApps();
@@ -885,7 +889,7 @@ void TLogContainer::openRecentFile()
         {
            setCurrentFile(FileName);
            ContestDetails pced( this );
-           BaseContestLog *ct = addSlot( &pced, FileName, false, -1, false, false );
+           BaseContestLog *ct = addSlot( &pced, FileName, -1, false );
            if (ct)
            {
               sendDM->subscribeApps();
@@ -1028,8 +1032,52 @@ void TLogContainer::onSetMemoryActionExecute()
 
     emit MinosLoggerEvents::SendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
-bool TLogContainer::FileNewActionExecute(bool hf, bool fromAbout)
+void TLogContainer::showContest(LoggerContestLog* contest, int slotNo)
 {
+    static int namegen = 0;
+    QString fname = contest->cfileName;
+
+    TContestApp::getContestApp() ->setCurrentContest( contest );
+    contest->scanContest();    // contest initially opened (addSlot) required
+    QString baseFName = ExtractFileName( contest->cfileName );
+    TSingleLogFrame *f = new TSingleLogFrame( this, contest );
+
+    setUpdatesEnabled(false);
+    f->buildFrame(slotNo);
+
+    f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
+
+    int tno = ui->contestPageControl->addTab(f, baseFName);
+
+    ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
+
+    MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
+    MinosLoggerEvents::SendSplittersChanged();
+
+    on_contestPageControl_currentChanged(tno);
+
+    setUpdatesEnabled(true);
+
+    if ( contest->needsExport() )      // imported from an alien format (e.g. .log)
+    {
+        QString expName = f->makeEntry( true, false );
+        if ( expName.size() )
+        {
+            closeSlot(tno, true );
+            addSlot( nullptr, expName,  -1, false );
+        }
+    }
+    else
+    {
+        f->addAllQSOsToBandmap();
+    }
+    removeCurrentFile( fname );
+}
+
+QStringList TLogContainer::createContest(bool hf)
+{
+    // create the initial skeleton
+
     QString InitialDir = getDirectoryLocation(dlLogs);
 
     QFileInfo qf(InitialDir);
@@ -1047,125 +1095,204 @@ bool TLogContainer::FileNewActionExecute(bool hf, bool fromAbout)
     char letter = 'A';
     while ( letter < 'Z' )      // the A of A.Minos
     {
-       QString fileNameBuff = creationDir + "/" + nfileName + letter + ".minos";
+        QString fileNameBuff = creationDir + "/" + nfileName + letter + ".minos";
 
-       if (FileExists(fileNameBuff))
-       {
-           letter ++;
-       }
-       else
-          break;
+        if (FileExists(fileNameBuff))
+        {
+            letter ++;
+        }
+        else
+            break;
     }
 
     QString initName = creationDir + "/" + nfileName + letter + ".minos";
     ContestDetails pced( this );
-    BaseContestLog * c = addSlot( &pced, initName, true, -1, hf, fromAbout );
 
-    if (!c)
+    QString m;
+
+    m += tr("Creating ");
+
+    m += tr("Contest file ");
+    m += initName;
+
+    sblabel0->setText( m );
+    repaint();
+
+    LoggerContestLog * contest = new LoggerContestLog(hf);
+
+    trace(QString("contest uuid for %1 is %2").arg(initName, contest->uuid));
+
+
+    if ( !contest->initialiseNewFile( initName ) )    // this adds it to the slot
     {
-       if ( !QFile::remove( initName ) )
-       {
-          MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg( initName) );
-       }
-       return false;
+        TContestApp::getContestApp() ->closeFile( contest );
+        return QStringList();
+    }
+
+    if ( contest )
+    {
+        pced.setDetails( contest );
+
+        {
+            if ( pced.exec() != QDialog::Accepted )
+            {
+                TContestApp::getContestApp() ->closeFile( contest );
+                contest = nullptr;
+            }
+        }
+    }
+#ifdef ABOUTNEWCONTEST
+    // we need to get the contest set from the contest settings
+    // so that we write the correct list
+
+    if (contest)
+    {
+        // Change the preload session
+        QString settingsName = contest->contestSettings.getValue();
+        if (!settingsName.isEmpty())
+        {
+            ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
+            QString sname = settings->getVal(ecsLogSet);
+            if (!sname.isEmpty())
+            {
+                setCurrSessionName(sname);
+            }
+        }
+    }
+#endif
+
+    if (!contest)
+    {
+        if ( !QFile::remove( initName ) )
+        {
+            MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg( initName) );
+        }
+        return QStringList();
     }
     bool repeatDialog = true;
-   QString suggestedfName;
-   suggestedfName = ( c->mycall.realCall );
-   suggestedfName += '_';
-   if ( c->DTGStart.getValue().size() )
-   {
-      suggestedfName += CanonicalToTDT( c->DTGStart.getValue() ).toString( "yyyy_MM_dd" );
-   }
-   else
-   {
-      suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
-   }
-   QString band = c->contestBands.getValue();
-   if (band == allHF)
-   {
-       band = tr("All HF");
-   }
-   if ( band.size() )
-   {
-      suggestedfName += '_';
-      suggestedfName += band.replace('-', '_').replace('/','_').replace(' ','_');
-   }
-   QString nameBase = suggestedfName;
-   int fnum = 1;
-   if (FileExists(InitialDir + "/" + nameBase + ".minos"))
-   {
-       while (FileExists(InitialDir + "/" + nameBase + "_" + QString::number(fnum) + ".minos"))
-       {
-           if (fnum == 9)
-               break;
-           fnum++;
-       }
-       suggestedfName = nameBase + "_" + QString::number(fnum);
-   }
-   suggestedfName += ".minos";
+    QString suggestedfName;
+    QString contestSetName;
+    QString startAppsName;
+    suggestedfName = ( contest->mycall.realCall );
+    suggestedfName += '_';
+    if ( contest->DTGStart.getValue().size() )
+    {
+        suggestedfName += CanonicalToTDT( contest->DTGStart.getValue() ).toString( "yyyy_MM_dd" );
+    }
+    else
+    {
+        suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
+    }
+    QString band = contest->contestBands.getValue();
+    if (band == allHF)
+    {
+        band = tr("All HF");
+    }
+    if ( band.size() )
+    {
+        suggestedfName += '_';
+        suggestedfName += band.replace('-', '_').replace('/','_').replace(' ','_');
+    }
+    QString nameBase = suggestedfName;
+    int fnum = 1;
+    if (FileExists(InitialDir + "/" + nameBase + ".minos"))
+    {
+        while (FileExists(InitialDir + "/" + nameBase + "_" + QString::number(fnum) + ".minos"))
+        {
+            if (fnum == 9)
+                break;
+            fnum++;
+        }
+        suggestedfName = nameBase + "_" + QString::number(fnum);
+    }
+    suggestedfName += ".minos";
 
-   // close the slot - we will re-open it later under the new name
-   closeSlot(ui->contestPageControl->currentIndex(), false );
+    // Must close the contest here, so get important values now
 
-   while ( repeatDialog )
-   {
-       QString fileName = QFileDialog::getSaveFileName( this,
-                          tr("Save new contest as"),
-                          InitialDir + "/" + suggestedfName,
-                          tr("Minos contest files %1").arg( "(*.minos *.Minos)"),
-                          nullptr,
-                          QFileDialog::DontConfirmOverwrite
-                                                      );
-       if ( !fileName.isEmpty() )
-       {
-           if (FileExists(fileName) )
-           {
-               MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 \nalready exists.\n\nPlease choose a new name.").arg(fileName) );
+    QString sname = contest->contestSettings.getValue();
+    ContestSettings *settings = ManageContestSettings::getCurrentSettings(sname);
+    contestSetName = settings->logSet;
+    startAppsName = settings->appSet;
 
-               InitialDir = ExtractFileDir(fileName);
-               QString sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
-               while (FileExists(sfname))
-               {
-                   if (fnum == 9)
-                       break;
-                   fnum++;
-                   sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
-               }
-               suggestedfName = nameBase + "_" + QString::number(fnum);
-               suggestedfName += ".minos";
-               continue;
-           }
-          suggestedfName = fileName;
-          QDir r(creationDir);
-          if ( !r.rename( initName, suggestedfName ) )
-          {
-             MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(initName, suggestedfName) );
-             suggestedfName = initName;
-          }
+    delete contest;
+    contest = nullptr;
+    while ( repeatDialog )
+    {
+        QString fileName = QFileDialog::getSaveFileName( this,
+                                                        tr("Save new contest as"),
+                                                        InitialDir + "/" + suggestedfName,
+                                                        tr("Minos contest files %1").arg( "(*.minos *.Minos)"),
+                                                        nullptr,
+                                                        QFileDialog::DontConfirmOverwrite
+                                                        );
+        if ( !fileName.isEmpty() )
+        {
+            if (FileExists(fileName) )
+            {
+                MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 \nalready exists.\n\nPlease choose a new name.").arg(fileName) );
 
-          // we want to (re)open it WITHOUT using the dialog!
-          if (!fromAbout)
-          {
-            addSlot( nullptr, suggestedfName, false, -1, hf, fromAbout );
-          }
-          repeatDialog = false;
-       }
-       else
-       {
+                InitialDir = ExtractFileDir(fileName);
+                QString sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
+                while (FileExists(sfname))
+                {
+                    if (fnum == 9)
+                        break;
+                    fnum++;
+                    sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
+                }
+                suggestedfName = nameBase + "_" + QString::number(fnum);
+                suggestedfName += ".minos";
+                continue;
+            }
+            suggestedfName = fileName;
+            QDir r(creationDir);
+            if ( !r.rename( initName, suggestedfName ) )
+            {
+                MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(initName, suggestedfName) );
+                suggestedfName = initName;
+            }
+
+            repeatDialog = false;
+        }
+        else
+        {
             repeatDialog = false;   // never go back to the dialog
             if ( !QFile::remove( initName ) )
             {
                 MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg(initName) );
             }
-       }
+        }
     }
-   if (!fromAbout)
+
+    QStringList ret;
+    ret.append(suggestedfName);
+    ret.append(contestSetName);
+    ret.append(startAppsName);
+    return ret;
+
+}
+QStringList TLogContainer::FileNewActionExecute(bool hf, bool fromAbout)
+{
+    QStringList names = createContest(hf);
+
+    if (fromAbout)
     {
-        sendDM->subscribeApps();
-        selectContest(c);
-   }
-    return c != nullptr;
+        return names;
+    }
+    else
+    {
+        if (names.size() == 0)
+        {
+            return QStringList();
+        }
+        QString fname = names[0];
+        LoggerContestLog *lg = TContestApp::getContestApp() ->openFile( fname, -1, hf );
+        if (lg)
+        {
+            showContest(lg, lg->cslotno);
+        }
+    }
+    return QStringList();
 }
 void TLogContainer::VHFFileNewActionExecute()
 {
@@ -1203,7 +1330,7 @@ void TLogContainer::FileOpenActionExecute()
         if ( !fname.isEmpty() )
         {
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1, false, false );   // not automatically read only
+            ct = addSlot( &pced, fname, -1, false );   // not automatically read only
             if (ct)
             {
                 sendDM->subscribeApps();
@@ -1253,7 +1380,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
         {
             trace(QString("about to import %1 as %2").arg(fname, (hf?"HF":"VHF")));
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1, hf, false );   // not automatically read only
+            ct = addSlot( &pced, fname, -1, hf );   // not automatically read only
             if (ct)
             {
                 sendDM->subscribeApps();
@@ -1712,11 +1839,11 @@ void TLogContainer::selectTab(int curTab)
     }
 
 }
-BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno, bool hf , bool fromAbout)
+BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, int slotno, bool hf )
 {
     QString m;
 
-    m += newfile?tr("Creating "):tr("Loading ");
+    m += tr("Loading ");
 
     m += tr("Contest file ");
     m += fname;
@@ -1724,11 +1851,10 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
     sblabel0->setText( m );
     repaint();
 
-   static int namegen = 0;
    // openFile ends up calling ContestLog::initialise which then
    // calls TContestApp::insertContest
 
-   LoggerContestLog * contest = TContestApp::getContestApp() ->openFile( fname, newfile, slotno, hf );
+   LoggerContestLog * contest = TContestApp::getContestApp() ->openFile( fname, slotno, hf );
 
    if ( contest )
    {
@@ -1757,62 +1883,9 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
 
       if ( show )
       {
-         TContestApp::getContestApp() ->setCurrentContest( contest );
-         contest->scanContest();    // contest initially opened (addSlot) required
-         QString baseFName = ExtractFileName( contest->cfileName );
-         TSingleLogFrame *f = new TSingleLogFrame( this, contest );
-
-         setUpdatesEnabled(false);
-         f->buildFrame(slotno);
-
-         f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
-
-         int tno = ui->contestPageControl->addTab(f, baseFName);
-
-         ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
-
-         MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
-         MinosLoggerEvents::SendSplittersChanged();
-
-         on_contestPageControl_currentChanged(tno);
-
-         setUpdatesEnabled(true);
-
-         if ( contest->needsExport() )      // imported from an alien format (e.g. .log)
-         {
-            QString expName = f->makeEntry( true, false );
-            if ( expName.size() )
-            {
-               closeSlot(tno, true );
-               addSlot( nullptr, expName, false, -1, false, fromAbout );
-            }
-         }
-         else
-         {
-             f->addAllQSOsToBandmap();
-         }
-         removeCurrentFile( fname );
+          showContest(contest, slotno);
       }
    }
-#ifdef ABOUTNEWCONTEST
-   // we need to get the contest set from the contest settings
-   // so that we write the correct list
-
-   if (contest)
-   {
-       // Change the preload session
-       QString settingsName = contest->contestSettings.getValue();
-       if (!settingsName.isEmpty())
-       {
-           ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
-           QString sname = settings->getVal(ecsLogSet);
-           if (!sname.isEmpty())
-           {
-                setCurrSessionName(sname);
-           }
-       }
-   }
-#endif
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
 
@@ -2112,7 +2185,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             int slotno = slot.toInt(&ok);
             if ( ok )
             {
-                addSlot( nullptr, pathlst[ i ], false, slotno, false, false );
+                addSlot( nullptr, pathlst[ i ], slotno, false );
                 // spin the event loop...
                 QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
             }
@@ -2216,7 +2289,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         if (!TContestApp::getContestApp()->isContestOpen(conarg))
         {
             // open the "argument" one last - which will make it current
-            ct = addSlot( nullptr, conarg, false, -1, false, false );
+            ct = addSlot( nullptr, conarg, -1, false );
             app ->writeContestList();	// or this one will not get included
         }
     }

@@ -221,7 +221,7 @@ void LoggerContestLog::setDirty()
    watchedADIFLastOffset.setDirty();
    BaseContestLog::setDirty();
 }
-bool LoggerContestLog::initialise( int sno )
+bool LoggerContestLog::initialiseSlot( int sno )
 {
    if ( !TContestApp::getContestApp() ->insertContest( this, sno ) )
    {
@@ -230,10 +230,80 @@ bool LoggerContestLog::initialise( int sno )
    cslotno = sno;
    return true;
 }
-
-bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
+void LoggerContestLog::baseIinitialise(QString fn)
 {
-   if ( !initialise( slotno ) )
+    initOnSetHF();
+    // open the settings bundle files
+    initialiseINI();
+
+    // preset the stacked info
+
+    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
+    statsPeriod2.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod2());
+
+    showWorkedCountries.setInitialValue(true);
+    showUnworkedCountries.setInitialValue(false);
+    showWorkedDistricts.setInitialValue(true);
+    showUnworkedDistricts.setInitialValue(false);
+
+    QString temp;
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );
+    screenLayout.setInitialValue(temp);
+
+    temp.clear(); // Initial value now comes from the screen config
+
+    currentFKeySet.setInitialValue("Default");
+
+    for (int i = 0; i < STACKITEMS; i++)
+    {
+        currentStackItems[i].setInitialValue(temp);
+    }
+
+    // open the LoggerContestLog file
+
+
+    cfileName = GetFullPath(fn);
+    publishedName = ExtractFileName( fn );
+
+}
+
+bool LoggerContestLog::initialiseNewFile( const QString &fn)
+{
+    if ( TContestApp::getContestApp() ->isContestOpen( fn ) )
+    {
+        return false;
+    }
+
+    baseIinitialise(fn);
+    minosFile = true;
+    QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
+    if (isUnwriteable())
+    {
+        om = QIODevice::ReadOnly;
+    }
+    QSharedPointer<QFile> contestFile(new QFile(fn));
+
+    if (!contestFile->open(om))
+    {
+        QString lerr = contestFile->errorString();
+        QString emess = tr("Failed to create Contest file %1 : %2").arg(fn, lerr);
+        MinosParameters::getMinosParameters() ->mshowMessage( emess );
+        return false;
+    }
+
+    minosContestFile = contestFile;
+
+    setVersion(STRINGVERSION);
+    commonSave( true );
+
+    checkAgeProtection();
+
+    return true;
+
+}
+bool LoggerContestLog::initialiseExisting( const QString &fn, int slotno )
+{
+   if ( !initialiseSlot( slotno ) )
       return false;
 
    if ( TContestApp::getContestApp() ->isContestOpen( fn ) )
@@ -241,39 +311,8 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       return false;
    }
 
-   initOnSetHF();
-   // open the settings bundle files
-   initialiseINI();
-
-   // preset the stacked info
-
-   statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
-   statsPeriod2.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod2());
-
-   showWorkedCountries.setInitialValue(true);
-   showUnworkedCountries.setInitialValue(false);
-   showWorkedDistricts.setInitialValue(true);
-   showUnworkedDistricts.setInitialValue(false);
-
-   QString temp;
-   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );
-   screenLayout.setInitialValue(temp);
-
-   temp.clear(); // Initial value now comes from the screen config
-
-   currentFKeySet.setInitialValue("Default");
-
-   for (int i = 0; i < STACKITEMS; i++)
-   {
-        currentStackItems[i].setInitialValue(temp);
-   }
-
-   // open the LoggerContestLog file
-
-
-   cfileName = GetFullPath(fn);
+   baseIinitialise(fn);
    QString ext = ExtractFileExt( fn );
-   publishedName = ExtractFileName( fn );
    if ( ext.compare(".gjv", Qt::CaseInsensitive ) == 0 )
    {
       GJVFile = true;
@@ -307,124 +346,97 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                   MinosParameters::getMinosParameters() ->mshowMessage( tr("Not a known file type! (%1)").arg(ext) );
                   return false;
                }
-   if ( !newFile )
-   {
-      QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
-      QSharedPointer<QFile> contestFile(new QFile(fn));
 
-      if (!FileExists(fn) || !contestFile->open(om))
+  QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
+  QSharedPointer<QFile> contestFile(new QFile(fn));
+
+  if (!FileExists(fn) || !contestFile->open(om))
+  {
+      // isWriteable doesn't give good results on Windows
+      om = QIODevice::ReadOnly;
+      if (!contestFile->open(om))
       {
-          // isWriteable doesn't give good results on Windows
-          om = QIODevice::ReadOnly;
-          if (!contestFile->open(om))
-          {
-             QString lerr = contestFile->errorString();
-             QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn, lerr);
-             MinosParameters::getMinosParameters() ->mshowMessage( emess );
-             return false;
-          }
-          setUnwriteable(true);
+         QString lerr = contestFile->errorString();
+         QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn, lerr);
+         MinosParameters::getMinosParameters() ->mshowMessage( emess );
+         return false;
       }
+      setUnwriteable(true);
+  }
 
-      bool loadOK = false;
-      needExport = false;
+  bool loadOK = false;
+  needExport = false;
 
-      if ( GJVFile )
-      {
-         GJVcontestFile = contestFile;
-         if ( !GJVload() )     // load the header so that we can display it
-            return false;
-         loadOK = GJVloadContacts();
-      }
-      else
-         if ( minosFile )
-         {
-            minosContestFile = contestFile;
-            MinosTestImport mt( this );
-            ct_stanzaCount = mt.importTest( minosContestFile );
-            if ( ct_stanzaCount > 0 )
-            {
-               // set the bundles accordingly
-               entryBundle.openSection( entryBundleName.getValue() );
-               QTHBundle.openSection( QTHBundleName.getValue() );
-               stationBundle.openSection( stationBundleName.getValue() );
-               loadOK = true;
-            }
-            else
-            {
-               mShowMessage(tr("File %1 is empty, so cannot be opened").arg(fn), nullptr);
-            }
-         }
-         else
-            if ( logFile )
-            {
-               logContestFile = contestFile;
-               loadOK = importLOG( logContestFile );
-               needExport = true;
-            }
-            else
-               if ( adifFile )
-               {
-                  adifContestFile = contestFile;
-                  loadOK = importAdif( adifContestFile );
-                  needExport = true;
-               }
-               else
-                  if ( ediFile )
-                  {
-                     ediContestFile = contestFile;
-                     loadOK = importReg1Test( ediContestFile );
-                     needExport = true;
-                  }
+  if ( GJVFile )
+  {
+     GJVcontestFile = contestFile;
+     if ( !GJVload() )     // load the header so that we can display it
+        return false;
+     loadOK = GJVloadContacts();
+  }
+  else
+     if ( minosFile )
+     {
+        minosContestFile = contestFile;
+        MinosTestImport mt( this );
+        ct_stanzaCount = mt.importTest( minosContestFile );
+        if ( ct_stanzaCount > 0 )
+        {
+           // set the bundles accordingly
+           entryBundle.openSection( entryBundleName.getValue() );
+           QTHBundle.openSection( QTHBundleName.getValue() );
+           stationBundle.openSection( stationBundleName.getValue() );
+           loadOK = true;
+        }
+        else
+        {
+           mShowMessage(tr("File %1 is empty, so cannot be opened").arg(fn), nullptr);
+        }
+     }
+     else
+        if ( logFile )
+        {
+           logContestFile = contestFile;
+           loadOK = importLOG( logContestFile );
+           needExport = true;
+        }
+        else
+           if ( adifFile )
+           {
+              adifContestFile = contestFile;
+              loadOK = importAdif( adifContestFile );
+              needExport = true;
+           }
+           else
+              if ( ediFile )
+              {
+                 ediContestFile = contestFile;
+                 loadOK = importReg1Test( ediContestFile );
+                 needExport = true;
+              }
 
-      scanContest();    // after log initialise/load/import
-      clearDirty();  // what we have just read CAN'T be dirty
+  scanContest();    // after log initialise/load/import
+  clearDirty();  // what we have just read CAN'T be dirty
 //      validateLoc();    // this was done in scanContest
-      // run_contest_dialog has already loaded the LoggerContestLog and set log_count
-      // here, we display a "loading" box
-      if ( isUnwriteable() )     // Minos files can be unprotected if not realy RO
-         closeFile();				// to preserve file handles
+  // run_contest_dialog has already loaded the LoggerContestLog and set log_count
+  // here, we display a "loading" box
+  if ( isUnwriteable() )     // Minos files can be unprotected if not realy RO
+     closeFile();				// to preserve file handles
 
-      if ( !loadOK )    // sets ct as well
-      {
-         return false;
-      }
-      // and create the ADIF manager if required
-      QString wadif = watchedADIFFile.getValue();
-      if (!wadif.isEmpty())
-      {
-          qint64 lo = watchedADIFLastOffset.getValue();
-          adifManager = QSharedPointer<AdifManager>(new AdifManager(this, wadif, lo));
-      }
-   }
-   else
-      if ( minosFile )
-      {
-          //CreateDir(fn);
-          QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
-          if (isUnwriteable())
-          {
-            om = QIODevice::ReadOnly;
-          }
-          QSharedPointer<QFile> contestFile(new QFile(fn));
-
-          if (!contestFile->open(om))
-          {
-             QString lerr = contestFile->errorString();
-             QString emess = tr("Failed to create Contest file %1 : %2").arg(fn, lerr);
-             MinosParameters::getMinosParameters() ->mshowMessage( emess );
-             return false;
-          }
-
-          minosContestFile = contestFile;
-      }
-      else
-      {
-         return false;
-      }
+  if ( !loadOK )    // sets ct as well
+  {
+     return false;
+  }
+  // and create the ADIF manager if required
+  QString wadif = watchedADIFFile.getValue();
+  if (!wadif.isEmpty())
+  {
+      qint64 lo = watchedADIFLastOffset.getValue();
+      adifManager = QSharedPointer<AdifManager>(new AdifManager(this, wadif, lo));
+  }
 
    setVersion(STRINGVERSION);
-   commonSave( newFile );
+   commonSave( false );
 
    checkAgeProtection();
 

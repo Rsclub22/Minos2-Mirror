@@ -16,6 +16,7 @@ class TLogContainer;
 
 class ContestDetails;
 class BaseContestLog;
+class LoggerContestLog;
 class BaseContact;
 class TSingleLogFrame;
 class TContactListDetails;
@@ -56,6 +57,8 @@ public:
 
     SerialTVSwitch *serialTVSw = nullptr;
 
+    QString aboutBoxOpenFilename;
+
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
@@ -90,6 +93,9 @@ public:
 
     void openSerialTVSwitch();
     
+    QStringList createContest(bool hf);
+    void showContest(LoggerContestLog* contest, int slotNo);
+
 private:
     Ui::TLogContainer *ui;
 
@@ -114,7 +120,7 @@ private:
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
 
-    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno , bool hf, bool fromAbout);
+    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, int slotno , bool hf);
     void closeSlot(int t, bool addToMRU );
     TSingleLogFrame *findLogFrame(int t);
 
@@ -132,7 +138,7 @@ private:
     void clearMenus();
 
     void FileImportActionExecute(bool hf);
-    bool FileNewActionExecute(bool hf, bool fromAbout);
+    QStringList FileNewActionExecute(bool hf, bool fromAbout);
 
     QAction *EnterAction = nullptr;
 

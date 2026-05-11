@@ -4,10 +4,7 @@
 #include <QFont>
 #include "AppStartup.h"
 #include "MTrace.h"
-#ifdef ABOUTNEWCONTEST
-#include "contest.h"
-#include "LoggerContest.h"
-#endif
+//#include "LoggerContest.h"
 #include "managecontestsettings.h"
 #include "regsettings.h"
 #include "MShowMessageDlg.h"
@@ -228,11 +225,6 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     {
         doStartup = true; // click the start button on form close
     }
-#ifdef ABOUTNEWCONTEST
-    ui->newContestFrame->setVisible(false);
-#else
-    ui->newContestFrame->setVisible(false);
-#endif
 }
 
 TAboutBox::~TAboutBox()
@@ -371,33 +363,30 @@ void TAboutBox::on_fontButton_clicked()
 
 void TAboutBox::doNewContest(bool hf)
 {
-    bool oldpreloadComplete = TContestApp::getContestApp() ->preloadComplete;
-    TContestApp::getContestApp() ->preloadComplete = true;
+    QStringList names = LogContainer->FileNewActionExecute(hf, true);
 
-    bool ok = LogContainer->FileNewActionExecute(hf, true);
-    if (ok)
+    if (names.count() >= 3)
     {
-#ifdef ABOUTNEWCONTEST
+        LogContainer->aboutBoxOpenFilename = names[0];
 
-        BaseContestLog *contest = TContestApp::getContestApp()->getCurrentContest();
-        LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>( contest);
-        QString settingsName = lcl->contestSettings.getValue();
-        if (!settingsName.isEmpty())
+        QString newContestSetName = names[1];
+        QString newContestAppSetName = names[2];
+        // switch contest set and start apps to those of new contest
+        //save contest set/contest file to be opened after preload
+
+        if (!newContestSetName.isEmpty())
         {
-            ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
-            QString sname = settings->getVal(ecsStartApps);
-            if (!sname.isEmpty())
-            {
-                LogContainer->setCurrSessionName(sname);
-            }
+            ui->chooseSetCb->setCurrentText(newContestSetName);
         }
-        TContestApp::getContestApp() ->suppressWritePreload = true;
-        LogContainer->CloseAllActionExecute();
-        TContestApp::getContestApp() ->suppressWritePreload = false;
-#endif
+
+        if (!newContestAppSetName.isEmpty())
+        {
+            MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+            minosConfig->setCurConfig(newContestAppSetName);
+            showAppConfig();
+        }
         accept();
     }
-    TContestApp::getContestApp() ->preloadComplete = oldpreloadComplete;
 }
 void TAboutBox::on_newHFButton_clicked()
 {

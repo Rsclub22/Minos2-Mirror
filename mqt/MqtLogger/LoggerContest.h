@@ -192,9 +192,11 @@ protected:
       // startup/closedown
 
       LoggerContestLog( bool hf);
+      bool initialiseSlot( int slotno );
       void initialiseINI();
-      bool initialise( int slotno );
-      bool initialise(const QString &, bool, int slotno );
+      void baseIinitialise(QString fn);
+      bool initialiseNewFile(const QString &fn);
+      bool initialiseExisting(const QString &, int slotno );
       ~LoggerContestLog() override;
 
 
