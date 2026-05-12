@@ -94,6 +94,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    bool dirty = false;
 
    ct->contestSettings.addIfDirty(st, "settings", dirty);
+   ct->contestAppSet.addIfDirty(st, "appset", dirty);
+   ct->contestLogSet.addIfDirty(st, "logset", dirty);
    ct->hfContest.addIfDirty(st, "hf", dirty);
    ct->appVersion.addIfDirty(st, "version", dirty);
    ct->name.addIfDirty( st, "name", dirty );

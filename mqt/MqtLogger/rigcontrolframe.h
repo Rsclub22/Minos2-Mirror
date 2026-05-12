@@ -313,7 +313,7 @@ private:
     bool isVmButtonsFrameVisible();
     void sendVmButtonFrameSelectedRadio(PubSubName selectedRadio);
     void sendVmButtonFrameRadioConnected(bool connected);
-    QString getSelectedRadio();
+    //QString getSelectedRadio();
     bool setSelectedRadio(QString s);
     void setRigControlPanelTitle();
     bool getRadioReadOnlyFlag();

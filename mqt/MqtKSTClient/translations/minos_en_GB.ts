@@ -619,7 +619,7 @@ Path in AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstplanesframe.cpp" line="73"/>
+        <location filename="../kstplanesframe.cpp" line="80"/>
         <source></source>
         <translation></translation>
     </message>
@@ -688,15 +688,18 @@ Path in AirScout</source>
     </message>
     <message>
         <location filename="../kstscreenoptions.cpp" line="26"/>
+        <location filename="../kstscreenoptions.cpp" line="26"/>
         <source>AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../kstscreenoptions.cpp" line="27"/>
+        <location filename="../kstscreenoptions.cpp" line="27"/>
         <source>AirScout Activation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../kstscreenoptions.cpp" line="28"/>
         <location filename="../kstscreenoptions.cpp" line="28"/>
         <source>Messages</source>
         <translation type="unfinished"></translation>
@@ -722,6 +725,7 @@ Path in AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../kstscreenoptions.cpp" line="31"/>
         <location filename="../kstscreenoptions.cpp" line="31"/>
         <source>Buttons</source>
         <translation type="unfinished"></translation>

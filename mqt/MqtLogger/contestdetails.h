@@ -88,6 +88,9 @@ public:   		// User declarations
    TBundleFrame *getStationBundle();
    TBundleFrame *getQTHBundle();
    TBundleFrame *getEntryBundle();
+
+   QString appset;
+   QString logset;
    private slots:
    void focusChange(QObject *, bool, QFocusEvent *event);
    void on_OKButton_clicked();

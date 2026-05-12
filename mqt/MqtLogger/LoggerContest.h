@@ -83,9 +83,11 @@ protected:
       virtual void setStanza(unsigned int stanza, int stanzaStart , int stanzaEnd) override;
       virtual bool getStanza(unsigned int Stanza, QString &stanzaData ) override;
 
-      // The contest details
+      // The contest details as assigned on "new"
 
       MinosStringItem<QString> contestSettings;
+      MinosStringItem<QString> contestAppSet;
+      MinosStringItem<QString> contestLogSet;
 
       // Bundles are specific to the off disk logs, not the monitored logs
 

@@ -1,5 +1,4 @@
 #include "AppStartup.h"
-#include "ConfigFile.h"
 #include "ScreenConfigManager.h"
 #include "managecontestsettings.h"
 #include "regsettings.h"
@@ -349,7 +348,10 @@ void ContestDetails::setDetails(  )
 {
    setWindowTitle( (tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName)));
 
-    ui->settingsCombo->setCurrentText(contestTransferObject->contestSettings.getValue());
+   ui->settingsCombo->setCurrentText(contestTransferObject->contestSettings.getValue());
+   appset = contestTransferObject->contestAppSet.getValue();
+   logset = contestTransferObject->contestLogSet.getValue();
+
    ui->ContestNameEdit->setText(contestTransferObject->name.getValue());
 
    setBandBoxes(contestTransferObject->contestBands.getValue(), contestTransferObject->bandsList.getValue());
@@ -1254,6 +1256,8 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contestTransferObject->contestSettings.setValue(ui->settingsCombo->currentText());
+    contestTransferObject->contestAppSet.setValue(appset);
+    contestTransferObject->contestLogSet.setValue(logset);
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
     contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
     contestTransferObject->sectionList.setValue( sectionList );
@@ -1903,6 +1907,14 @@ int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
 {
     // we need to be able to find a unique rig name in here as well
     int found = -1;
+    int ct = cb->count();
+    if (ct <= 1)
+    {
+        cb->clear();
+        cb->addItem("", "");
+        cb->addItem(name, name);
+        return 1;
+    }
     for(int r = 0; r < cb->count(); r++)
     {
         QString data = cb->itemData(r).toString();
@@ -2016,13 +2028,10 @@ void ContestDetails::toSettings(ContestSettings *settings)
                 settings->setVal(s, ui->screenLayoutCombo->currentText());
                 break;
             case ecsLogSet:
-                settings->setVal(s, LogContainer->getCurrSession());
+                settings->setVal(s, contestTransferObject->contestLogSet.getValue());
                 break;
             case ecsStartApps:
-            {
-                MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-                settings->setVal(s, minosConfig->getCurrConfig().configName);
-            }
+                settings->setVal(s, contestTransferObject->contestAppSet.getValue());
                 break;
             case ecsMaxVal:
                 break;
@@ -2069,10 +2078,10 @@ void ContestDetails::fromSettings(ContestSettings *settings)
                 ui->screenLayoutCombo->setCurrentText(val);
                 break;
             case ecsLogSet:
-                // not at the moment...
+                contestTransferObject->contestLogSet.setValue(val);
                 break;
             case ecsStartApps:
-                // not at the moment...
+                contestTransferObject->contestAppSet.setValue(val);
                 break;
             case ecsMaxVal:
                 break;

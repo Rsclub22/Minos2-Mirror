@@ -1211,8 +1211,11 @@ QStringList TLogContainer::createContest(bool hf)
 
     QString sname = contest->contestSettings.getValue();
     ContestSettings *settings = ManageContestSettings::getCurrentSettings(sname);
-    contestSetName = settings->logSet;
-    startAppsName = settings->appSet;
+    if (settings)
+    {
+        contestSetName = settings->logSet;
+        startAppsName = settings->appSet;
+    }
 
     delete contest;
     contest = nullptr;

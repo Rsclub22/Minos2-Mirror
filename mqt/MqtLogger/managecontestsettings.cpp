@@ -225,15 +225,16 @@ int ManageContestSettings::save()
         {
             newName = currentValue;
         }
-        else
+    }
+    if (newName.isEmpty())
+    {
+        newName = tr("new setting");
+        if (!getNewName(newName))
         {
-            newName = tr("new setting");
-            if (!getNewName(newName))
-            {
-                return QDialog::Rejected;
-            }
+            return QDialog::Rejected;
         }
     }
+
     ContestSettings saved;
     parentDetails->toSettings(&saved);
 
@@ -704,7 +705,7 @@ QStringList ContestSettings::getValues() const
 bool ManageContestSettings::getNewName(QString &Value)
 {
     bool firsttime = true;
-    while (firsttime || allSettings.contains(Value))
+    while (firsttime || allSettings.contains(Value) || Value.isEmpty())
     {
         firsttime = false;
         if ( enquireDialog( this, tr("Please give a new name for the setting") , Value ) )

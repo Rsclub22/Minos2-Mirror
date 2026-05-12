@@ -171,10 +171,10 @@ void RigControlFrame::clearFreqInputFocus()
 {
     ui->freqInput->clearFocus();
 }
-QString RigControlFrame::getSelectedRadio()
-{
-    return ui->radioNameSel->currentData().toString();
-}
+// QString RigControlFrame::getSelectedRadio()
+// {
+//     return ui->radioNameSel->currentData().toString();
+// }
 
 bool RigControlFrame::setSelectedRadio(QString s)
 {
@@ -326,7 +326,7 @@ void RigControlFrame::clusterUpdateRigFreq(Frequency freq)
 void RigControlFrame::on_radioNameSel_activated(int /*index*/)
 {
     // radio combo selected
-    radioName = getSelectedRadio();
+    radioName = ui->radioNameSel->currentData().toString();
 
     traceMsg(QString("on radioNameSel activated: radioName - %1 requested ***").arg(ui->radioNameSel->currentText()));
     setRadioName(radioName, true);       // set true here as we want to act like start and use preset freq, except if a last freq is available

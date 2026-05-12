@@ -183,6 +183,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     unwriteable = ct->unwriteable;
 
     contestSettings = ct->contestSettings;
+    contestAppSet = ct->contestAppSet;
+    contestLogSet = ct->contestLogSet;
 
     entryBundle = ct->entryBundle;
     entryBundleName = ct->entryBundleName;
@@ -302,6 +304,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->unwriteable = unwriteable;
 
     ct->contestSettings = contestSettings;
+    ct->contestAppSet = contestAppSet;
+    ct->contestLogSet = contestLogSet;
 
     ct->entryBundle = entryBundle;
     ct->entryBundleName = entryBundleName;

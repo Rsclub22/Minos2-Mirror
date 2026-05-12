@@ -135,6 +135,8 @@ private:
     bool unwriteable = false;
 
     MinosStringItem<QString> contestSettings;
+    MinosStringItem<QString> contestAppSet;
+    MinosStringItem<QString> contestLogSet;
 
     SettingsBundle entryBundle;      // individual LoggerContestLog
     MinosStringItem<QString> entryBundleName;
