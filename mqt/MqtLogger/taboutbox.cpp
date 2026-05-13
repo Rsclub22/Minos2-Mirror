@@ -383,6 +383,7 @@ void TAboutBox::doNewContest(bool hf)
         {
             MinosConfig *minosConfig = MinosConfig::getMinosConfig();
             minosConfig->setCurConfig(newContestAppSetName);
+            minosConfig->saveAll();
             showAppConfig();
         }
         accept();

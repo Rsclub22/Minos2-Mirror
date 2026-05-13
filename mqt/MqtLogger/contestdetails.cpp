@@ -1,4 +1,5 @@
 #include "AppStartup.h"
+#include "ConfigFile.h"
 #include "ScreenConfigManager.h"
 #include "managecontestsettings.h"
 #include "regsettings.h"
@@ -125,6 +126,26 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_SetRotatorList);
+
+    QStringList sessionlst = LogContainer->getSessions();
+    if (sessionlst.count())
+    {
+        ui->contestSetCombo->addItems(sessionlst);
+    }
+    QString sess = LogContainer->getCurrSession();
+    ui->contestSetCombo->setCurrentText(sess);
+
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    for(auto const &i: QASCONST(minosConfig->configs ))
+    {
+        ui->startAppsCombo->addItem(i.configName);
+    }
+    ui->startAppsCombo->setCurrentText(minosConfig->getCurrConfig().configName);
+
+    // And we want to lose ui->setsFrame if from TAboutBox
+    // or just disable them?
+
+    // What about all the settings stuff?
 
     fillSettingsCombo(QString());
     adjustMargins(layout(), 5, 2, 2, 2, 2);
@@ -349,8 +370,8 @@ void ContestDetails::setDetails(  )
    setWindowTitle( (tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName)));
 
    ui->settingsCombo->setCurrentText(contestTransferObject->contestSettings.getValue());
-   appset = contestTransferObject->contestAppSet.getValue();
-   logset = contestTransferObject->contestLogSet.getValue();
+   ui->startAppsCombo->setCurrentText(contestTransferObject->contestAppSet.getValue());
+   ui->contestSetCombo->setCurrentText(contestTransferObject->contestLogSet.getValue());
 
    ui->ContestNameEdit->setText(contestTransferObject->name.getValue());
 
@@ -1256,8 +1277,8 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contestTransferObject->contestSettings.setValue(ui->settingsCombo->currentText());
-    contestTransferObject->contestAppSet.setValue(appset);
-    contestTransferObject->contestLogSet.setValue(logset);
+    contestTransferObject->contestAppSet.setValue(ui->startAppsCombo->currentText());
+    contestTransferObject->contestLogSet.setValue(ui->contestSetCombo->currentText());
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
     contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
     contestTransferObject->sectionList.setValue( sectionList );
@@ -2028,10 +2049,10 @@ void ContestDetails::toSettings(ContestSettings *settings)
                 settings->setVal(s, ui->screenLayoutCombo->currentText());
                 break;
             case ecsLogSet:
-                settings->setVal(s, contestTransferObject->contestLogSet.getValue());
+                settings->setVal(s, ui->contestSetCombo->currentText());
                 break;
             case ecsStartApps:
-                settings->setVal(s, contestTransferObject->contestAppSet.getValue());
+                settings->setVal(s, ui->startAppsCombo->currentText());
                 break;
             case ecsMaxVal:
                 break;
@@ -2078,10 +2099,10 @@ void ContestDetails::fromSettings(ContestSettings *settings)
                 ui->screenLayoutCombo->setCurrentText(val);
                 break;
             case ecsLogSet:
-                contestTransferObject->contestLogSet.setValue(val);
+                ui->contestSetCombo->setCurrentText(val);
                 break;
             case ecsStartApps:
-                contestTransferObject->contestAppSet.setValue(val);
+                ui->startAppsCombo->setCurrentText(val);
                 break;
             case ecsMaxVal:
                 break;
