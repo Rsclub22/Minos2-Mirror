@@ -124,5 +124,6 @@ QStringList TBundleFrame::getBundleNames() const
 
 int TBundleFrame::getBundleOffset() const
 {
-    return ui->BundleSection->currentIndex();
+    int offset = ui->BundleSection->currentIndex();
+    return offset;
 }

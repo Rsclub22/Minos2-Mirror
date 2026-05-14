@@ -430,7 +430,6 @@ bool TLogContainer::show(int argc, char *argv[])
         preloadFiles( conarg );
         enableActions();
     }
-    TContestApp::getContestApp()->setPreloadComplete();
     sendDM->subscribeApps();
     if (!n1mmBroadcast)
     {
@@ -1171,8 +1170,6 @@ QStringList TLogContainer::createContest(bool hf)
     }
     bool repeatDialog = true;
     QString suggestedfName;
-    QString contestSetName;
-    QString startAppsName;
     suggestedfName = ( contest->mycall.realCall );
     suggestedfName += '_';
     if ( contest->DTGStart.getValue().size() )
@@ -1210,12 +1207,8 @@ QStringList TLogContainer::createContest(bool hf)
     // Must close the contest here, so get important values now
 
     QString sname = contest->contestSettings.getValue();
-    ContestSettings *settings = ManageContestSettings::getCurrentSettings(sname);
-    if (settings)
-    {
-        contestSetName = settings->logSet;
-        startAppsName = settings->appSet;
-    }
+    QString contestSetName = contest->contestLogSet.getValue();
+    QString startAppsName = contest->contestAppSet.getValue();
 
     delete contest;
     contest = nullptr;
@@ -2284,6 +2277,8 @@ void TLogContainer::preloadFiles( const QString &conarg )
         app ->currSession = app ->defaultSession;
     }
 
+    TContestApp::getContestApp()->setPreloadComplete();
+
     BaseContestLog *ct = loadSession(app->currSession);
 
 
@@ -2293,6 +2288,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         {
             // open the "argument" one last - which will make it current
             ct = addSlot( nullptr, conarg, -1, false );
+
             app ->writeContestList();	// or this one will not get included
         }
     }

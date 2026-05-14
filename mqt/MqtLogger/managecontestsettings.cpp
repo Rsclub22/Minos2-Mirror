@@ -340,7 +340,7 @@ int nCol = sender()->property("col").toInt();
                 QComboBox* combo = new QComboBox();
 
                 combo->addItems(parentDetails->getStationBundle()->getBundleNames());
-                combo->setCurrentIndex(parentDetails->getStationBundle()->getBundleOffset());
+                combo->setCurrentText(values[i]);
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
             else if (i == ecsEntry)
@@ -348,7 +348,7 @@ int nCol = sender()->property("col").toInt();
                 QComboBox* combo = new QComboBox();
 
                 combo->addItems(parentDetails->getEntryBundle()->getBundleNames());
-                combo->setCurrentIndex(parentDetails->getEntryBundle()->getBundleOffset());
+                combo->setCurrentText(values[i]);
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
             else if (i == ecsQTH)
@@ -356,7 +356,7 @@ int nCol = sender()->property("col").toInt();
                 QComboBox* combo = new QComboBox();
 
                 combo->addItems(parentDetails->getQTHBundle()->getBundleNames());
-                combo->setCurrentIndex(parentDetails->getQTHBundle()->getBundleOffset());
+                combo->setCurrentText(values[i]);
                 ui->OptionsTable->setCellWidget(i,0,combo);
             }
             // else if (i == ecsRadio)
@@ -525,7 +525,7 @@ void ManageContestSettings::on_SettingsList_itemSelectionChanged()
 
         QString val = ui->SettingsList->currentItem()->text();
         settings = &allSettings[val];
-        showSetting();
+        showDetails();
     }
 }
 

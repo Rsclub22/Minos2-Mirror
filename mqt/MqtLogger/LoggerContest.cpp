@@ -1564,8 +1564,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
    if ( methodName == "MinosLogContest" )
    {
        mt->getStructArgMemberValue("settings", contestSettings);
-       mt->getStructArgMemberValue("appset", contestAppSet);
-       mt->getStructArgMemberValue("logset", contestLogSet);
+       //mt->getStructArgMemberValue("appset", contestAppSet);
+       //mt->getStructArgMemberValue("logset", contestLogSet);
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
       mt->getStructArgMemberValue( "ScreenLayout", screenLayout);

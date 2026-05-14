@@ -363,8 +363,11 @@ void TAboutBox::on_fontButton_clicked()
 
 void TAboutBox::doNewContest(bool hf)
 {
+    LogContainer->setCurrSessionName(ui->chooseSetCb->currentText());
+
     QStringList names = LogContainer->FileNewActionExecute(hf, true);
 
+    trace(QString("names %1").arg(names.join("!")));
     if (names.count() >= 3)
     {
         LogContainer->aboutBoxOpenFilename = names[0];
