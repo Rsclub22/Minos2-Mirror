@@ -238,6 +238,7 @@ void MainWindow::on_appSelectButton_clicked()
 
 void MainWindow::on_closeButton_clicked()
 {
+    // this is close all, including this app
     close();
 }
 void MainWindow::startTimer_Timeout()
@@ -248,7 +249,20 @@ void MainWindow::startTimer_Timeout()
 
 void MainWindow::start()
 {
-    MinosConfig::getMinosConfig() ->start();
+    // if started, stop, change button to start
+    if (started)
+    {
+        MinosConfig::getMinosConfig() ->askStop();
+        MinosConfig::getMinosConfig()->forceStop();
+        started = false;
+        ui->startAppsButton->setText(tr("Start Apps"));
+    }
+    else
+    {
+        MinosConfig::getMinosConfig() ->start();
+        started = true;
+        ui->startAppsButton->setText(tr("Stop Apps"));
+    }
 }
 void MainWindow::on_stdOutLine(QString line)
 {
@@ -311,6 +325,6 @@ void MainWindow::on_stdOutLine(QString line)
 
 void MainWindow::on_startAppsButton_clicked()
 {
-    MinosConfig::getMinosConfig()->start();
+    start();
 }
 

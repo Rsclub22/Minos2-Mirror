@@ -51,6 +51,8 @@ private:
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
 
+    bool started = false;
+
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
