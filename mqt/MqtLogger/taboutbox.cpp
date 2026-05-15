@@ -380,6 +380,10 @@ void TAboutBox::doNewContest(bool hf)
         if (!newContestSetName.isEmpty())
         {
             ui->chooseSetCb->setCurrentText(newContestSetName);
+            trace(QString("TAboutBox::doNewContest set session name to %1").arg(newContestSetName));
+            trace(QString("TAboutBox::doNewContest combo is %1").arg(ui->chooseSetCb->currentText()));
+            repaint();
+            trace(QString("TAboutBox::doNewContest combo after repaint is %1").arg(ui->chooseSetCb->currentText()));
         }
 
         if (!newContestAppSetName.isEmpty())

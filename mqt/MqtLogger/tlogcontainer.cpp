@@ -2248,6 +2248,7 @@ QString TLogContainer::getCurrSession()
 }
 void TLogContainer::setCurrSessionName(QString sessionName)
 {
+    trace(QString("TLogContainer::setCurrSessionName %1").arg(sessionName));
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
     preloadBundle.openSection(app ->preloadsect);
