@@ -161,12 +161,12 @@ void displayCompassBearingWithOverlap(const QString newBearing, RotFrameData &ro
 
     if (rotFrameData.getRotatorBearing() > COMPASS_MAX360 && sl[2] == "1")
     {
-        brg.prepend("<font color='Red'>");
+        brg.prepend("<span style=\"background-color:red;\"><font color='white'>");
         displayLabel->setText(brg);
     }
     else if (rotFrameData.getRotatorBearing() < COMPASS_MIN0 && sl[2] == "1")
     {
-        brg.prepend("<font color='Blue'>");
+        brg.prepend("<span style=\"background-color:blue;\"><font color='white'>");
         displayLabel->setText(brg);
     }
     else
