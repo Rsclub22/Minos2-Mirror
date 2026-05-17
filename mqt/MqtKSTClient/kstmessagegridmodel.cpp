@@ -172,7 +172,7 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
         case eccChat:
             return tr("Chat");
         case eccDTG:
-            cell = tr("Time(Z)");
+            cell = tr("Time(UTC)");
             break;
         case eccCall:
             cell = tr("Call");

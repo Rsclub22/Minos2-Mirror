@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QPushButton>
+#include <QTimeZone>
 
 #include "QtUtils.h"
 #include "SecondInstall.h"
@@ -1060,7 +1061,11 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
+#if QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000, Qt::UTC);
+#else
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000, QTimeZone::UTC);
+#endif
 
         kst->call.setFullCall(sl[3]);
         kst->distance = -2;
@@ -1103,8 +1108,11 @@ void KSTMainWindow::analyseKstMessage(QString atj) {
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000, Qt::UTC);
+#else
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000, QTimeZone::UTC);
+#endif
         kst->call.setFullCall(sl[3]);
         kst->distance = calcDistance(kst->call);
         kst->name = sl[4];
