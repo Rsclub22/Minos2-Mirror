@@ -324,12 +324,19 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             // ; separated list of "near" calls
             ui->placeHolderList->clear();
 
-            QStringList placeHolders = an.getValue().split(";");
-
-            for (auto &p:QASCONST(placeHolders))
+            QString anval = an.getValue();
+            if (!anval.isEmpty())
             {
-                QStringList pl = p.split("|");
-                ui->placeHolderList->addItem(pl[1]);
+                QStringList placeHolders = anval.split(";");
+
+                if (placeHolders.count())
+                {
+                    for (auto &p:QASCONST(placeHolders))
+                    {
+                        QStringList pl = p.split("|");
+                        ui->placeHolderList->addItem(pl[1]);
+                    }
+                }
             }
         }
 
