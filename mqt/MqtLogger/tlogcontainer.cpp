@@ -2134,6 +2134,7 @@ void TLogContainer::selectSession(QString sessName)
 
 BaseContestLog *TLogContainer::loadSession( QString sessName)
 {
+    trace(QString("loadSession %1").arg(sessName));
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
@@ -2225,6 +2226,7 @@ QString TLogContainer::getCurrSession()
     {
         app ->currSession = app ->defaultSession;
     }
+    trace(QString("TLogContainer::getCurrSession %1").arg(app->currSession));
     return app->currSession;
 }
 void TLogContainer::setCurrSessionName(QString sessionName)
@@ -2241,6 +2243,7 @@ void TLogContainer::setCurrSessionName(QString sessionName)
     }
 
     preloadBundle.setStringProfile(eppSession, sessionName);
+    preloadBundle.flushProfile();
 }
 void TLogContainer::preloadFiles( const QString &conarg )
 {
