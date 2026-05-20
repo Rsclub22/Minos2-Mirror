@@ -309,6 +309,9 @@
             </item>
             <item>
              <widget class="QFrame" name="setsFrame">
+              <property name="frameShape">
+               <enum>QFrame::Shape::Box</enum>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
                 <widget class="QLabel" name="label_21">
@@ -321,6 +324,26 @@
                 <widget class="QComboBox" name="contestSetCombo"/>
                </item>
                <item>
+                <widget class="QToolButton" name="contestSetToolButton">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_9">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
                 <widget class="QLabel" name="label_20">
                  <property name="text">
                   <string>Start Apps</string>
@@ -329,6 +352,13 @@
                </item>
                <item>
                 <widget class="QComboBox" name="startAppsCombo"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="appSetToolButton">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>

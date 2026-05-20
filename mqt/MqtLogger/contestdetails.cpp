@@ -1,6 +1,8 @@
 #include "AppStartup.h"
 #include "ConfigFile.h"
 #include "ScreenConfigManager.h"
+#include "StartConfigManager.h"
+#include "TSessionManager.h"
 #include "managecontestsettings.h"
 #include "regsettings.h"
 #include "LoggerContest.h"
@@ -37,6 +39,29 @@ enum BonusTypes {
     btB8,
     btNAC
 };
+
+void ContestDetails::populateAppsCombo()
+{
+    ui->startAppsCombo->clear();
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    for(auto const &i: QASCONST(minosConfig->configs ))
+    {
+        ui->startAppsCombo->addItem(i.configName);
+    }
+    ui->startAppsCombo->setCurrentText(minosConfig->getCurrConfig().configName);
+}
+
+void ContestDetails::populateContestSetCombo()
+{
+    ui->contestSetCombo->clear();
+    QStringList sessionlst = LogContainer->getSessions();
+    if (sessionlst.count())
+    {
+        ui->contestSetCombo->addItems(sessionlst);
+    }
+    QString sess = LogContainer->getCurrSession();
+    ui->contestSetCombo->setCurrentText(sess);
+}
 
 ContestDetails::ContestDetails(QWidget *parent) :
     QDialog(parent),
@@ -127,25 +152,18 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_SetRotatorList);
 
-    QStringList sessionlst = LogContainer->getSessions();
-    if (sessionlst.count())
-    {
-        ui->contestSetCombo->addItems(sessionlst);
-    }
-    QString sess = LogContainer->getCurrSession();
-    ui->contestSetCombo->setCurrentText(sess);
+    populateContestSetCombo();
 
-    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-    for(auto const &i: QASCONST(minosConfig->configs ))
-    {
-        ui->startAppsCombo->addItem(i.configName);
-    }
-    ui->startAppsCombo->setCurrentText(minosConfig->getCurrConfig().configName);
+    populateAppsCombo();
 
     // And we want to lose ui->setsFrame if from TAboutBox
     // or just disable them?
 
     // What about all the settings stuff?
+    if (!LogContainer->aboutBox)
+    {
+        ui->setsFrame->setVisible(false);
+    }
 
     fillSettingsCombo(QString());
     adjustMargins(layout(), 5, 2, 2, 2, 2);
@@ -2166,3 +2184,20 @@ void ContestDetails::fillSettingsCombo(QString def)
     ui->settingsCombo->setCurrentText(def);
 
 }
+void ContestDetails::on_contestSetToolButton_clicked()
+{
+    LogContainer->setCurrSessionName(ui->contestSetCombo->currentText());
+    TSessionManager tsm(this);
+    tsm.exec();
+
+    populateContestSetCombo();
+}
+
+
+void ContestDetails::on_appSetToolButton_clicked()
+{
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
+    manageApps.exec();
+    populateAppsCombo();
+}
+

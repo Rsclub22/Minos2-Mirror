@@ -25,6 +25,7 @@ class MatchContact;
 class TSendDM;
 class ContestPageControl;
 class QLabel;
+class TAboutBox;
 
 class SetMemoryAction: public QAction
 {
@@ -45,6 +46,7 @@ public:
     LoggerScreenOptions loggerScreenOptions;
     TSendDM *sendDM;
     N1MMBroadcast *n1mmBroadcast = nullptr;
+    TAboutBox *aboutBox = nullptr;
 
     bool show(int argc, char *argv[]);
     TSingleLogFrame *getCurrentLogFrame();

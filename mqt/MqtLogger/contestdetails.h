@@ -73,6 +73,10 @@ private:
    void doCalendarButton(QString dtitle, CalType calt);
    int findPubSubInCombo(QString name, QComboBox *cb);
    void fillSettingsCombo(QString def);
+   void populateAppsCombo();
+
+   void populateContestSetCombo();
+
    public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
@@ -113,6 +117,8 @@ public:   		// User declarations
    void on_saveSettingsButton_clicked();
    void on_settingsCombo_activated(int index);
    void on_settingsEditButton_clicked();
+   void on_contestSetToolButton_clicked();
+   void on_appSetToolButton_clicked();
 };
 
 #endif // CONTESTDETAILS_H

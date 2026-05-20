@@ -421,124 +421,124 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="152"/>
+        <location filename="../kstmainwindow.cpp" line="153"/>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="34"/>
-        <location filename="../kstmainwindow.cpp" line="145"/>
+        <location filename="../kstmainwindow.cpp" line="146"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="148"/>
+        <location filename="../kstmainwindow.cpp" line="149"/>
         <source>Clear Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="150"/>
-        <location filename="../kstmainwindow.cpp" line="800"/>
+        <location filename="../kstmainwindow.cpp" line="151"/>
+        <location filename="../kstmainwindow.cpp" line="801"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="187"/>
+        <location filename="../kstmainwindow.cpp" line="188"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="146"/>
+        <location filename="../kstmainwindow.cpp" line="147"/>
         <source>Manage Layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="147"/>
+        <location filename="../kstmainwindow.cpp" line="148"/>
         <source>Show Logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="149"/>
+        <location filename="../kstmainwindow.cpp" line="150"/>
         <source>(set away)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="154"/>
+        <location filename="../kstmainwindow.cpp" line="155"/>
         <source>Split Icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="161"/>
+        <location filename="../kstmainwindow.cpp" line="162"/>
         <source>Chats Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="164"/>
+        <location filename="../kstmainwindow.cpp" line="165"/>
         <source>Active Calls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="167"/>
+        <location filename="../kstmainwindow.cpp" line="168"/>
         <source>Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="170"/>
+        <location filename="../kstmainwindow.cpp" line="171"/>
         <source>Messages To Me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="173"/>
+        <location filename="../kstmainwindow.cpp" line="174"/>
         <source>Send Meep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="176"/>
+        <location filename="../kstmainwindow.cpp" line="177"/>
         <source>Buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="179"/>
+        <location filename="../kstmainwindow.cpp" line="180"/>
         <source>AirScout Activation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="182"/>
+        <location filename="../kstmainwindow.cpp" line="183"/>
         <source>AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="706"/>
+        <location filename="../kstmainwindow.cpp" line="707"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="790"/>
+        <location filename="../kstmainwindow.cpp" line="791"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1424"/>
+        <location filename="../kstmainwindow.cpp" line="1432"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1428"/>
+        <location filename="../kstmainwindow.cpp" line="1436"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1766"/>
+        <location filename="../kstmainwindow.cpp" line="1774"/>
         <source>KST Test data Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1767"/>
+        <location filename="../kstmainwindow.cpp" line="1775"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1770"/>
+        <location filename="../kstmainwindow.cpp" line="1778"/>
         <source>KST Client log files Files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -688,18 +688,15 @@ Path in AirScout</source>
     </message>
     <message>
         <location filename="../kstscreenoptions.cpp" line="26"/>
-        <location filename="../kstscreenoptions.cpp" line="26"/>
         <source>AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../kstscreenoptions.cpp" line="27"/>
-        <location filename="../kstscreenoptions.cpp" line="27"/>
         <source>AirScout Activation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstscreenoptions.cpp" line="28"/>
         <location filename="../kstscreenoptions.cpp" line="28"/>
         <source>Messages</source>
         <translation type="unfinished"></translation>
@@ -725,7 +722,6 @@ Path in AirScout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstscreenoptions.cpp" line="31"/>
         <location filename="../kstscreenoptions.cpp" line="31"/>
         <source>Buttons</source>
         <translation type="unfinished"></translation>
@@ -880,7 +876,7 @@ Path in AirScout</source>
     </message>
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="175"/>
-        <source>Time(Z)</source>
+        <source>Time(UTC)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

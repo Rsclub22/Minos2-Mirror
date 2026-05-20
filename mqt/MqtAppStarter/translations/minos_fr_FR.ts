@@ -11,6 +11,7 @@
     </message>
     <message>
         <location filename="../AsMainWindow.ui" line="21"/>
+        <location filename="../AsMainWindow.cpp" line="258"/>
         <source>Start Apps</source>
         <translation>Démarrer les applications</translation>
     </message>
@@ -63,6 +64,11 @@
         <location filename="../AsMainWindow.cpp" line="152"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation>Le paramètrage de la  police ne fonctionnera pas si la variable environnement QT_QPA_PLATFORMTHEME est définie sur QT5CT</translation>
+    </message>
+    <message>
+        <location filename="../AsMainWindow.cpp" line="264"/>
+        <source>Stop Apps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

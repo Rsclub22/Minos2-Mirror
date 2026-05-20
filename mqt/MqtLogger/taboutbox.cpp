@@ -74,10 +74,12 @@ QString TAboutBox::MinosText =
 
 /*static*/bool TAboutBox::ShowAboutBox(QWidget *Owner,  bool onStartup )
 {
-   TAboutBox aboutBox( Owner, onStartup);
+   LogContainer->aboutBox = new TAboutBox( Owner, onStartup);
 
 
-   int ret = aboutBox.exec();
+   int ret = LogContainer->aboutBox->exec();
+
+   LogContainer->aboutBox = nullptr;
 
    return ret == QDialog::Accepted;
 }
@@ -379,6 +381,11 @@ void TAboutBox::doNewContest(bool hf)
 
         if (!newContestSetName.isEmpty())
         {
+            if (!ui->chooseSetCb->findText(newContestSetName))
+            {
+                // contestDetails may have added the set name
+                ui->chooseSetCb->addItem(newContestSetName);
+            }
             ui->chooseSetCb->setCurrentText(newContestSetName);
             trace(QString("TAboutBox::doNewContest set session name to %1").arg(newContestSetName));
             trace(QString("TAboutBox::doNewContest combo is %1").arg(ui->chooseSetCb->currentText()));

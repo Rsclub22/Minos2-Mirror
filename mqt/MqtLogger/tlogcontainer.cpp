@@ -1140,25 +1140,6 @@ QStringList TLogContainer::createContest(bool hf)
             }
         }
     }
-#ifdef ABOUTNEWCONTEST
-    // we need to get the contest set from the contest settings
-    // so that we write the correct list
-
-    if (contest)
-    {
-        // Change the preload session
-        QString settingsName = contest->contestSettings.getValue();
-        if (!settingsName.isEmpty())
-        {
-            ContestSettings *settings = ManageContestSettings::getCurrentSettings(settingsName);
-            QString sname = settings->getVal(ecsLogSet);
-            if (!sname.isEmpty())
-            {
-                setCurrSessionName(sname);
-            }
-        }
-    }
-#endif
 
     if (!contest)
     {
