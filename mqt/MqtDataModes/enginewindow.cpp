@@ -241,6 +241,33 @@ void EngineWindow::changeEvent( QEvent* e )
     QDialog::changeEvent(e);
 
 }
+QColor EngineWindow::classifyPlaceHolder(QString call)
+{
+    Callsign cs;
+    int res = cs.setFullCall(call);
+    if (res == CS_OK)
+    {
+        Callsign mycall = RemoteLogs::getRemoteLogs()->myCall();
+        if (mycall == cs)
+        {
+            return Qt::darkRed;
+        }
+        else
+        {
+            // look for it...
+            if (RemoteLogs::getRemoteLogs()->hasWorked(cs, rigBand, rigMode))
+            {
+                return Qt::gray;
+            }
+            else
+            {
+                return Qt::blue;
+            }
+        }
+    }
+    return Qt::black;
+}
+
 void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     // pubsub notify
@@ -335,6 +362,11 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     {
                         QStringList pl = p.split("|");
                         ui->placeHolderList->addItem(pl[1]);
+                        QColor c = classifyPlaceHolder(pl[1]);
+                        ui->placeHolderList->item(ui->placeHolderList->count())
+                            ->setForeground(c);
+
+                        // This should be redone periodically? e.g. on working a call
                     }
                 }
             }

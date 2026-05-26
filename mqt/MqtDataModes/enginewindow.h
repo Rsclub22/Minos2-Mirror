@@ -124,6 +124,7 @@ private:
     void scanLine(int curLine);
     QString getSelectedRadio();
     bool setSelectedRadio(QString s);
+    QColor classifyPlaceHolder(QString call);
 signals:
     void setSpeeds(QString b, QString r);
     void rigModeFreq(QString, Frequency);
