@@ -2052,6 +2052,7 @@ void TLogContainer::updateSessionActions()
     {
         if (s == app->preloadsect)
         {
+            // don't allow the "control" section to be used
             continue;
         }
         QAction *act =  new QAction(this);
@@ -2224,6 +2225,7 @@ QString TLogContainer::getCurrSession()
 
     if (app ->currSession == app ->preloadsect)
     {
+        // don't allow the "control" section to be used
         app ->currSession = app ->defaultSession;
     }
     trace(QString("TLogContainer::getCurrSession %1").arg(app->currSession));
@@ -2239,6 +2241,7 @@ void TLogContainer::setCurrSessionName(QString sessionName)
     preloadBundle.getStringProfile(eppDefSession, app ->defaultSession );
     if (sessionName == app ->preloadsect)
     {
+        // don't allow the "control" section to be used
         sessionName = app ->defaultSession;
     }
 
@@ -2259,6 +2262,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
 
     if (app ->currSession == app ->preloadsect)
     {
+        // don't allow the "control" section to be used
         app ->currSession = app ->defaultSession;
     }
 
