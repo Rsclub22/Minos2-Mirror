@@ -1051,6 +1051,22 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->asymmetricMult.setValue(false);
            contestTransferObject->loc_multiplier = 0;
        }
+       else if ( ic.mults == "B8" )
+       {
+           contestTransferObject->usesBonus.setValue(true);
+           contestTransferObject->bonusType.setValue("B8");
+           contestTransferObject->districtBonus.setValue(false);
+
+           contestTransferObject->districtMult.setValue( false );
+           contestTransferObject->countryMult.setValue( false );
+           contestTransferObject->locMult.setValue( false );
+
+           contestTransferObject->exchangeRequired.setValue(true);
+           contestTransferObject->exchangeDashAllowed.setValue(true);
+           contestTransferObject->otherMult.setValue(0);
+           contestTransferObject->asymmetricMult.setValue(false);
+           contestTransferObject->loc_multiplier = 0;
+       }
        else
        {
           contestTransferObject->usesBonus.setValue(false);
@@ -1449,6 +1465,10 @@ QWidget * ContestDetails::getDetails( )
         else if (bt == btB6)
         {
             contestTransferObject->bonusType.setValue("B6");
+        }
+        else if (bt == btB8)
+        {
+            contestTransferObject->bonusType.setValue("B8");
         }
         else if (bt == btNAC)
         {
