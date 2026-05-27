@@ -4,7 +4,7 @@
 # Do a clean after making a change.
 
 #HAMLIBVERSION=4.6.2
-HAMLIBVERSION=4.7.0
+HAMLIBVERSION=4.7.1
 
 DEFINES += HAMLIBVERSION=\\\"$$HAMLIBVERSION\\\"
 # message(Using hamlib V$$HAMLIBVERSION)
