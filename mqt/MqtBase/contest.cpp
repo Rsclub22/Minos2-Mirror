@@ -1146,11 +1146,11 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       cs.brloc1 = cs.brloc2 = ' ';
       cs.nmults += cs.nlocs;
    }
-   if ( bt == "B6" || bt == "B6" )
+   if ( bt == "B6" || bt == "B8" )
    {
        cs.brcc1 = cs.brcc2 = ' ';
    }
-   if ( bt == "B6" || bt == "B6" )
+   if ( bt == "B6" || bt == "B8" )
    {
        cs.brcc3 = cs.brcc4 = ' ';
    }
