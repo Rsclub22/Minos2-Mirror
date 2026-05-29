@@ -268,6 +268,28 @@ QColor EngineWindow::classifyPlaceHolder(QString call)
     return Qt::black;
 }
 
+void EngineWindow::setPlaceHolders()
+{
+    ui->placeHolderList->clear();
+
+    if (!placeHolders.isEmpty())
+    {
+        QStringList placeHoldersList = placeHolders.split(";");
+
+        if (placeHolders.count())
+        {
+            for (auto &p:QASCONST(placeHoldersList))
+            {
+                QStringList pl = p.split("|");
+                ui->placeHolderList->addItem(pl[1]);
+                QColor c = classifyPlaceHolder(pl[1]);
+                ui->placeHolderList->item(ui->placeHolderList->count())
+                    ->setForeground(c);
+            }
+        }
+    }
+}
+
 void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     // pubsub notify
@@ -348,28 +370,10 @@ void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
         }
         else if (an.getCategory() == rpcConstants::LoggerCategory && an.getKey() == rpcConstants::placeHolders)
         {
-            // ; separated list of "near" calls
-            ui->placeHolderList->clear();
-
             QString anval = an.getValue();
-            if (!anval.isEmpty())
-            {
-                QStringList placeHolders = anval.split(";");
-
-                if (placeHolders.count())
-                {
-                    for (auto &p:QASCONST(placeHolders))
-                    {
-                        QStringList pl = p.split("|");
-                        ui->placeHolderList->addItem(pl[1]);
-                        QColor c = classifyPlaceHolder(pl[1]);
-                        ui->placeHolderList->item(ui->placeHolderList->count())
-                            ->setForeground(c);
-
-                        // This should be redone periodically? e.g. on working a call
-                    }
-                }
-            }
+            placeHolders = anval;
+            // ; separated list of "near" calls
+            setPlaceHolders();
         }
 
         RigState &selState = rigCache.getState(mainRig);
@@ -724,6 +728,8 @@ void EngineWindow::rescan()
             rxBuff.getRxLine(i)->setDirty(true);
         }
         ui->rxChars->setText();
+
+        setPlaceHolders();
     }
 }
 void EngineWindow::clear()

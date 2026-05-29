@@ -91,6 +91,8 @@ private:
     QString splitterStr;
     QString dataSplitterStr;
 
+    QString placeHolders;
+
 #ifdef Q_OS_WIN
     MMVARIFrame *mmvariFrame = nullptr;
     MMTTYFrame *mmttyFrame = nullptr;
@@ -125,6 +127,8 @@ private:
     QString getSelectedRadio();
     bool setSelectedRadio(QString s);
     QColor classifyPlaceHolder(QString call);
+    void setPlaceHolders();
+
 signals:
     void setSpeeds(QString b, QString r);
     void rigModeFreq(QString, Frequency);
