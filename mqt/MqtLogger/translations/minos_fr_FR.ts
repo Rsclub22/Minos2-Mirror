@@ -1008,13 +1008,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="97"/>
-        <location filename="../contestdetails.cpp" line="1807"/>
+        <location filename="../contestdetails.cpp" line="1827"/>
         <source>HF Calendar</source>
         <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="104"/>
-        <location filename="../contestdetails.cpp" line="1811"/>
+        <location filename="../contestdetails.cpp" line="1831"/>
         <source>VHF Calendar</source>
         <translation>Calendrier VHF</translation>
     </message>
@@ -1025,13 +1025,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="118"/>
-        <location filename="../contestdetails.cpp" line="1821"/>
+        <location filename="../contestdetails.cpp" line="1841"/>
         <source>UKSMG Calendar</source>
         <translation>Calendrier UKSMG</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="125"/>
-        <location filename="../contestdetails.cpp" line="1827"/>
+        <location filename="../contestdetails.cpp" line="1847"/>
         <source>BARTG Calendar</source>
         <translation>Calendrier BARTG</translation>
     </message>
@@ -1340,7 +1340,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="258"/>
-        <location filename="../contestdetails.cpp" line="1595"/>
+        <location filename="../contestdetails.cpp" line="1615"/>
         <source>(None)</source>
         <translation>(Aucun)</translation>
     </message>
@@ -1351,7 +1351,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1703"/>
+        <location filename="../contestdetails.cpp" line="1723"/>
         <source>This contest will be marked as protected.
 This is a permanent change that may be temporarily overridden.
 Please confirm this change by pressing &quot;Yes&quot;.</source>
@@ -1360,7 +1360,7 @@ Il s&amp;apos;agit d&amp;apos;un changement permanent qui peut être temporairem
 Veuillez confirmer cette modification en appuyant sur &amp;quot;Oui&amp;quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1751"/>
+        <location filename="../contestdetails.cpp" line="1771"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.
 
 There are four basic groups: - 
@@ -1427,22 +1427,22 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation>Bande %1 définir comme non désiré.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1364"/>
+        <location filename="../contestdetails.cpp" line="1380"/>
         <source>Contest end is before contest start</source>
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1815"/>
+        <location filename="../contestdetails.cpp" line="1835"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1883"/>
+        <location filename="../contestdetails.cpp" line="1903"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation>Voulez-vous vraiment protéger ce Concours?</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1890"/>
+        <location filename="../contestdetails.cpp" line="1910"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
     </message>
@@ -5836,7 +5836,7 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2522"/>
+        <location filename="../tlogcontainer.cpp" line="2529"/>
         <source>Minos Contest Logger Application</source>
         <translation>Application Minos Contest Logger</translation>
     </message>
@@ -5862,7 +5862,7 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1823"/>
-        <location filename="../tlogcontainer.cpp" line="2323"/>
+        <location filename="../tlogcontainer.cpp" line="2330"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
@@ -5883,22 +5883,22 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2325"/>
+        <location filename="../tlogcontainer.cpp" line="2332"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2335"/>
+        <location filename="../tlogcontainer.cpp" line="2342"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2359"/>
+        <location filename="../tlogcontainer.cpp" line="2366"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2363"/>
+        <location filename="../tlogcontainer.cpp" line="2370"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>

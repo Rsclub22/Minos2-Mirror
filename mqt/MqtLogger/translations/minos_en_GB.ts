@@ -988,13 +988,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="97"/>
-        <location filename="../contestdetails.cpp" line="1807"/>
+        <location filename="../contestdetails.cpp" line="1827"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="104"/>
-        <location filename="../contestdetails.cpp" line="1811"/>
+        <location filename="../contestdetails.cpp" line="1831"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1005,13 +1005,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="118"/>
-        <location filename="../contestdetails.cpp" line="1821"/>
+        <location filename="../contestdetails.cpp" line="1841"/>
         <source>UKSMG Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="125"/>
-        <location filename="../contestdetails.cpp" line="1827"/>
+        <location filename="../contestdetails.cpp" line="1847"/>
         <source>BARTG Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1319,7 +1319,7 @@ Score between 4 fig loc centres</source>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="258"/>
-        <location filename="../contestdetails.cpp" line="1595"/>
+        <location filename="../contestdetails.cpp" line="1615"/>
         <source>(None)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1330,14 +1330,14 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1703"/>
+        <location filename="../contestdetails.cpp" line="1723"/>
         <source>This contest will be marked as protected.
 This is a permanent change that may be temporarily overridden.
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1751"/>
+        <location filename="../contestdetails.cpp" line="1771"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.
 
 There are four basic groups: - 
@@ -1381,22 +1381,22 @@ Move between components of a group using the mouse or up/down arrow keys.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1364"/>
+        <location filename="../contestdetails.cpp" line="1380"/>
         <source>Contest end is before contest start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1815"/>
+        <location filename="../contestdetails.cpp" line="1835"/>
         <source>Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1883"/>
+        <location filename="../contestdetails.cpp" line="1903"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1890"/>
+        <location filename="../contestdetails.cpp" line="1910"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5332,7 +5332,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2522"/>
+        <location filename="../tlogcontainer.cpp" line="2529"/>
         <source>Minos Contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5353,7 +5353,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1823"/>
-        <location filename="../tlogcontainer.cpp" line="2323"/>
+        <location filename="../tlogcontainer.cpp" line="2330"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
@@ -5374,22 +5374,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2325"/>
+        <location filename="../tlogcontainer.cpp" line="2332"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2335"/>
+        <location filename="../tlogcontainer.cpp" line="2342"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2359"/>
+        <location filename="../tlogcontainer.cpp" line="2366"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2363"/>
+        <location filename="../tlogcontainer.cpp" line="2370"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
