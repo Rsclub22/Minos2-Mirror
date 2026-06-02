@@ -287,7 +287,7 @@ void EngineWindow::setPlaceHolders()
                     QStringList pl = p.split("|");
                     ui->placeHolderList->addItem(pl[1]);
                     QColor c = classifyPlaceHolder(pl[1]);
-                    ui->placeHolderList->item(ui->placeHolderList->count())
+                    ui->placeHolderList->item(ui->placeHolderList->count() - 1)
                         ->setForeground(c);
                 }
             }
