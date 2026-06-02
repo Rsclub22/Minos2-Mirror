@@ -270,24 +270,29 @@ QColor EngineWindow::classifyPlaceHolder(QString call)
 
 void EngineWindow::setPlaceHolders()
 {
-    ui->placeHolderList->clear();
-
-    if (!placeHolders.isEmpty())
+    delayedAction(this, [=]()
     {
-        QStringList placeHoldersList = placeHolders.split(";");
+        // delay the setting to make sure we are in the GUI thread
 
-        if (placeHolders.count())
+        ui->placeHolderList->clear();
+
+        if (!placeHolders.isEmpty())
         {
-            for (auto &p:QASCONST(placeHoldersList))
+            QStringList placeHoldersList = placeHolders.split(";");
+
+            if (placeHolders.count())
             {
-                QStringList pl = p.split("|");
-                ui->placeHolderList->addItem(pl[1]);
-                QColor c = classifyPlaceHolder(pl[1]);
-                ui->placeHolderList->item(ui->placeHolderList->count())
-                    ->setForeground(c);
+                for (auto &p:QASCONST(placeHoldersList))
+                {
+                    QStringList pl = p.split("|");
+                    ui->placeHolderList->addItem(pl[1]);
+                    QColor c = classifyPlaceHolder(pl[1]);
+                    ui->placeHolderList->item(ui->placeHolderList->count())
+                        ->setForeground(c);
+                }
             }
         }
-    }
+    });
 }
 
 void EngineWindow::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
