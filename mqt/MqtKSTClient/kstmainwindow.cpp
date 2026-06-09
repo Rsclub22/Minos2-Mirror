@@ -861,7 +861,7 @@ int KSTMainWindow::getMaxDistance() const
     return maxDistance;
 }
 
-int KSTMainWindow::getASActive() const
+bool KSTMainWindow::getASActive() const
 {
     return ASActive;
 }

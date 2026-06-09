@@ -227,7 +227,7 @@ public:
     void setMaxDistance(int);
      int getMaxDistance() const;
 
-    int getASActive() const;
+    bool getASActive() const;
 
     QString getASServerName() const;
 

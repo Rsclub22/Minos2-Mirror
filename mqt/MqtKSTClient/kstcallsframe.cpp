@@ -25,7 +25,6 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
     installEventFilter(this);   // so we pick up return, and implement the default button
     ui->stringRb->setChecked(true);
 
-    showAircout(mainWindow->getASActive());
     ui->maxDistanceEdit->setText(QString::number(mainWindow->getMaxDistance()));
     ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
@@ -67,6 +66,8 @@ KSTCallsFrame::KSTCallsFrame(QWidget *parent)
 
     connect(&appStart, &AppStart::listCompressionChanged,
             this, &KSTCallsFrame::onListCompressionChanged, Qt::QueuedConnection);
+
+    showAircout(mainWindow->getASActive());
 }
 
 KSTCallsFrame::~KSTCallsFrame()
