@@ -455,21 +455,6 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
-    if (awayFilter && call->away)
-    {
-        return false;
-    }
-    if (inactiveFilter && call->messageCount == 0)
-    {
-        return false;
-    }
-    bool worked = RemoteLogs::getRemoteLogs()->hasWorked(call->call, "", "");
-
-    if (workedFilter && worked)
-    {
-        return false;
-    }
-
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
     {
@@ -510,6 +495,20 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
             int m = mainWindow->getMaxDistance();
             if (m > 0 && call->distance > m)
                 return false;
+        }
+        if (awayFilter && call->away)
+        {
+            return false;
+        }
+        if (inactiveFilter && call->messageCount == 0)
+        {
+            return false;
+        }
+        bool worked = RemoteLogs::getRemoteLogs()->hasWorked(call->call, "", "");
+
+        if (workedFilter && worked)
+        {
+            return false;
         }
         return true;
     }
