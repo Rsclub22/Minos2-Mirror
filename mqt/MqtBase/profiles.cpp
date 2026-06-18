@@ -6,8 +6,10 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+//#include <QSettings>
 #include "AppStartup.h"
 #include "INIFile.h"
+//#include "MShowMessageDlg.h"
 #include "clustercommon.h"
 #include "profiles.h"
 
@@ -301,6 +303,7 @@ void SettingsBundle::setProfile( QSharedPointer<BundleFile> b )
 }
 void SettingsBundle::openSection( const QString &psect )
 {
+
    if ( psect.size() )
       currsection = psect;
    else

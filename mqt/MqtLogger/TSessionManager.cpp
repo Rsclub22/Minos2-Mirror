@@ -112,6 +112,7 @@ void TSessionManager::writeSessions()
     }
     preloadBundle.flushProfile();
     preloadBundle.openSection(app->preloadsect);
+    preloadBundle.clearProfileSection(true);
     if (sessionList.sessions.count())
     {
         preloadBundle.setStringProfile(eppSession, sessionList.sessions[sessionList.currentSession].sessionName);
