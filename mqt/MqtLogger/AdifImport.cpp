@@ -175,11 +175,11 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           {
               aqso->mode.setValue(temp);
           }
-          else if (temp == "RTTY")
+          else if (temp.startsWith("RTTY"))
           {
               aqso->mode.setValue(RY);
           }
-          else if (temp == "PSK")
+          else if (temp.startsWith("PSK"))
           {
               aqso->mode.setValue(PSK);
           }
