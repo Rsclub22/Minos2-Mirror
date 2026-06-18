@@ -119,6 +119,10 @@ public:   		// User declarations
    void on_settingsEditButton_clicked();
    void on_contestSetToolButton_clicked();
    void on_appSetToolButton_clicked();
+   void on_addRadioToStation_clicked();
+   void on_addAntennaToStation_clicked();
+   void on_radioNameSel_currentTextChanged(const QString &arg1);
+   void on_antennaNameSel_currentTextChanged(const QString &arg1);
 };
 
 #endif // CONTESTDETAILS_H

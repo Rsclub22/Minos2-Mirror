@@ -156,6 +156,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     populateAppsCombo();
 
+    ui->addRadioToStation->setEnabled(false);
+    ui->addAntennaToStation->setEnabled(false);
     // And we want to lose ui->setsFrame if from TAboutBox
     // or just disable them?
 
@@ -408,6 +410,7 @@ void ContestDetails::setDetails(  )
           ui->ModeComboBox->setCurrentText(contestTransferObject->currentMode.getValue());
        }
     }
+   QString cursect = ui->SectionComboBox->currentText();
    ui->SectionComboBox->clear();
    if ( sectionList.size() )
    {
@@ -418,8 +421,11 @@ void ContestDetails::setDetails(  )
 #endif
        ui->SectionComboBox->addItems(sl);
    }
-
-   int s = ui->SectionComboBox->findText( contestTransferObject->entSect.getValue() );        // contest
+   if (cursect.isEmpty())
+   {
+       cursect = contestTransferObject->entSect.getValue() ;
+   }
+   int s = ui->SectionComboBox->findText( cursect );        // contest
 
    if ( s >= 0 )
    {
@@ -806,6 +812,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
     bool isHF = ((ic.calType == ectHF) || (ic.calType == ectHFBARTG));
     contestTransferObject->locatorMandatoryField.setValue(!isHF);
 
+    QString cursect = ui->SectionComboBox->currentText();
     ui->SectionComboBox->clear();
 
    sectionList = ic.sections; // the combo will then be properly set up in setDetails()
@@ -815,7 +822,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       ui->SectionComboBox->addItems(sl);
    }
 
-   int s = ui->SectionComboBox->findText( contestTransferObject->entSect.getValue() );        // contest
+   if (cursect.isEmpty())
+   {
+       cursect = contestTransferObject->entSect.getValue() ;
+   }
+   int s = ui->SectionComboBox->findText( cursect);        // contest
 
    if ( s >= 0 )
    {
@@ -823,7 +834,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    }
    else
    {
-      ui->SectionComboBox->setCurrentText(contestTransferObject->entSect.getValue());
+      ui->SectionComboBox->setCurrentText(cursect);
    }
 
    ui->StartDateEdit->setDate(ic.start.date());
@@ -1599,10 +1610,12 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->power.setValue( ui->PowerEdit->text() );
     contestTransferObject->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
 
-    if (LogContainer->sendDM->isRadioLoaded())
-        contestTransferObject->radioName.setValue(PubSubName(getSelectedRadio()));
-    if (LogContainer->sendDM->isRotatorLoaded())
-        contestTransferObject->antennaName.setValue(PubSubName(getSelectedAntenna()));
+    QString selRadio = getSelectedRadio();
+    if (!selRadio.isEmpty())
+        contestTransferObject->radioName.setValue(PubSubName(selRadio));
+    QString selRot = getSelectedAntenna();
+    if (!selRot.isEmpty())
+        contestTransferObject->antennaName.setValue(PubSubName(selRot));
 
     contestTransferObject->currentMode.setValue(ui->ModeComboBox->currentText());
 
@@ -1964,32 +1977,40 @@ QString ContestDetails::getSelectedRadio()
 }
 int ContestDetails::findPubSubInCombo(QString name, QComboBox *cb)
 {
+    int ct = cb->count();
+    //trace(QString("ContestDetails::findPubSubInCombo %1(%2) %3").arg(cb->objectName()).arg(ct).arg(name));
     // we need to be able to find a unique rig name in here as well
     int found = -1;
-    int ct = cb->count();
     if (ct <= 1)
     {
         cb->clear();
         cb->addItem("", "");
         cb->addItem(name, name);
+        //trace(QString("ContestDetails::findPubSubInCombo %1 added").arg(name));
         return 1;
     }
     for(int r = 0; r < cb->count(); r++)
     {
         QString data = cb->itemData(r).toString();
+        //trace(QString("ContestDetails::findPubSubInCombo combo value %1 <%2>").arg(r).arg(cb->itemText(r)));
+        //trace(QString("ContestDetails::findPubSubInCombo data value %1 <%2>").arg(r).arg(data));
         if (data.contains(name, Qt::CaseInsensitive))
         {
+            //trace(QString("ContestDetails::findPubSubInCombo name found"));
             PubSubName combo(data);
             QString ck = combo.key();
             PubSubName fname(name);     // NB if name is NOT a PubSub string, this won't be correct
             QString nk = fname.key();
+            //trace(QString("ContestDetails::findPubSubInCombo ck %1 nk %2").arg(ck, nk));
             if (ck.compare(nk, Qt::CaseInsensitive) == 0)
             {
+                //trace("name found");
                 found = r;
                 break;
             }
         }
     }
+    //trace(QString("ContestDetails::findPubSubInCombo returning %1").arg(found));
     return found;
 }
 
@@ -2071,12 +2092,6 @@ void ContestDetails::toSettings(ContestSettings *settings)
             case ecsSection:
                 settings->setVal(s, ui->SectionComboBox->currentText());
                 break;
-            case ecsRadio:
-                settings->setVal(s, getSelectedRadio());
-                break;
-            case ecsRotator:
-                settings->setVal(s, getSelectedAntenna());
-                break;
             case ecsMainOp:
                 settings->setVal(s, ui->MainOpComboBox->currentText());
                 break;
@@ -2120,12 +2135,6 @@ void ContestDetails::fromSettings(ContestSettings *settings)
                 break;
             case ecsSection:
                 ui->SectionComboBox->setCurrentText(val);
-                break;
-            case ecsRadio:
-                setSelectedRadio(val);
-                break;
-            case ecsRotator:
-                setSelectedAntenna(val);
                 break;
             case ecsMainOp:
                 ui->MainOpComboBox->setCurrentText(val);
@@ -2219,5 +2228,35 @@ void ContestDetails::on_appSetToolButton_clicked()
     StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
     populateAppsCombo();
+}
+
+
+void ContestDetails::on_addRadioToStation_clicked()
+{
+    if (!ui->radioNameSel->currentText().isEmpty())
+    {
+        contestTransferObject->stationBundle.setStringProfile(espRadioName, ui->radioNameSel->currentData().toString());
+    }
+}
+
+
+void ContestDetails::on_addAntennaToStation_clicked()
+{
+    if (!ui->antennaNameSel->currentText().isEmpty())
+    {
+        contestTransferObject->stationBundle.setStringProfile(espRotatorName, ui->antennaNameSel->currentData().toString());
+    }
+}
+
+
+void ContestDetails::on_radioNameSel_currentTextChanged(const QString &arg1)
+{
+    ui->addRadioToStation->setEnabled(!arg1.isEmpty());
+}
+
+
+void ContestDetails::on_antennaNameSel_currentTextChanged(const QString &arg1)
+{
+    ui->addAntennaToStation->setEnabled(!arg1.isEmpty());
 }
 

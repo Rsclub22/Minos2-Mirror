@@ -3,12 +3,11 @@
 
 #include <QDialog>
 
-#include "PubSubName.h"
 #include "qcoreapplication.h"
 
 class ContestDetails;
 
-enum eCSettings { ecsStation, ecsEntry, ecsQTH, ecsSection, ecsRadio, ecsRotator,
+enum eCSettings { ecsStation, ecsEntry, ecsQTH, ecsSection,
        ecsMainOp, ecsSecondOp, ecsScreenLayout,
        ecsLogSet, ecsStartApps,
        ecsMaxVal
@@ -25,9 +24,6 @@ public:
     QString QTHBundle;
 
     QString section;
-
-    PubSubName radio;
-    PubSubName rotator;
 
     QString mainOp;
     QString secondOp;

@@ -142,9 +142,6 @@ void ManageContestSettings::getAllSettings()
 
                 cs.section = v.value( "section").toString();
 
-                cs.radio = v.value( "radio").toString();
-                cs.rotator = v.value( "rotator").toString();
-
                 cs.mainOp = v.value( "mainOp").toString();
                 cs.secondOp = v.value( "secondOp").toString();
 
@@ -173,9 +170,6 @@ void ManageContestSettings::saveAllSettings()
         set.insert("QTHBundle", csi->QTHBundle);
 
         set.insert("section", csi->section);
-
-        set.insert("radio", csi->radio.toString());
-        set.insert("rotator", csi->rotator.toString());
 
         set.insert("mainOp", csi->mainOp);
         set.insert("secondOp", csi->secondOp);
@@ -570,12 +564,6 @@ QString ContestSettings::getVal(eCSettings s) const
     case ecsSection:
         val = section;
         break;
-    case ecsRadio:
-        val = radio.toString();
-        break;
-    case ecsRotator:
-        val = rotator.toString();
-        break;
     case ecsMainOp:
         val = mainOp;
         break;
@@ -613,12 +601,6 @@ void ContestSettings::setVal(eCSettings s, QString val)
     case ecsSection:
         section = val;
         break;
-    case ecsRadio:
-        radio = PubSubName(val);
-        break;
-    case ecsRotator:
-        rotator = PubSubName(val);
-        break;
     case ecsMainOp:
         mainOp = val;
         break;
@@ -655,12 +637,6 @@ QString ContestSettings::headerName(eCSettings s) const
         break;
     case ecsSection:
         val = tr("Section");
-        break;
-    case ecsRadio:
-        val = tr("Radio");
-        break;
-    case ecsRotator:
-        val = tr("Rotator");
         break;
     case ecsMainOp:
         val = tr("Main Op");

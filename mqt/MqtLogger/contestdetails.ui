@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>903</width>
-        <height>763</height>
+        <width>886</width>
+        <height>885</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -827,6 +827,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="addRadioToStation">
+            <property name="text">
+             <string>Add to Station</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -850,6 +857,13 @@
            <widget class="QComboBox" name="antennaNameSel">
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="addAntennaToStation">
+            <property name="text">
+             <string>Add to Station</string>
             </property>
            </widget>
           </item>
@@ -884,35 +898,42 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="ScoreGroupBox">
+         <property name="title">
+          <string>Scoring</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_22">
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="commencedKRB">
+            <property name="text">
+             <string>Commenced Kilometer</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="PPQSORB">
+            <property name="text">
+             <string>Point per QSO</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_21">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_11">
-           <item>
-            <widget class="QGroupBox" name="ScoreGroupBox">
-             <property name="title">
-              <string>Scoring</string>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_22">
-              <item>
-               <widget class="QRadioButton" name="commencedKRB">
-                <property name="text">
-                 <string>Commenced Kilometer</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="PPQSORB">
-                <property name="text">
-                 <string>Point per QSO</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
            <item>
             <widget class="QGroupBox" name="groupBox_5">
              <property name="title">
