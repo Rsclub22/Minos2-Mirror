@@ -2237,7 +2237,7 @@ QString ContestScore::disp()
     QString buff;
     if (usesBonus == true)
     {
-        if (bonusType == "B4" || bonusType == "B8")
+        if (bonusType == "B4")
         {
             buff = tr("Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7")
                        .arg(nqsos).arg(contestScore)
@@ -2252,6 +2252,14 @@ QString ContestScore::disp()
                        .arg(nctry).arg(ndistrict).arg(nlocs)
                        .arg(bonus) .arg(nbonus)
                        .arg(totalScore );
+        }
+        if (bonusType == "B8")
+        {
+            buff = tr("Score: %1 Qsos; %2 pts; %3 countries; %4 locs; bonuses %5(%6) = %7")
+            .arg(nqsos).arg(contestScore)
+                .arg(nctry).arg(nlocs)
+                .arg(bonus) .arg(nbonus)
+                .arg(totalScore );
         }
         else
         {
