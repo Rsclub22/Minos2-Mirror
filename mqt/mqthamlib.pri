@@ -3,7 +3,7 @@
 
 # Do a clean after making a change.
 
-HAMLIBVERSION=4.7.1
+HAMLIBVERSION=4.7.2
 
 DEFINES += HAMLIBVERSION=\\\"$$HAMLIBVERSION\\\"
 # message(Using hamlib V$$HAMLIBVERSION)
