@@ -431,9 +431,10 @@ void ContestDetails::setDetails(  )
    {
       ui->SectionComboBox->setCurrentIndex(s);
    }
-   else
+   else if (ui->SectionComboBox->count() == 0)
    {
-      ui->SectionComboBox->setCurrentText(contestTransferObject->entSect.getValue());
+       // don't set the section wrongly
+      // ui->SectionComboBox->setCurrentText(contestTransferObject->entSect.getValue());
    }
 
    // start/end of ContestLog
@@ -832,7 +833,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    {
       ui->SectionComboBox->setCurrentIndex(s);
    }
-   else
+   else if (ui->SectionComboBox->count() == 0)
    {
       ui->SectionComboBox->setCurrentText(cursect);
    }
