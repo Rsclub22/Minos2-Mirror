@@ -238,7 +238,7 @@ l&apos;indicatif sélectionné</translation>
         <translation type="unfinished">Envoyer au Logger</translation>
     </message>
     <message>
-        <location filename="../kstcallsframe.cpp" line="124"/>
+        <location filename="../kstcallsframe.cpp" line="125"/>
         <source>Active</source>
         <translation type="unfinished">Actif</translation>
     </message>

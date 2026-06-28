@@ -237,7 +237,7 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallsframe.cpp" line="124"/>
+        <location filename="../kstcallsframe.cpp" line="125"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>

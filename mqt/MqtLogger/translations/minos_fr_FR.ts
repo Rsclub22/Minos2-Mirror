@@ -1008,13 +1008,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="97"/>
-        <location filename="../contestdetails.cpp" line="1827"/>
+        <location filename="../contestdetails.cpp" line="1841"/>
         <source>HF Calendar</source>
         <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="104"/>
-        <location filename="../contestdetails.cpp" line="1831"/>
+        <location filename="../contestdetails.cpp" line="1845"/>
         <source>VHF Calendar</source>
         <translation>Calendrier VHF</translation>
     </message>
@@ -1025,13 +1025,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="118"/>
-        <location filename="../contestdetails.cpp" line="1841"/>
+        <location filename="../contestdetails.cpp" line="1855"/>
         <source>UKSMG Calendar</source>
         <translation>Calendrier UKSMG</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="125"/>
-        <location filename="../contestdetails.cpp" line="1847"/>
+        <location filename="../contestdetails.cpp" line="1861"/>
         <source>BARTG Calendar</source>
         <translation>Calendrier BARTG</translation>
     </message>
@@ -1167,109 +1167,115 @@ Le mode calculé est %2</translation>
         <translation>Nom de la radio</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="845"/>
+        <location filename="../contestdetails.ui" line="832"/>
+        <location filename="../contestdetails.ui" line="866"/>
+        <source>Add to Station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.ui" line="852"/>
         <source>Antenna Name</source>
         <translation>Nom de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="872"/>
+        <location filename="../contestdetails.ui" line="886"/>
         <source>Screen Layout</source>
         <translation>Disposition de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="893"/>
+        <location filename="../contestdetails.ui" line="903"/>
         <source>Scoring</source>
         <translation>Score</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="902"/>
+        <location filename="../contestdetails.ui" line="912"/>
         <source>Commenced Kilometer</source>
         <translation>Kilomètre commencé</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="909"/>
+        <location filename="../contestdetails.ui" line="919"/>
         <source>Point per QSO</source>
         <translation>Point par QSO</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="919"/>
+        <location filename="../contestdetails.ui" line="933"/>
         <source>Bonus Scheme</source>
         <translation>Système de bonus</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="937"/>
+        <location filename="../contestdetails.ui" line="951"/>
         <source>Antenna Offset</source>
         <translation>Décalage d&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="970"/>
+        <location filename="../contestdetails.ui" line="984"/>
         <source>RSGB MGM Contest Rules
 Score between 4 fig loc centres</source>
         <translation>Règlement du Concours RSGB MGM
 Comptabiliser entre Locators de 4 caractères</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="991"/>
+        <location filename="../contestdetails.ui" line="1005"/>
         <source>Locator Length</source>
         <translation>Longueur du Locator</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="997"/>
+        <location filename="../contestdetails.ui" line="1011"/>
         <source>Allow 4 char Locators</source>
         <translation>4 caractères permis</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1004"/>
+        <location filename="../contestdetails.ui" line="1018"/>
         <source>Allow 8 char Locators</source>
         <translation>8 caractères permis</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1014"/>
+        <location filename="../contestdetails.ui" line="1028"/>
         <source>Mandatory QSO Fields</source>
         <translation>Détails du QSO obligatoire</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1022"/>
+        <location filename="../contestdetails.ui" line="1036"/>
         <source>RS(T)</source>
         <translation>RS(T)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1029"/>
+        <location filename="../contestdetails.ui" line="1043"/>
         <source>Serial</source>
         <translation>Numéro de série</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1040"/>
+        <location filename="../contestdetails.ui" line="1054"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1056"/>
+        <location filename="../contestdetails.ui" line="1070"/>
         <source>Multipliers and Exchange</source>
         <translation>Multiplicateurs et échanges</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1062"/>
+        <location filename="../contestdetails.ui" line="1076"/>
         <source>DXCC Multiplier</source>
         <translation>Multiplicateur DXCC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1069"/>
+        <location filename="../contestdetails.ui" line="1083"/>
         <source>Locator Multiplier</source>
         <translation>Multiplicateurs Locator</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1132"/>
+        <location filename="../contestdetails.ui" line="1146"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1155"/>
+        <location filename="../contestdetails.ui" line="1169"/>
         <source>Entry Details</source>
         <translation>Détails de l&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="1175"/>
+        <location filename="../contestdetails.ui" line="1189"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1324,34 +1330,34 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Bonus NAC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="195"/>
+        <location filename="../contestdetails.cpp" line="197"/>
         <source>QTH</source>
         <translation>QTH</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="196"/>
+        <location filename="../contestdetails.cpp" line="198"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="197"/>
+        <location filename="../contestdetails.cpp" line="199"/>
         <source>Entry</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="258"/>
-        <location filename="../contestdetails.cpp" line="1615"/>
+        <location filename="../contestdetails.cpp" line="260"/>
+        <location filename="../contestdetails.cpp" line="1629"/>
         <source>(None)</source>
         <translation>(Aucun)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="388"/>
-        <location filename="../contestdetails.cpp" line="795"/>
+        <location filename="../contestdetails.cpp" line="390"/>
+        <location filename="../contestdetails.cpp" line="802"/>
         <source>Details of Contest Entry - %1</source>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1723"/>
+        <location filename="../contestdetails.cpp" line="1737"/>
         <source>This contest will be marked as protected.
 This is a permanent change that may be temporarily overridden.
 Please confirm this change by pressing &quot;Yes&quot;.</source>
@@ -1360,7 +1366,7 @@ Il s&amp;apos;agit d&amp;apos;un changement permanent qui peut être temporairem
 Veuillez confirmer cette modification en appuyant sur &amp;quot;Oui&amp;quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1771"/>
+        <location filename="../contestdetails.cpp" line="1785"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.
 
 There are four basic groups: - 
@@ -1422,27 +1428,27 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
         <translation type="vanished">Bonuses AFS (B6)</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="786"/>
+        <location filename="../contestdetails.cpp" line="793"/>
         <source>Band %1 is set as unwanted.</source>
         <translation>Bande %1 définir comme non désiré.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1380"/>
+        <location filename="../contestdetails.cpp" line="1392"/>
         <source>Contest end is before contest start</source>
         <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1835"/>
+        <location filename="../contestdetails.cpp" line="1849"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1903"/>
+        <location filename="../contestdetails.cpp" line="1917"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation>Voulez-vous vraiment protéger ce Concours?</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1910"/>
+        <location filename="../contestdetails.cpp" line="1924"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
     </message>
@@ -1479,57 +1485,51 @@ Déplacez-vous entre les composants d&amp;apos;un groupe à l&amp;apos;aide de l
 <context>
     <name>ContestSettings</name>
     <message>
-        <location filename="../managecontestsettings.cpp" line="648"/>
+        <location filename="../managecontestsettings.cpp" line="630"/>
         <source>Station Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="651"/>
+        <location filename="../managecontestsettings.cpp" line="633"/>
         <source>Entry Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="654"/>
+        <location filename="../managecontestsettings.cpp" line="636"/>
         <source>QTH Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="657"/>
+        <location filename="../managecontestsettings.cpp" line="639"/>
         <source>Section</source>
         <translation type="unfinished">Section</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="660"/>
         <source>Radio</source>
-        <translation type="unfinished">Radio</translation>
+        <translation type="obsolete">Radio</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="663"/>
-        <source>Rotator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../managecontestsettings.cpp" line="666"/>
+        <location filename="../managecontestsettings.cpp" line="642"/>
         <source>Main Op</source>
         <translation type="unfinished">Opérateur principal</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="669"/>
+        <location filename="../managecontestsettings.cpp" line="645"/>
         <source>Second Op</source>
         <translation type="unfinished">Second opérateur</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="672"/>
+        <location filename="../managecontestsettings.cpp" line="648"/>
         <source>Screen Layout</source>
         <translation type="unfinished">Disposition de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="675"/>
+        <location filename="../managecontestsettings.cpp" line="651"/>
         <source>Contest Log Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="678"/>
+        <location filename="../managecontestsettings.cpp" line="654"/>
         <source>Start Applications</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2702,22 +2702,22 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <translation type="unfinished">Annuler</translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="224"/>
+        <location filename="../managecontestsettings.cpp" line="218"/>
         <source>Do you want to overwrite setting %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="231"/>
+        <location filename="../managecontestsettings.cpp" line="225"/>
         <source>new setting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="711"/>
+        <location filename="../managecontestsettings.cpp" line="687"/>
         <source>Please give a new name for the setting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../managecontestsettings.cpp" line="715"/>
+        <location filename="../managecontestsettings.cpp" line="691"/>
         <source>%1 already exists</source>
         <translation type="unfinished">%1 existe déjà</translation>
     </message>
@@ -5836,7 +5836,7 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2529"/>
+        <location filename="../tlogcontainer.cpp" line="2531"/>
         <source>Minos Contest Logger Application</source>
         <translation>Application Minos Contest Logger</translation>
     </message>
@@ -5862,7 +5862,7 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1823"/>
-        <location filename="../tlogcontainer.cpp" line="2330"/>
+        <location filename="../tlogcontainer.cpp" line="2332"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
@@ -5883,22 +5883,22 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2332"/>
+        <location filename="../tlogcontainer.cpp" line="2334"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2342"/>
+        <location filename="../tlogcontainer.cpp" line="2344"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2366"/>
+        <location filename="../tlogcontainer.cpp" line="2368"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2370"/>
+        <location filename="../tlogcontainer.cpp" line="2372"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
@@ -6036,27 +6036,27 @@ Veuillez confirmer cette action en appuyant sur &amp;quot;Oui&amp;quot;.</transl
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../TSessionManager.cpp" line="246"/>
+        <location filename="../TSessionManager.cpp" line="247"/>
         <source>Give name for new session</source>
         <translation>Donner un nom à la nouvelle session</translation>
     </message>
     <message>
-        <location filename="../TSessionManager.cpp" line="263"/>
+        <location filename="../TSessionManager.cpp" line="264"/>
         <source>Give name for new contest set</source>
         <translation>Nom du nouvel Ensemble de Concours</translation>
     </message>
     <message>
-        <location filename="../TSessionManager.cpp" line="292"/>
+        <location filename="../TSessionManager.cpp" line="293"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation>Fichiers du Concours Minos (* .minos * .Minos) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../TSessionManager.cpp" line="296"/>
+        <location filename="../TSessionManager.cpp" line="297"/>
         <source>Open contests</source>
         <translation>Ouvrir les Concours</translation>
     </message>
     <message>
-        <location filename="../TSessionManager.cpp" line="349"/>
+        <location filename="../TSessionManager.cpp" line="350"/>
         <source>Give new name for contest set %1</source>
         <translation>Nouveau nom d&amp;apos;Ensemble de Concours %1</translation>
     </message>
