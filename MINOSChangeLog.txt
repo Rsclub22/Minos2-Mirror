@@ -1,8 +1,8 @@
-Post 2.7.1.0
+Post 2.7.1.0 to 2.8.0.0
 
 Bug fixes
-Hamlib 4.7
-Build with Qt up to 6.10.0
+Hamlib 4.7 (includes FTX-1)
+Build with Qt up to 6.11.2
 KST changes
     focus changes
     processor usage
@@ -28,3 +28,22 @@ QRZ
     Layout
     Record aging
 
+2.8.0.0 to 2..8.0.1000 Beta
+
+Apart from bug fixes, the main change is a re-working of the KST app.
+
+It is now broken into multiple panes in the same way as the logger, and 
+has its own layout editor. Panes that aren't shown are accessible as 
+dialogs under the right mouse button. Like logger, it can have multiple 
+"screens".
+
+The layout designer has the ability to set font sizes (as a proportion of the 
+overall font size) independently for each panel in the logger and the KST app.
+
+Post 2.8.0.1000 Beta
+
+Bug fix for B8 bonuses (2.8.1.0)
+
+2300/2320 bugfix in bandlist.xml
+
+Concept of settings groups; "new contest" now included in the about box, including contest set and app set.
