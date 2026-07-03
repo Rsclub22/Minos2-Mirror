@@ -117,6 +117,8 @@ WsjtxFrame::WsjtxFrame(TSingleLogFrame *parent) :
 
     adjustMargins(ui->wframe->layout(), ls, cml, cmt, cmr, cmb);
     removeFrameBoxes(ui->wframe->layout());
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &WsjtxFrame::on_AfterLogContact, Qt::QueuedConnection);
+
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -148,7 +150,13 @@ void WsjtxFrame::setContest(BaseContestLog *c)
     ct = c;
     restoreWSJTXTableColumns();
 }
-
+void WsjtxFrame::on_AfterLogContact(BaseContestLog *c)
+{
+    if (c && ct == c)
+    {
+        ui->decodes_table_view_->repaint();
+    }
+}
 //void WsjtxFrame::log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call
 //                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
 //                                           , QString const& report_sent, QString const& report_received

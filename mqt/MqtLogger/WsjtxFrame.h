@@ -184,6 +184,7 @@ private slots:
     void viewColumn();
 
     void on_doColumnChanges(BaseContestLog *b);
+    void on_AfterLogContact(BaseContestLog *c);
 };
 
 #endif // WSJTXFRAME_H
