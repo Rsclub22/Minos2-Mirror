@@ -97,6 +97,7 @@ void TLogContainer::openSerialTVSwitch()
         }
     }
 }
+#ifdef INSPECTGEOMETRY
 bool TLogContainer::inspectGeometry(const QByteArray &geometry)
 {
     if (geometry.size() < 4)
@@ -221,7 +222,7 @@ bool TLogContainer::inspectGeometry(const QByteArray &geometry)
     }
     return true;
 }
-
+#endif
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
@@ -274,10 +275,17 @@ TLogContainer::TLogContainer(QWidget *parent) :
             ||geometry().right() != r
             )
         {
-            //inspectGeometry(ageometry);
+#ifdef INSPECTGEOMETRY
+            inspectGeometry(ageometry);
+#endif
             trace("Bad geometry!");
-            QRect geoRect(l, t, r - l, b - t);
-            setGeometry(geoRect);
+            QScreen *ltScreen = QGuiApplication::screenAt(QPoint(l, t));
+            if (ltScreen)
+            {
+                QRect geoRect(l, t, r - l, b - t);
+                setGeometry(geoRect);
+            }
+            // else believe Qt's analysis
         }
 
     }
