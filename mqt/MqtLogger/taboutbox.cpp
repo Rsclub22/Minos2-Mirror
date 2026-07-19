@@ -40,7 +40,7 @@ QString TAboutBox::creditsText = QString(
     "<br><h3>%9</h3>"
     "<br>Dave Sergeant G3YMC"
     "<br><h3>%10</h3>"
-    "<br>Jacqui Goodey G6XSY, Marie Balharrie, Sue Punshon"
+    "<br>Jacqui Goodey G6XSY, Marie Balharrie (RIP), Sue Punshon"
      );
 QString TAboutBox::MinosText =
    "The Inferno, Dante, (trans Dorothy L Sayers, Penguin Classics); Canto 5.\n"
