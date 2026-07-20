@@ -18,6 +18,9 @@
 #ifdef Q_OS_UNIX
 #include <unistd.h>
 #endif
+#ifdef Q_OS_MACOS
+#include <sys/sysctl.h>
+#endif
 
 #include "regsettings.h"
 #include "fileutils.h"
@@ -455,7 +458,31 @@ void appStartup(const QString &pappName)
     trace(QSysInfo::prettyProductName());
     trace(QSysInfo::buildAbi());
     trace(qVersion());
+#ifdef Q_OS_MACOS
+    int procTranslated;
+    int size = sizeof(procTranslated);
+    // Checks whether process is translated by Rosetta
+    sysctlbyname("sysctl.proc_translated", &procTranslated, &size, NULL, 0);
 
+    // Removes CPU_ARCH_ABI64 or CPU_ARCH_ABI64_32 encoded with the Type
+    cpu_type_t typeWithABIInfoRemoved = type & ~CPU_ARCH_MASK;
+
+    if (typeWithABIInfoRemoved == CPU_TYPE_X86)
+    {
+        if (procTranslated == 1)
+        {
+            trace("ARM Processor (Running x86 application in Rosetta)");
+        }
+        else
+        {
+            trace("Intel Processor");
+        }
+    }
+    else if (typeWithABIInfoRemoved == CPU_TYPE_ARM)
+    {
+        trace("ARM Processor");
+    }
+#endif
 
     QString sysinfo = QString("%1 %2 %3").arg(appStartupName,
                                       QSysInfo::kernelType(),
