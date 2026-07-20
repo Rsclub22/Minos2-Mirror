@@ -4,6 +4,8 @@
 
 #include "cabrillo.h"
 
+extern bool rosetta;
+
 /*
 https://wwrof.org/cabrillo/cabrillo-specification-v3/
 
@@ -362,7 +364,9 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
     QString pver = QString("Minos by G0GJV, version ")
                    + STRINGVERSION  + " " + PRERELEASETYPE
                    + " on " + QSysInfo::prettyProductName()
-                   + " " + QSysInfo::currentCpuArchitecture();
+                   + " " + QSysInfo::currentCpuArchitecture()
+                   + (rosetta?" Rosetta":"");
+
     linelist[ static_cast< int> (PCreatedBy) ] = cabrilloLine( "CREATED-BY", pver );
 
     QString cabrilloName = BaseContestLog::getCabrilloName(ct->name.getValue(), ct->cabrilloName.getValue(), ct->calType.getValue());

@@ -12,6 +12,7 @@
 #include "cutils.h"
 #include "reg1test.h"
 
+extern bool rosetta;
 enum reg1test_order
 {
    TName, TDate, PCall, PWWLo, PExch, PAdr1, PAdr2, PSect, PBand,
@@ -234,6 +235,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
                   + STRINGVERSION  + " " + PRERELEASETYPE
                   + " on " + QSysInfo::prettyProductName()
                   + " " + QSysInfo::currentCpuArchitecture()
+                  + (rosetta?" Rosetta":"")
                   + "]";
    wr.lwrite( pver );
 

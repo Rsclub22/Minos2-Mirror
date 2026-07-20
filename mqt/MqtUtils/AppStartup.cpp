@@ -20,6 +20,7 @@
 #endif
 #ifdef Q_OS_MACOS
 #include <sys/sysctl.h>
+#include <mach/machine.h>
 #endif
 
 #include "regsettings.h"
@@ -44,6 +45,8 @@ static QSharedPointer<QTranslator> qtTranslator;
 
 static QString deflog = "Logs";
 static QString deflist = "Lists";
+
+bool rosetta = false;
 
 QString getAppExecutable()
 {
@@ -459,8 +462,11 @@ void appStartup(const QString &pappName)
     trace(QSysInfo::buildAbi());
     trace(qVersion());
 #ifdef Q_OS_MACOS
+    cpu_type_t type;
     int procTranslated;
-    int size = sizeof(procTranslated);
+    size_t size = sizeof(type);
+    sysctlbyname("hw.cputype", &type, &size, NULL, 0);
+    size = sizeof(procTranslated);
     // Checks whether process is translated by Rosetta
     sysctlbyname("sysctl.proc_translated", &procTranslated, &size, NULL, 0);
 
@@ -471,6 +477,7 @@ void appStartup(const QString &pappName)
     {
         if (procTranslated == 1)
         {
+            rosetta = true;
             trace("ARM Processor (Running x86 application in Rosetta)");
         }
         else
