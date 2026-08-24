@@ -160,7 +160,7 @@ QSharedPointer<ClusterSpotData> stringToDxSpot(QString spot, BaseContestLog *ct,
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 #endif
 
-        if (spotlist.count() == TTLVALUE +1)
+        if (spotlist.count() >= TTLVALUE +1)
         {
             bool ok = false;
             int ttl = spotlist[TTLVALUE].toInt(&ok);

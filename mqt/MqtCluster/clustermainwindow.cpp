@@ -721,11 +721,18 @@ void ClusterMainWindow::onReconnectCommandFromLog(bool state)
 
 void ClusterMainWindow::messageRx(QString msg)
 {
-    while(msg[msg.length() - 1] == '\r' || msg[msg.length() - 1] == '\n')
+    if (msg.isEmpty())
+    {
+        return;
+    }
+    while(!msg.isEmpty() && (msg[msg.length() - 1] == '\r' || msg[msg.length() - 1] == '\n'))
     {
         msg = msg.left(msg.length() - 1);
     }
-    msg.remove('\x07');
+    if (!!msg.isEmpty())
+    {
+        msg.remove('\x07');
+    }
     rawClusterDataView->appendPlainText(msg);   // append paragraph, so has newline
 }
 
@@ -752,7 +759,7 @@ void ClusterMainWindow::echoErrorMsg(QString err)
 
 void ClusterMainWindow::checkedLoggedIn(QString msg)
 {
-    QString endOfMsg = QString(">\r\n");
+    QString endOfMsg = QString("\r\n");
 
     if (loginStart && !loginSuccess)  // loginSuccess not used at the moment!
     {
