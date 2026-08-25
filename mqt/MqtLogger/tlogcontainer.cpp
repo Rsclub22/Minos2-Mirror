@@ -1450,7 +1450,10 @@ void TLogContainer::CloseAllActionExecute()
         {
             t -= 1;
         }
-        closeSlot(t, true );
+        if (t >= 0)
+        {
+            closeSlot(t, true );
+        }
     }
     closeSlot(0, true);
     on_contestPageControl_currentChanged(-1);
@@ -2174,7 +2177,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             {
                 addSlot( nullptr, pathlst[ i ], slotno, false );
                 // spin the event loop...
-                QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+                //QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
             }
         }
 
