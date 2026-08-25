@@ -116,13 +116,18 @@ void BandmapView::setBandmapZoom(int level)
         {
             return;
         }
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (!tslf)
+        {
+            return;
+        }
         if (level <= dialMaxZoomLevel && level >= dialMinZoomLevel)
         {
             zoomLevel = level;
             dial->setZoomLevel(level);
 
             setBandmapHeight(contestBandFlow, contestBandFhigh);
-            trace("BandmapView::bandmapUpdate()setBandMapZoom ");
+            trace("BandmapView::bandmapUpdate() setBandMapZoom ");
             bandmapUpdate(true);
             scrollBandmapCenterToFreq(dial->getCurFreq());
 
@@ -187,6 +192,11 @@ void BandmapView::doBandmapUpdate()
 {
     if (!TSingleLogFrame::inApplyScreenLayout)
     {
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (!tslf)
+        {
+            return;
+        }
 
         if (!getSuppressUpdate())
         {
@@ -689,6 +699,12 @@ void BandmapView::drawBandMapSpots()
     {
         return;
     }
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (!tslf)
+    {
+        return;
+    }
+
     if (TSingleLogFrame::inApplyScreenLayout)
     {
         return;

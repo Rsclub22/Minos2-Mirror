@@ -98,6 +98,7 @@ public:
     QStringList createContest(bool hf);
     void showContest(LoggerContestLog* contest, int slotNo);
 
+    void doCloseAllActionExecute();
 private:
     Ui::TLogContainer *ui;
 
@@ -114,6 +115,7 @@ private:
     QMenu *sessionsMenu = nullptr;
 
     static bool loggerClosing;
+    static bool closingAllContests;
 
     void enableActions();
 

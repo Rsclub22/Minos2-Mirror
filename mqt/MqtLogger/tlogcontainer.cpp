@@ -60,6 +60,7 @@
 TLogContainer *LogContainer = nullptr;
 
 bool TLogContainer::loggerClosing = false;
+bool TLogContainer::closingAllContests = false;
 
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
@@ -528,11 +529,11 @@ void TLogContainer::closeEvent(QCloseEvent *event)
     TContestApp::getContestApp() ->suppressWritePreload = true;
 
     // close all current slots, but don't write preload
-    CloseAllActionExecute();
+    doCloseAllActionExecute();
 
     TContestApp::getContestApp() ->clearPreloadComplete();
 
-    CloseAllActionExecute();
+    doCloseAllActionExecute();
     trace("closeEvent:Contest slots closed");
 
     MinosConfig::getMinosConfig() ->askStop();
@@ -1439,7 +1440,14 @@ void TLogContainer::onTabClosebutton(int t)
 
 void TLogContainer::CloseAllActionExecute()
 {
+    doCloseAllActionExecute();
+    on_contestPageControl_currentChanged(-1);
+}
+void TLogContainer::doCloseAllActionExecute()
+{
     trace(QString("%1 entered").arg(__func__));
+
+    closingAllContests = true;
 
     QWidget *thisContest = ui->contestPageControl->currentWidget();
     while ( ui->contestPageControl->count() > 1)
@@ -1456,7 +1464,8 @@ void TLogContainer::CloseAllActionExecute()
         }
     }
     closeSlot(0, true);
-    on_contestPageControl_currentChanged(-1);
+    trace("All slots closed in doCloseAllActionExecute");
+    //on_contestPageControl_currentChanged(-1);
     for(auto cpc: QASCONST(contestPageControls))
     {
         if (cpc && cpc->getInstance() > 0)
@@ -1467,6 +1476,8 @@ void TLogContainer::CloseAllActionExecute()
     }
 
     enableActions();
+    trace("Leaving doCloseAllActionExecute");
+    closingAllContests = false;
 }
 //---------------------------------------------------------------------------
 
@@ -1750,9 +1761,12 @@ void TLogContainer::setMenuLog(int current)
 }
 void TLogContainer::on_contestPageControl_currentChanged(int index)
 {
+    // when we are closing contests this gets called eachtim the current tab changes
+    // i.e. once per contest
     trace(QString("TLogContainer::on_contestPageControl_currentChanged index %1").arg(index));
-    if (loggerClosing)
+    if (loggerClosing || closingAllContests)
     {
+        trace("But we are closing things, so duck out");
         return;
     }
     enableActions();
@@ -1888,7 +1902,8 @@ TSingleLogFrame *TLogContainer::getCurrentLogFrame()
 
 void TLogContainer::closeSlot(int t, bool addToMRU)
 {
-   if ( t >= 0 )
+    trace(QString("%1 entered").arg(__func__));
+    if ( t >= 0 )
    {
       TSingleLogFrame * f = findLogFrame(t);
 
@@ -2127,21 +2142,28 @@ void TLogContainer::selectSession(QString sessName)
     app->suppressWritePreload = true;
 
     // first, close all current slots, but don't write preload
-    CloseAllActionExecute();
+    doCloseAllActionExecute();
 
-    // and reload
-    BaseContestLog *ct = loadSession(sessName);
+    trace("All closed in selectSession");
 
-    // and make sure everything happens
-    app->suppressWritePreload = false;
-    if ( ct )
+    delayedAction(this, [=]()
     {
-        selectContest( ct );
-        app->setCurrentContest(ct);
+        trace("Reloading session " + sessName);
+        // and reload
+        BaseContestLog *ct = loadSession(sessName);
+
+        // and make sure everything happens
+        app->suppressWritePreload = false;
+        if ( ct )
+        {
+            selectContest( ct );
+            app->setCurrentContest(ct);
+        }
+        app->logsPreloadBundle.flushProfile();
+        on_contestPageControl_currentChanged(-1);
+        enableActions();
     }
-    app->logsPreloadBundle.flushProfile();
-    on_contestPageControl_currentChanged(-1);
-    enableActions();
+    );
 }
 
 BaseContestLog *TLogContainer::loadSession( QString sessName)
