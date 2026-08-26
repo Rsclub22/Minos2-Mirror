@@ -411,10 +411,15 @@ void ScreenContact::score()
            {
               if ( letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
               {
-                 ls = new LocSquare ( letters );
-                 MapWrapper<LocSquare> wls(ls);
-                 if (!contest->locs[band].llist.contains(wls))
-                     contest->locs[band].llist.insert ( wls, wls );
+                 LocSquare lst ( letters );
+                 MapKeyWrapper<LocSquare> wlsk(&lst);
+                 if (!contest->locs[band].llist.contains(wlsk))
+                 {
+                     LocSquare *lsi = new LocSquare ( letters );
+                     MapKeyWrapper<LocSquare> wlsk(lsi);
+                     MapWrapper<LocSquare> wls(ls);
+                     contest->locs[band].llist.insert ( wlsk, wls );
+                 }
               }
            }
 

@@ -8,13 +8,14 @@
 /////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------
 #ifndef MultsH
-#define MultsH 
+#define MultsH
+#include <QObject>
 #include <QString>
 #include <QMap>
 
 #include "MapWrapper.h"
 #include "locator.h"
-#include "callsign.h"
+//#include "callsign.h"
 //----------------------------------------------------------------------------
 class DistrictEntry;
 class DistrictSynonym;
@@ -48,8 +49,9 @@ enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
 #define qHashRet uint
 #endif
 
-class GlistEntry
+class GlistEntry:public QObject
 {
+    Q_OBJECT
    public:
       GlistEntry( const QString &cd, const QString &syn );
       virtual ~GlistEntry();
@@ -65,13 +67,16 @@ class GlistEntry
           return ::qHash(synPrefix);
       }
 };
-class MultEntry
+class MultEntry:public QObject
 {
+    Q_OBJECT
     Locator central;	// central point to take bearings to
     QString realName;
 
 public:
       MultEntry( const QString &name, const QString &cloc );
+    MultEntry(const MultEntry &rhs);
+
       virtual ~MultEntry();
 
       virtual QString str( bool ) = 0;
@@ -85,6 +90,7 @@ public:
 #define DISTRICT_CODE_LENGTH 2
 class DistrictEntry : public MultEntry
 {
+    Q_OBJECT
    public:
 
       QString districtCode; // RSGB code
@@ -106,8 +112,9 @@ class DistrictEntry : public MultEntry
       }
 };
 
-class DistrictSynonym
+class DistrictSynonym:public QObject
 {
+    Q_OBJECT
    public:
       DistrictSynonym( const QString &cd, const QString &syn );
       DistrictSynonym( const QString &syn );
@@ -126,6 +133,7 @@ class DistrictSynonym
 
 class CountryEntry : public MultEntry
 {
+    Q_OBJECT
       int distLimit = -1;
       QString basePrefix;
       QString continent;
@@ -139,6 +147,14 @@ class CountryEntry : public MultEntry
 
       CountryEntry(const QString &continent, const QString &prefix, const QString &name, const QString &cloc, int cq, int itu );
       CountryEntry( const QString &prefix );
+      CountryEntry(const CountryEntry &rhs):MultEntry(rhs)
+      {
+          distLimit = rhs.distLimit;
+          basePrefix = rhs.basePrefix;
+          continent = rhs.continent;
+          ITUZone = rhs.ITUZone;
+          CQZone = rhs.CQZone;
+      }
       virtual ~CountryEntry();
       virtual QString str( bool ) override;
       virtual void addSynonyms( QString & ) override;
@@ -157,8 +173,9 @@ class CountryEntry : public MultEntry
 
 // stCallsign means a FULL callsign from cty.dat
 enum SynType {stNormal, stCallsign, stTest};
-class CountrySynonym
+class CountrySynonym:public QObject
 {
+    Q_OBJECT
     QString synPrefix;
     Locator central;	// central point to take bearings to
 
@@ -204,8 +221,9 @@ public:
     unsigned short locCount;
       LocCount():locCount(0){}
 };
-class LocSquare
+class LocSquare:public QObject
 {
+    Q_OBJECT
    public:
       LocSquare( const QString &loc );
       LocCount *map( int num ); // give count char for loc num
@@ -222,7 +240,7 @@ class LocSquare
       bool isClear();
 };
 
-typedef QMap < MapWrapper<LocSquare>, MapWrapper<LocSquare> > LocSquareList;
+typedef QMap < MapKeyWrapper<LocSquare>, MapWrapper<LocSquare> > LocSquareList;
 class LocList
 {
    public:

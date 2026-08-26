@@ -368,9 +368,12 @@ int DisplayContestContact::checkContact(bool adddup)
             if (letters.size() >= 2 && letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
             {
                 ls = new LocSquare ( letters );
-                MapWrapper<LocSquare> wls(ls);
-                if (!clp->locs[band].llist.contains(wls))
-                    clp->locs[band].llist.insert ( wls, wls );
+                MapKeyWrapper<LocSquare> kls(ls);
+                if (!clp->locs[band].llist.contains(kls))
+                {
+                    MapWrapper<LocSquare> wls(ls);
+                    clp->locs[band].llist.insert ( kls, wls );
+                }
             }
         }
 

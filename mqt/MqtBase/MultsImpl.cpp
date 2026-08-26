@@ -36,23 +36,17 @@ GlistEntry::~GlistEntry()
 
 bool GlistEntry::operator<( const GlistEntry& rhs ) const
 {
-   // p1 is from list; p2 is the one being searched for
-
    int res = synPrefix.compare(rhs.synPrefix, Qt::CaseInsensitive );
    return res < 0;
 }
 bool GlistEntry::operator==( const GlistEntry& rhs ) const
 {
-   // p1 is from list; p2 is the one being searched for
-
-    int res = synPrefix.compare(rhs.synPrefix, Qt::CaseInsensitive );
+   int res = synPrefix.compare(rhs.synPrefix, Qt::CaseInsensitive );
    return res == 0;
 }
 bool GlistEntry::operator!=( const GlistEntry& rhs ) const
 {
-   // p1 is from list; p2 is the one being searched for
-
-    int res = synPrefix.compare(rhs.synPrefix, Qt::CaseInsensitive );
+   int res = synPrefix.compare(rhs.synPrefix, Qt::CaseInsensitive );
    return res != 0;
 }
 
@@ -69,9 +63,14 @@ bool GlistList::procLine( QStringList a )
    QString syn = a[ 0 ];
    QString dup = a[ 1 ];
 
-   MapWrapper<GlistEntry>gle(new GlistEntry ( syn, dup ));
-   if (!contains(gle))
-       insert ( gle, gle );
+   GlistEntry let( syn, dup );
+   if (!contains(&let))
+   {
+       GlistEntry *le = new GlistEntry( syn, dup );
+       MapKeyWrapper<GlistEntry>glk(le);
+       MapWrapper<GlistEntry>gle(le);
+       insert ( glk, gle );
+   }
    return true;
 }
 
@@ -80,7 +79,6 @@ MultEntry::MultEntry( const QString &name, const QString &cloc )
 {
    realName = name.trimmed();
 
-   // set up central
    central.setLoc( cloc.left( 6 ) );
 }
 MultEntry::~MultEntry()
@@ -98,14 +96,14 @@ DistrictEntry::DistrictEntry( const QString &cd, const QString &name, const QStr
    districtCode = cd;
 
    // search country list for the prefix
-   MapWrapper<CountryEntry> test2(new CountryEntry(prefix2));
-   MapWrapper<CountryEntry> test(new CountryEntry(prefix));
-   MapWrapper<CountryEntry> res = MultListsImpl::getMultLists() ->ctryList.value(test2);
+   CountryEntry test2(prefix2);
+   CountryEntry test(prefix);
+   MapWrapper<CountryEntry> res = MultListsImpl::getMultLists() ->ctryList.value(&test2);
    if (res)
    {
        country2 = res.wt;
    }
-   res = MultListsImpl::getMultLists() ->ctryList.value(test);
+   res = MultListsImpl::getMultLists() ->ctryList.value(&test);
    if (res)
    {
        country1 = res.wt;
@@ -169,8 +167,8 @@ DistrictSynonym::DistrictSynonym( const QString &cd, const QString &syn ) :
    synonym = syn;
 
    // find district entry from cd code
-   MapWrapper<DistrictEntry> test(new DistrictEntry(cd));
-   MapWrapper<DistrictEntry> res = MultListsImpl::getMultLists() ->distList.value(test);
+   DistrictEntry test(cd);
+   MapWrapper<DistrictEntry> res = MultListsImpl::getMultLists() ->distList.value(&test);
    if (res)
    {
        district = res.wt;
@@ -221,9 +219,13 @@ bool DistrictList::procLine(QStringList a )
    QString prefix2 = a[ 3 ];
    QString cloc = (a.size() > 4)?a[ 4 ]:QString();
 
-   MapWrapper<DistrictEntry >dte(new DistrictEntry ( cd, cname, prefix, prefix2, cloc ));
-   if (!contains(dte))
-       insert ( dte, dte );
+   DistrictEntry *de = new DistrictEntry ( cd, cname, prefix, prefix2, cloc );
+   MapKeyWrapper<DistrictEntry >dtk(de);
+   if (!contains(dtk))
+   {
+       MapWrapper<DistrictEntry >dte(de);
+       insert ( dtk, dte );
+   }
    return true;
 }
 int DistrictList::getWorked( const QString &item, BaseContestLog *const ct, const QString &band )
@@ -249,10 +251,14 @@ bool DistrictSynonymList::procLine( QStringList a )
 {
    QString cd = a[ 0 ];
    QString cname = a[ 1 ];
-   MapWrapper<DistrictSynonym> dse(new DistrictSynonym ( cd, cname ));
+   DistrictSynonym *ds = new DistrictSynonym ( cd, cname );
+   MapKeyWrapper<DistrictSynonym> dsk(ds);
 
-   if ( dse.wt->district )
-       insert ( dse, dse );
+   if ( dsk.k->district )
+   {
+       MapWrapper<DistrictSynonym> dse(ds);
+       insert ( dsk, dse );
+   }
    return true;
 }
 static bool compdistnames( DistrictEntry *ce, const QString &syn )
@@ -451,7 +457,6 @@ bool CountrySynonym::operator!=( const CountrySynonym& rhs ) const
 }
 int CountrySynonym::compare( const CountrySynonym &cs ) const
 {
-   // p1 is from list; p2 is the one being searched for
    int res;
 
    res = synPrefix.compare(cs.synPrefix, Qt::CaseInsensitive );
@@ -597,9 +602,13 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          int cq = a[1].toInt();
          int itu = a[2].toInt();
 
-         MapWrapper<CountryEntry> cte(new CountryEntry ( a[ 3 ], a[ 7 ], a[ 0 ], gridref, cq, itu ));
-         if (!contains(cte))
-             insert ( cte, cte );
+         CountryEntry *ce = new CountryEntry ( a[ 3 ], a[ 7 ], a[ 0 ], gridref, cq, itu );
+         MapKeyWrapper<CountryEntry> ctk(ce);
+         if (!contains(ctk))
+         {
+             MapWrapper<CountryEntry> cte(ce);
+             insert ( ctk, cte );
+         }
       }
    /*
       CTY.dat cty-1805 1/6/2008
@@ -742,8 +751,8 @@ void CountryList::makeCountrySynonym(const QString &ssyn, const QString &sprefix
    }
 
    QSharedPointer<CountryEntry> ctry;
-   MapWrapper<CountryEntry> test(new CountryEntry(prefix));
-   MapWrapper<CountryEntry> res = value(test);
+   CountryEntry test(prefix);
+   MapWrapper<CountryEntry> res = value(&test);
    if (res)
    {
        ctry = res.wt;
@@ -753,15 +762,19 @@ void CountryList::makeCountrySynonym(const QString &ssyn, const QString &sprefix
    if ( cts.wt && ( cts.wt->getCountry().data() == ctry.data() ) )
       return ;		// as already there
 
-   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix
-                                                       , cq, itu, ll, cont
-                                                       , prefixType
-                                                       ));
+   CountrySynonym *cs = new CountrySynonym ( syn, prefix
+                      , cq, itu, ll, cont
+                      , prefixType
+                                           );
+   MapKeyWrapper< CountrySynonym> ctk = MapKeyWrapper<CountrySynonym >(cs);
 
-   if ( cts.wt->getCountry() )
+   if ( ctk.k->getCountry() )
    {
-       if (!MultListsImpl::getMultLists() ->ctrySynList.contains(cts))
-           MultListsImpl::getMultLists() ->ctrySynList.insert ( cts, cts );   // must add to the syn list...
+       if (!MultListsImpl::getMultLists() ->ctrySynList.contains(ctk))
+       {
+           MapWrapper< CountrySynonym> ctsv = MapWrapper<CountrySynonym >(cs);
+           MultListsImpl::getMultLists() ->ctrySynList.insert ( ctk, ctsv );   // must add to the syn list...
+       }
    }
 }
 
@@ -921,17 +934,17 @@ QSharedPointer<CountryEntry> MultListsImpl::getCtryForPrefix( const QString &for
    return ctryMult;
 }
 
-//void MultListsImpl::addCountry( bool addsyn );
 QSharedPointer<CountrySynonym> MultListsImpl::searchCountrySynonym(const QString &syn )
 {
-    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "", "", "", "", "", stNormal ));
-    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", "", "", "", "", "", stNormal));
-    MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test, defVal);
-
-    if (cs == defVal)
-        return QSharedPointer<CountrySynonym>();
-    else
+    CountrySynonym cst( syn, "", "", "", "", "", stNormal );
+    MapKeyWrapper < CountrySynonym > test(&cst);
+    if (MultListsImpl::getMultLists() ->ctrySynList.contains(test))
+    {
+        MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test);
         return cs.wt;
+    }
+
+    return QSharedPointer<CountrySynonym>();
 }
 QSharedPointer<DistrictEntry> MultListsImpl::searchDistrict( const QString &syn )
 {

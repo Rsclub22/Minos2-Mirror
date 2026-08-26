@@ -529,20 +529,24 @@ void ThisLogMatcher::addMatch( CheckableContact *cct, BaseContestLog *ccon )
       return ;
 
    ContestMatchList &contestMatchList = matchCollection->contestMatchList;
-   MapWrapper<BaseMatchContest> wmc = MapWrapper<BaseMatchContest>(new MatchContactLog);
    if (contestMatchList.size() == 0)
    {
+       MatchContactLog *mc = new MatchContactLog;
+       MapWrapper<BaseMatchContest> wmc(mc);
        wmc.wt->matchedContest = ccon;
-       contestMatchList.insert(wmc, wmc);
+       MapKeyWrapper<BaseMatchContest> wmk (mc);
+       contestMatchList.insert(wmk, wmc);
    }
-   QSharedPointer<BaseMatchContest> found;
+
    for(auto const &test: contestMatchList)
    {
        if (test.wt->getContactLog() == ccon)
        {
-            found = test.wt;
-            MapWrapper<MatchContact> wmct(new MatchLogContact( ccon, cct ));
-            found->contactMatchList.insert( wmct, wmct );
+            QSharedPointer<BaseMatchContest>found = test.wt;
+            MatchLogContact *mlc = new MatchLogContact( ccon, cct );
+            MapWrapper<MatchContact> wmct(mlc);
+            MapKeyWrapper<MatchContact> mctk(mlc);
+            found->contactMatchList.insert( mctk, wmct );
             break;
        }
    }
@@ -911,12 +915,10 @@ void OtherLogMatcher::matchCountry( const QString &cs )
 }
 void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog * ccon )
 {
-
    if ( !cct )
       return ;
 
    ContestMatchList &contestMatchList = matchCollection->contestMatchList;
-   MapWrapper<BaseMatchContest> wmc(new MatchContactLog);
 
 
    QSharedPointer<BaseMatchContest> found;
@@ -930,18 +932,23 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
    }
    if (!found)
    {
-       wmc.wt->matchedContest = ccon;
-       contestMatchList.insert(wmc, wmc);
+       MatchContactLog *mcl = new MatchContactLog;
+       mcl->matchedContest = ccon;
+       MapWrapper<BaseMatchContest> wmc(mcl);
+       MapKeyWrapper<BaseMatchContest> wmck(wmc.wt.data());
+       contestMatchList.insert(wmck, wmc);
    }
-   found.reset();
+
    for(auto const &test: contestMatchList)
    {
        const BaseContestLog *tcon = test.wt->getContactLog();
        if (tcon == ccon)
        {
-            found = test.wt;
-            MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct.data() ));
-            found->contactMatchList.insert( mct, mct );
+            QSharedPointer<BaseMatchContest>found = test.wt;
+            MatchLogContact *mc = new MatchLogContact( ccon, cct.data() );
+            MapKeyWrapper<MatchContact> mctk(mc);
+            MapWrapper<MatchContact> mct(mc);
+            found->contactMatchList.insert( mctk, mct );
             break;
        }
    }
@@ -1152,16 +1159,20 @@ void ListMatcher::addMatch( ListContact *lct, ContactList * clist )
        if (!found)
        {
            wmc.wt->matchedContest = clist;
-           contestMatchList.insert(wmc, wmc);
+           contestMatchList.insert(MapKeyWrapper(wmc.wt.data()), wmc);
        }
-       found.reset();
+
        for(auto const &test: contestMatchList)
        {
            if (test.wt->getContactList() == clist)
            {
-                found = test.wt;
-                MapWrapper<MatchContact> mct(new MatchListContact( clist, lct ));
-                found->contactMatchList.insert( mct, mct );
+                QSharedPointer<BaseMatchContest>found = test.wt;
+
+                MatchListContact *mlc = new MatchListContact( clist, lct );
+                MapKeyWrapper<MatchContact> mctk(mlc);
+                MapWrapper<MatchContact> mct(mlc);
+
+                found->contactMatchList.insert( mctk, mct );
                 break;
            }
        }

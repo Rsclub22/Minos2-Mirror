@@ -18,7 +18,7 @@
 #include "cutils.h"
 #include "MinosParameters.h"
 template < class itemtype >
-class MultList : public QObject, public QHash < MapWrapper<itemtype>, MapWrapper<itemtype> >
+class MultList : public QObject, public QHash < MapKeyWrapper<itemtype>, MapWrapper<itemtype> >
 {
 
 public:
@@ -31,9 +31,11 @@ public:
       virtual bool procLine( QStringList ) = 0;
       MultList()
       {}
-      virtual ~MultList()
-      {
-      }
+      MultList(const MultList &) = delete;
+      MultList(MultList &&) = delete;
+      MultList &operator=(const MultList &) = delete;
+      MultList &operator=(MultList &&) = delete;
+      virtual ~MultList() {}
       void loadEntries( const QString &sfname, const QString &fmess )
       {
          QString fname = sfname;
@@ -96,7 +98,8 @@ public:
          QString dest;
          if ( !ct )
             return dest;
-         MapWrapper<itemtype> test(new itemtype(item));
+         itemtype it(item);
+         MapKeyWrapper<itemtype> test(&it);
          QSharedPointer<itemtype> ce = this->value(test).wt;
          switch ( Column )
          {

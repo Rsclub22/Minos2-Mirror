@@ -2,6 +2,7 @@
 #define MAPWRAPPER_H
 
 #include <QSharedPointer>
+#include <QPointer>
 template <class itemtype>
 class MapWrapper
 {
@@ -44,6 +45,50 @@ public:
     }
 
 };
+template <class itemtype>
+class MapKeyWrapper
+{
+public:
+    QPointer<itemtype> k;
+    MapKeyWrapper(){}
+    MapKeyWrapper(itemtype *mp):k(mp){}
+
+    MapKeyWrapper(QPointer<itemtype> mp):k(mp.data()){}
+    MapKeyWrapper(const MapKeyWrapper &m)
+    {
+        k = m.k;
+    }
+    MapKeyWrapper &operator= (const MapKeyWrapper &m)
+    {
+        k = m.k;
+        return *this;
+    }
+    ~MapKeyWrapper()
+    {
+
+    }
+    operator bool()
+    {
+        return !k.isNull();
+    }
+    bool operator!() const
+    {
+        return k.isNull();
+    }
+    bool operator==(const MapKeyWrapper &rhs) const
+    {
+        return *k == *rhs.k;
+    }
+    bool operator!=(const MapKeyWrapper &rhs) const
+    {
+        return *k != *rhs.k;
+    }
+    bool operator<(const MapKeyWrapper &rhs) const
+    {
+        return *k < *rhs.k;
+    }
+
+};
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #define qHashRet size_t
@@ -52,9 +97,9 @@ public:
 #endif
 
 template <class itemtype>
-qHashRet qHash(const MapWrapper<itemtype> &m)
+qHashRet qHash(const MapKeyWrapper<itemtype> &m)
 {
-    return m.wt->qHash();
+    return m.k->qHash();
 }
 
 #endif // MAPWRAPPER_H

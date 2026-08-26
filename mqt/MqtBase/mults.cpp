@@ -83,6 +83,12 @@ QString MultEntry::getRealName() const
     return realName;
 }
 
+MultEntry::MultEntry(const MultEntry &rhs):QObject()
+{
+    central = rhs.central;
+    realName = rhs.realName;
+}
+
 Locator MultEntry::getCentral() const
 {
     return central;

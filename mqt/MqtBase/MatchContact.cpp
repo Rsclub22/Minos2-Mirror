@@ -68,7 +68,10 @@ const BaseContestLog * MatchContactLog::getContactLog() const
    return dynamic_cast<BaseContestLog* >(matchedContest);
 }
 
-MatchContact::MatchContact( )
+MatchContact::MatchContact( ):QObject()
+{}
+
+MatchContact::MatchContact(const MatchContact &):QObject()
 {}
 MatchContact::~MatchContact()
 {}

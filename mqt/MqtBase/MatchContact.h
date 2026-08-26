@@ -19,16 +19,18 @@ class BaseMatchContest;
 class BaseContestLog;
 class MatchContact;
 
-typedef QMap < MapWrapper<BaseMatchContest>, MapWrapper<BaseMatchContest> > ContestMatchList;
+typedef QMap < MapKeyWrapper<BaseMatchContest>, MapWrapper<BaseMatchContest> > ContestMatchList;
 typedef ContestMatchList::iterator ContestMatchIterator;
 
-typedef QMap < MapWrapper<MatchContact>, MapWrapper<MatchContact> > MatchList;
+typedef QMap < MapKeyWrapper<MatchContact>, MapWrapper<MatchContact> > MatchList;
 typedef MatchList::iterator MatchIterator;
 
-class MatchContact
+class MatchContact:public QObject
 {
+    Q_OBJECT
    public:
       MatchContact( );
+       MatchContact(const MatchContact &/*rhs*/);
       virtual ~MatchContact();
       virtual ContactList * getContactList() const
       {
@@ -50,8 +52,9 @@ class MatchContact
       virtual bool operator==( const MatchContact& rhs ) const = 0;
       virtual bool operator!=( const MatchContact& rhs ) const = 0;
 };
-class BaseMatchContest
+class BaseMatchContest:public QObject
 {
+    Q_OBJECT
 public:
    virtual ~BaseMatchContest();
 
