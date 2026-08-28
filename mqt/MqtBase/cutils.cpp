@@ -247,7 +247,7 @@ QString makeADIFField( const QString &fieldname, int content )
 
 int strnicmp( const QString &s1, const QString &s2, int len )
 {
-    return s1.left(len).compare(s2.left(len), Qt::CaseInsensitive);
+    return QStringView(s1).left(len).compare( QStringView(s2).left( len), Qt::CaseInsensitive );
 }
 //=============================================================================
 

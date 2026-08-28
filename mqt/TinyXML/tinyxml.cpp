@@ -22,8 +22,10 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
-#include <ctype.h>
 
+#if !defined (_MSC_VER)
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 #ifdef TIXML_USE_STL
 #include <sstream>
 #include <iostream>

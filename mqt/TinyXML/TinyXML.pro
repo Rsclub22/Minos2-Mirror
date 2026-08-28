@@ -5,9 +5,6 @@
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
 
-# Third party code - accept the warnings
-*g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-old-style-cast
-
 QT       += core
 
 TARGET = TinyXML

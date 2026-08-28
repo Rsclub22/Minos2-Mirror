@@ -22,6 +22,10 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#if !defined (_MSC_VER)
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include <ctype.h>
 #include <stddef.h>
 
