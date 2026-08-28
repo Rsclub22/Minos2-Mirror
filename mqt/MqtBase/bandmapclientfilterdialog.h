@@ -38,6 +38,7 @@ public:
     void loadDistanceFilterEditBox();
     void loadIgnoreDistanceChkBoxState();
     void loadIgnoreEmptyDistanceValuesChkBoxState();
+    void loadHideWorkedStationsChkBoxState();
 
 private:
     Ui::BandmapClientFilterDialog *ui;
@@ -46,11 +47,11 @@ private:
     QList<QCheckBox*> modeChkBoxList;
     QMap<QString, QCheckBox*> modeCheckBoxes;
 
-
-    bool distanceChanged;
-    bool distanceChkBoxChanged;
-    bool distanceEmptyChkBoxChanged;
-    bool settingsChanged;
+    bool distanceChanged = false;
+    bool distanceChkBoxChanged = false;
+    bool distanceEmptyChkBoxChanged = false;
+    bool hideWorkedStationsChkBoxChanged = false;
+    bool settingsChanged = false;
 
     BandmapClientFilterSettings filterSettings;
 
@@ -76,10 +77,10 @@ private slots:
     void filtersAccepted();
     void filtersRejected();
 
-
     void onDistanceEditFinished();
     void onIgnoreDistanceChkBoxStateChanged(int state);
     void onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state);
+    void onHideWorkedStationsChkBoxStateChanged(int state);
     void setFilterTabCurrentIndex(int idx);
     int getFilterTabCurrentIndex();
     void onFilterTabIndexChanged(int idx);

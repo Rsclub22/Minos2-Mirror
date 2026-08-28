@@ -404,20 +404,18 @@ public:
 
     void setFilterModeSettings(QStringList &clustermodes);
 
-
-
     void setModeFilter(QString mode, bool setting);
     bool getModeFilter(QString mode);
 
     bool testDistance(int distance, bool lessGreaterFlag);
-    int getDistanceFilter();
+    int getDistanceFilter() const;
     void setDistanceFilter(int distance);
 
 
     bool getIgnoreDistanceFlag();
     void setIgnoreDistanceFlag(bool state);
 
-    bool getIgnoreEmptyDistanceFlag();
+    bool getIgnoreEmptyDistanceFlag() const;
     void setIgnoreEmptyDistanceFlag(bool state);
 
     //QString packFilterList(QStringList l);
@@ -425,15 +423,20 @@ public:
 
     QString print(){return modeFilterFlag.print();}
 
+    bool getHideWorkedStationsFlag() const;
+    void setHideWorkedStationsFlag(bool newHideWorkedStationsFlag);
+
 private:
 
 
     ModeFilterSettings modeFilterFlag;   // QMap<mode, flag>
 
-    int distanceFilter;
+    int distanceFilter = 0;
 
-    bool ignoreDistanceFlag;
-    bool ignoreEmptyDistanceFlag;
+    bool ignoreDistanceFlag = false;
+    bool ignoreEmptyDistanceFlag = false;
+
+    bool hideWorkedStationsFlag = false;
 
 };
 

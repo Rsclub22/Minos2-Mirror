@@ -21,12 +21,7 @@ int BandmapClientFilterDialog::mainTabIndex;
 BandmapClientFilterDialog::BandmapClientFilterDialog(BandmapClientFilterSettings &filterSettings_, const QString &title, const QString &reg, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
-    distanceChanged(false),
-    distanceChkBoxChanged(false),
-    distanceEmptyChkBoxChanged(false),
-    regPrefix(reg),
-    settingsChanged(false)
-
+    regPrefix(reg)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -53,16 +48,12 @@ void BandmapClientFilterDialog::modeButtonSelected()
     if (areAnyModesSet())
     {
         clearModes();
-
     }
     else
     {
         setModes();
-
     }
 }
-
-
 
 void BandmapClientFilterDialog::closeEvent (QCloseEvent *event)
 {
@@ -70,13 +61,11 @@ void BandmapClientFilterDialog::closeEvent (QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-
 void BandmapClientFilterDialog::doCloseEvent()
 {
     RegSettings settings;
     settings.getSettings().setValue(regPrefix + "ClientFilter/geometry", saveGeometry());
 }
-
 
 void BandmapClientFilterDialog::initCheckFilterTab(const QString &t)
 {
@@ -98,13 +87,13 @@ void BandmapClientFilterDialog::initCheckFilterTab(const QString &t)
         trace(QString("initCheckFilterTab: clusterModes %1 != modeChkBoxList %2").arg(clusterModes.count(), modeChkBoxList.count()));
     }
 
-
     ui->modeSelectBut->setToolTip(tr("Click to set/reset all modes"));
     connect(ui->modeSelectBut, &QPushButton::clicked, this, &BandmapClientFilterDialog::modeButtonSelected);
 
     connect(ui->spotDistanceEdit, &QLineEdit::editingFinished, this, &BandmapClientFilterDialog::onDistanceEditFinished);
     connect(ui->distFilterIgnoreCheckBox, &QCheckBox::stateChanged, this, &BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged);
     connect(ui->ignoreEmptyDistanceValuesChkBox, &QCheckBox::stateChanged, this, &BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged);
+    connect(ui->hideWorkedStationsCheckbox, &QCheckBox::stateChanged, this, &BandmapClientFilterDialog::onHideWorkedStationsChkBoxStateChanged);
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &BandmapClientFilterDialog::filtersAccepted);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &BandmapClientFilterDialog::filtersRejected);
 
@@ -112,22 +101,12 @@ void BandmapClientFilterDialog::initCheckFilterTab(const QString &t)
 
     setFilterTabCurrentIndex(mainTabIndex);
     loadSettingsToDialogBox();
-
 }
-
-/*
-void BandmapClientFilterDialog::setContest(BaseContestLog *c)
-{
-    ct = dynamic_cast<LoggerContestLog *>( c);
-}
-*/
 
 void BandmapClientFilterDialog::onFilterTabIndexChanged(int idx)
 {
     mainTabIndex = idx;
 }
-
-
 
 void BandmapClientFilterDialog::setFilterTabCurrentIndex(int idx)
 {
@@ -139,15 +118,13 @@ int BandmapClientFilterDialog::getFilterTabCurrentIndex()
     return ui->bandmapFilterTab->currentIndex();
 }
 
-
 void BandmapClientFilterDialog::loadSettingsToDialogBox()
 {
-
     loadDistanceFilterEditBox();
     loadIgnoreDistanceChkBoxState();
     loadIgnoreEmptyDistanceValuesChkBoxState();
+    loadHideWorkedStationsChkBoxState();
     copyModeFiltersToDialog();
-
 }
 
 
@@ -155,16 +132,14 @@ void BandmapClientFilterDialog::filtersAccepted()
 {
     bool modefilterChanged = false;
 
-
-
     if (modeFiltersChanged())
     {
         copyModeFiltersToFilterSettings();
         modefilterChanged = true;
     }
 
-
-    if (modefilterChanged || distanceChanged || distanceChkBoxChanged || distanceEmptyChkBoxChanged)
+    if (modefilterChanged || distanceChanged || distanceChkBoxChanged
+        || distanceEmptyChkBoxChanged || hideWorkedStationsChkBoxChanged)
     {
         if (modefilterChanged)
         {
@@ -188,6 +163,10 @@ void BandmapClientFilterDialog::filtersAccepted()
         {
             trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Empty Distance = %1, Ignore Empty Distance = %2").arg(filterSettings.getIgnoreEmptyDistanceFlag() ? "true" : "false"));
         }
+        if (hideWorkedStationsChkBoxChanged)
+        {
+            trace(QString("Bandmap Filter Hide Worked Stations Checkbox Changed %1").arg(filterSettings.getIgnoreEmptyDistanceFlag() ? "true" : "false"));
+        }
         settingsChanged = true;
     }
 
@@ -196,9 +175,7 @@ void BandmapClientFilterDialog::filtersAccepted()
 
 void BandmapClientFilterDialog::filtersRejected()
 {
-
     doCloseEvent();
-
 }
 
 
@@ -223,13 +200,8 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
     }
 }
 
-
-
-
-
 void BandmapClientFilterDialog::loadDistanceFilterEditBox()
 {
-
     ui->spotDistanceEdit->setText(QString::number(filterSettings.getDistanceFilter()));
 }
 
@@ -241,9 +213,6 @@ void BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged(int state)
         filterSettings.setIgnoreDistanceFlag(ui->distFilterIgnoreCheckBox->isChecked());
         distanceChkBoxChanged = true;
     }
-
-
-
 }
 
 void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
@@ -267,6 +236,16 @@ void BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged(in
         distanceEmptyChkBoxChanged = true;
     }
 }
+
+void BandmapClientFilterDialog::onHideWorkedStationsChkBoxStateChanged(int state)
+{
+    Q_UNUSED(state)
+    if (ui->hideWorkedStationsCheckbox->isChecked() != filterSettings.getHideWorkedStationsFlag())
+    {
+        filterSettings.setHideWorkedStationsFlag(ui->hideWorkedStationsCheckbox->isChecked());
+        hideWorkedStationsChkBoxChanged = true;
+    }
+}
 void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
 {
     if (filterSettings.getIgnoreEmptyDistanceFlag())
@@ -276,6 +255,18 @@ void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
     else
     {
         ui->ignoreEmptyDistanceValuesChkBox->setCheckState(Qt::Unchecked);
+    }
+}
+
+void BandmapClientFilterDialog::loadHideWorkedStationsChkBoxState()
+{
+    if (filterSettings.getHideWorkedStationsFlag())
+    {
+        ui->hideWorkedStationsCheckbox->setCheckState(Qt::Checked );
+    }
+    else
+    {
+        ui->hideWorkedStationsCheckbox->setCheckState(Qt::Unchecked);
     }
 }
 
@@ -308,18 +299,12 @@ void BandmapClientFilterDialog::copyModeFiltersToDialog()
     }
 }
 
-
-
-
-
 void BandmapClientFilterDialog::clearModes()
 {
     for (auto &m:clusterModes)
     {
         modeCheckBoxes.value(m)->setCheckState(Qt::Unchecked);
-
     }
-
 }
 
 void BandmapClientFilterDialog::setModes()
@@ -329,7 +314,6 @@ void BandmapClientFilterDialog::setModes()
         modeCheckBoxes.value(m)->setCheckState(Qt::Checked);
 
     }
-
 }
 
 bool BandmapClientFilterDialog::areAnyModesSet()
@@ -341,6 +325,5 @@ bool BandmapClientFilterDialog::areAnyModesSet()
             return true;
         }
     }
-
     return false;
 }

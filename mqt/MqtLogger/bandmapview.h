@@ -79,6 +79,10 @@ public:
     void setSuppressUpdate(bool value);
     void onNextUnworkedSpot(bool nextFreqUpDown, bool nextMult);
 
+    bool checkCallWorked(int row);
+
+    int getModeTolerance();
+
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);
@@ -139,7 +143,7 @@ private:
     bool lessGreaterThanDistanceFlag = false;
     QStringList nearMatches;
 
-    void assembleSpotMsg(int row, QString& markerMsg);
+    void assembleSpotMsg(int row, QString& markerMsg, bool callWorked);
     void assembleToolTip(int row, Frequency freq, QString& toolTipMsg);
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);

@@ -399,7 +399,7 @@ void ScreenContact::score()
            for ( auto const &i: QASCONST(contest->locs[band].llist) )
            {
                LocSquare *locsq = i.wt.data();
-               if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
+               if (locsq && strnicmp ( locsq ->loc, letters, 2 ) == 0 )
                {
                    ls = locsq;
                    break;

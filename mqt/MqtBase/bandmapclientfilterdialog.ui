@@ -17,7 +17,7 @@
    <item alignment="Qt::AlignLeft">
     <widget class="QTabWidget" name="bandmapFilterTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="modeTab">
       <attribute name="title">
@@ -116,7 +116,7 @@
      </widget>
      <widget class="QWidget" name="distanceTab">
       <attribute name="title">
-       <string>Distance</string>
+       <string>Distance/Other</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -152,6 +152,13 @@
             <widget class="QCheckBox" name="ignoreEmptyDistanceValuesChkBox">
              <property name="text">
               <string>Ignore Spots with no distance value</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="hideWorkedStationsCheckbox">
+             <property name="text">
+              <string>Hide Worked Stations</string>
              </property>
             </widget>
            </item>

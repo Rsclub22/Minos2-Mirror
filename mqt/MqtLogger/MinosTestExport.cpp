@@ -470,6 +470,7 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         st->addMember(bandmapFilter.getValue().getDistanceFilter(), "distanceFilter");
         st->addMember(bandmapFilter.getValue().getIgnoreDistanceFlag(), "ignoreDistanceFlag");
         st->addMember(bandmapFilter.getValue().getIgnoreEmptyDistanceFlag(), "ignoreEmptyDistanceFlag");
+        st->addMember(bandmapFilter.getValue().getHideWorkedStationsFlag(), "hideWorkedStationsFlag");
         sendRequest(expfd, "MinosBandmapFilter", st);
 
     }
@@ -498,6 +499,7 @@ void MinosTestExport::exportQSOMapFilter(QSharedPointer<QFile> expfd)
         st->addMember(qsomapFilter.getValue().getDistanceFilter(), "distanceFilter");
         st->addMember(qsomapFilter.getValue().getIgnoreDistanceFlag(), "ignoreDistanceFlag");
         st->addMember(qsomapFilter.getValue().getIgnoreEmptyDistanceFlag(), "ignoreEmptyDistanceFlag");
+        st->addMember(qsomapFilter.getValue().getHideWorkedStationsFlag(), "hideWorkedStationsFlag");
         sendRequest(expfd, "MinosQSOMapFilter", st);
 
     }

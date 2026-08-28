@@ -573,8 +573,61 @@ bool BandmapView::filterAcceptsRow(int sourceRow) const
 
     return false;
 }
+bool BandmapView::checkCallWorked(int row)
+{
+    bool callWkd = false;
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+    bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
+    if (savedSpotType != bandmapSpotType::CQ && savedSpotType != bandmapSpotType::DELETED )
+    {
+        QString dxCallsign = pSpot->getDxCallStr();
+        Callsign cs;
+        cs.setFullCall(dxCallsign);
+
+        CheckableContact test(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
+        CheckableContact *cc = contest->haveWorked(&test);
+        callWkd = cc != nullptr;
+        if (callWkd)
+        {
+            int tol = getModeTolerance();
+            Frequency f = dial->getCurFreq();
+            Frequency freq = pSpot->getFreq();
+
+            int offset = std::abs(freq - f);
+            if (tol > 0 && offset < tol )
+            {
+                QString nm;
+                QTextStream os(&nm);
+                os.setFieldWidth(5);
+                os << offset;
+                os.setFieldWidth(0);
+
+                QString dxQth = pSpot->getDistrict();
+                bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
+                QString dxLoc = pSpot->getDxLocator();
+                QString dxMode = pSpot->getMode();
+
+                os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
+                os << "|" << dxQth;
+
+                nearMatches.push_back(nm);
+            }
+        }
+    }
+    return callWkd;
+}
+
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn)
 {
+    bool callWkd = checkCallWorked(row);
+    if (callWkd)
+    {
+        bool hideCallWorked = filterSettings->getHideWorkedStationsFlag();
+        if (hideCallWorked)
+        {
+            return;
+        }
+    }
     ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
 
     bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
@@ -671,7 +724,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         }
         else
         {
-            assembleSpotMsg(row, spotMsg);
+            assembleSpotMsg(row, spotMsg, callWkd);
             spotRect = calculateSpotRect(spotMsg, spotCoord);
             assembleToolTip(row, spotFreq, spotTooltipText);
         }
@@ -851,11 +904,20 @@ void BandmapView::drawBandMapSpots()
 
         for (int row = 0; row < numrows; ++row)
         {
+            bool callWkd = checkCallWorked(row);
+            if (callWkd)
+            {
+                bool hideCallWorked = filterSettings->getHideWorkedStationsFlag();
+                if (hideCallWorked)
+                {
+                    continue;
+                }
+            }
             ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
             bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
             if (savedSpotType == bandmapSpotType::DELETED)
             {
-                continue;;
+                continue;
             }
            // check mode and distance against the filter settings
             if (matchMode(row) && matchDistance(row) && filterAcceptsRow(row))
@@ -899,12 +961,10 @@ void BandmapView::drawBandMapSpots()
                                 }
                                 else
                                 {
-                                    assembleSpotMsg(row, spotMsg);
+                                    assembleSpotMsg(row, spotMsg, callWkd);
                                     spotRect = calculateSpotRect(spotMsg, spotCoord);
                                     assembleToolTip(row, f, spotTooltipText);
                                 }
-
-
                                 spot->setSpotText(spotMsg);
 
                                 spot->setToolTipText(spotTooltipText);
@@ -1067,7 +1127,26 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
     markerMsg = msg;
 }
 
-void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
+int BandmapView::getModeTolerance()
+{
+    int tol = 0;
+    if (curMode == PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
+    {
+        tol = 1000;
+    }
+    else if (curMode == PSK || curMode == RY || curMode == hamlibData::RTTY)
+    {
+        tol = 100;
+    }
+    else if (curMode == hamlibData::CW)
+    {
+        tol = 100;
+    }
+
+    return tol;
+}
+
+void BandmapView::assembleSpotMsg(int row, QString& markerMsg, bool callWorked)
 {
     ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
 
@@ -1099,14 +1178,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     {
         newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + tr("New") +  HtmlFontColour(NOT_WORKED_COLOUR);
     }
-    Callsign cs;
-    cs.setFullCall(dxCallsign);
 
-    CheckableContact test(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
-    CheckableContact *cc = contest->haveWorked(&test);
-    bool callWkd = cc != nullptr;
 //    traceMsg(QString("test callsign %1 mode %2").arg(test->cs.getFullCall(), test->mode.getValue()));
-    if (cc!= nullptr)
+    if (callWorked)
     {
         pSpot->setDxCallWorked(true);
 //        traceMsg(QString("cc callsign %1 mode %2").arg(cc->cs.getFullCall(), cc->mode.getValue()));
@@ -1118,7 +1192,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     }
 
     QString callsign;
-    if (callWkd)
+    if (callWorked)
     {
         callsign = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxCallsign, HtmlFontColour(NOT_WORKED_COLOUR));
     }
@@ -1183,19 +1257,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    int tol = 0;
-    if (curMode == PH || curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
-    {
-        tol = 1000;
-    }
-    else if (curMode == PSK || curMode == RY || curMode == hamlibData::RTTY)
-    {
-        tol = 100;
-    }
-    else if (curMode == hamlibData::CW)
-    {
-        tol = 100;
-    }
+    int tol = getModeTolerance();
     Frequency f = cFreq;
     int offset = std::abs(freq - f);
     if (tol > 0 && offset < tol )
@@ -1203,16 +1265,6 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         // highlight this line as current frequency
         bLineStart = "<b>";
         bLineEnd = "</b>";
-
-        QString nm;
-        QTextStream os(&nm);
-        os.setFieldWidth(5);
-        os << offset;
-        os.setFieldWidth(0);
-        os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
-        os << "|" << dxQth;
-
-        nearMatches.push_back(nm);
     }
 
     QString markSym = "";

@@ -386,15 +386,8 @@ QStringList ClusterClientFilterSettings::unpackFilterList(QString &sl)
 }
 
 
-BandmapClientFilterSettings::BandmapClientFilterSettings() :
-
-    distanceFilter(0),
-    ignoreDistanceFlag(false),
-    ignoreEmptyDistanceFlag(false)
-
+BandmapClientFilterSettings::BandmapClientFilterSettings()
 {
-
-
 }
 
 
@@ -457,7 +450,7 @@ bool BandmapClientFilterSettings::testDistance(int distance, bool lessGreaterFla
     return false;
 }
 
-int BandmapClientFilterSettings::getDistanceFilter()
+int BandmapClientFilterSettings::getDistanceFilter() const
 {
     return distanceFilter;
 }
@@ -473,7 +466,7 @@ void BandmapClientFilterSettings::setIgnoreDistanceFlag(bool state)
 }
 
 
-bool BandmapClientFilterSettings::getIgnoreEmptyDistanceFlag()
+bool BandmapClientFilterSettings::getIgnoreEmptyDistanceFlag() const
 {
     return ignoreEmptyDistanceFlag;
 }
@@ -483,18 +476,27 @@ void BandmapClientFilterSettings::setIgnoreEmptyDistanceFlag(bool state)
     ignoreEmptyDistanceFlag = state;
 }
 
+bool BandmapClientFilterSettings::getHideWorkedStationsFlag() const
+{
+    return hideWorkedStationsFlag;
+}
+
+void BandmapClientFilterSettings::setHideWorkedStationsFlag(bool state)
+{
+    hideWorkedStationsFlag = state;
+}
+
 BandmapClientFilterSettings::BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
 {
     *this = bcfs;
 }
 BandmapClientFilterSettings& BandmapClientFilterSettings::operator= (const BandmapClientFilterSettings& bcfs)
 {
-
     modeFilterFlag = bcfs.modeFilterFlag;
     distanceFilter = bcfs.distanceFilter;
     ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
     ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
-
+    hideWorkedStationsFlag = bcfs.hideWorkedStationsFlag;
     return *this;
 }
 
@@ -504,7 +506,9 @@ bool BandmapClientFilterSettings::operator==( const BandmapClientFilterSettings&
     if ( modeFilterFlag == bcfs.modeFilterFlag &&
          distanceFilter == bcfs.distanceFilter &&
          ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
-         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
+         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag &&
+         hideWorkedStationsFlag == bcfs.hideWorkedStationsFlag
+        )
 
     {
         return true;
@@ -608,12 +612,6 @@ bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &b
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
 {
     QDateTime dt = QDateTime();
-    //int tn = QTime::currentTime().second();
-    //QString t = QString::number(tn);
-    //if (tn < 10)
-    //{
-    //    t = "0" + t;
-    //}
 
     QDate dto;
     QStringList dl = spotDate.split('-');
@@ -641,8 +639,6 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     dt = toUTC(dt);
     return dt;
 }
-
-
 
 bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive)
 {
