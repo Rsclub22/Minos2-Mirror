@@ -57,7 +57,7 @@ class BaseMatchContest:public QObject
     Q_OBJECT
 public:
     BaseMatchContest() {}
-    BaseMatchContest(const BaseMatchContest& rhs)
+    BaseMatchContest(const BaseMatchContest& rhs):QObject()
     {
         matchedContest = rhs.matchedContest;
         contactMatchList = rhs.contactMatchList;

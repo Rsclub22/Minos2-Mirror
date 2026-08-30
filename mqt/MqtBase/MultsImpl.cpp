@@ -32,7 +32,7 @@ GlistEntry::GlistEntry( const QString &syn, const QString &dup )
    dupPrefix = dup.trimmed();
 }
 
-GlistEntry::GlistEntry(const GlistEntry& rhs)
+GlistEntry::GlistEntry(const GlistEntry& rhs):QObject()
 {
     synPrefix = rhs.synPrefix;
     dupPrefix = rhs.dupPrefix;
