@@ -245,6 +245,10 @@ class LocList
    public:
       LocSquareList llist;
       LocList();
+      LocList(const LocList& ll)
+      {
+          llist = ll.llist;
+      }
       virtual ~LocList();
       QSharedPointer<LocSquare> itemAt(int offset)
       {

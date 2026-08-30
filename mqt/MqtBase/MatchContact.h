@@ -56,7 +56,15 @@ class BaseMatchContest:public QObject
 {
     Q_OBJECT
 public:
-   virtual ~BaseMatchContest();
+    BaseMatchContest() {}
+    BaseMatchContest(const BaseMatchContest& rhs)
+    {
+        matchedContest = rhs.matchedContest;
+        contactMatchList = rhs.contactMatchList;
+     
+    }
+
+    virtual ~BaseMatchContest();
 
    BaseLogList *matchedContest;
 
