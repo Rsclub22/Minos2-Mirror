@@ -41,14 +41,12 @@ enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
                     ectMultMaxCol
                    };
 
-#define GLIST_PREFIX_LEN 5
-
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #define qHashRet size_t
 #else
 #define qHashRet uint
 #endif
-#define GLIST_PREFIX_LEN 5
+
 class GlistEntry:public QObject
 {
     Q_OBJECT
