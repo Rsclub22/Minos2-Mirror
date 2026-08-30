@@ -48,12 +48,13 @@ enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
 #else
 #define qHashRet uint
 #endif
-
+#define GLIST_PREFIX_LEN 5
 class GlistEntry:public QObject
 {
     Q_OBJECT
    public:
       GlistEntry( const QString &cd, const QString &syn );
+       GlistEntry ( const GlistEntry &rhs);
       virtual ~GlistEntry();
 
       bool operator<( const GlistEntry& rhs ) const;

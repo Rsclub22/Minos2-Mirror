@@ -31,6 +31,12 @@ GlistEntry::GlistEntry( const QString &syn, const QString &dup )
    synPrefix = syn.trimmed();
    dupPrefix = dup.trimmed();
 }
+
+GlistEntry::GlistEntry(const GlistEntry& rhs)
+{
+    synPrefix = rhs.synPrefix;
+    dupPrefix = rhs.dupPrefix;
+}
 GlistEntry::~GlistEntry()
 {}
 
@@ -794,6 +800,10 @@ LocSquare::LocSquare( const QString &locId )
 
 LocCount *LocSquare::map( const QString &num )
 {
+    if (num.isEmpty())
+    {
+        return nullptr;
+    }
    if ( !num[ 0 ].isDigit() || !num[ 1 ].isDigit() )
       return nullptr;
 
