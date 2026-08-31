@@ -5,8 +5,9 @@
 
 #include "ScreenConfigElement.h"
 
-class LoggerScreenOptions
+class LoggerScreenOptions:public QObject
 {
+    Q_OBJECT
     static QVector <SCTypeOption> loggerScreenOptions;
     static QString defaultConfig;
     static QString protectedConfig;

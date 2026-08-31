@@ -108,6 +108,10 @@
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="119"/>
+        <source>Distance/Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../bandmapclientfilterdialog.ui" line="138"/>
         <source>Distance</source>
         <translation>Distance</translation>
@@ -123,17 +127,22 @@
         <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="102"/>
+        <location filename="../bandmapclientfilterdialog.ui" line="161"/>
+        <source>Hide Worked Stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientfilterdialog.cpp" line="90"/>
         <source>Click to set/reset all modes</source>
         <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="219"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="196"/>
         <source>Distance Filter</source>
         <translation>Filtre de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="220"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="197"/>
         <source>Please enter a number between %1 and %2!</source>
         <translation>Entrer un nombre entre %1 et %2 SVP !</translation>
     </message>
@@ -174,12 +183,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="705"/>
+        <location filename="../contest.cpp" line="706"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="721"/>
+        <location filename="../contest.cpp" line="722"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -1218,32 +1227,32 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="2242"/>
+        <location filename="../contest.cpp" line="2254"/>
         <source>Score: %1 Qsos; %2 pts; (%3 countries); %4 locs; bonuses %5(%6) = %7</source>
         <translation>Score: %1 Qsos; %2 pts; (%3 pays); %4 locs; bonuses %5(%6) = %7</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2250"/>
+        <location filename="../contest.cpp" line="2262"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 districts; %5 locs; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3 pays; %4 quartiers; %5 locs; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2258"/>
+        <location filename="../contest.cpp" line="2270"/>
         <source>Score: %1 Qsos; %2 pts; %3 countries; %4 locs; bonuses %5(%6) = %7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2266"/>
+        <location filename="../contest.cpp" line="2278"/>
         <source>Score: %1 Qsos; %2 pts; %3%4 countries%5; bonuses %6(%7) = %8</source>
         <translation>Score: %1 Qsos; %2 pts; %3%4 pays%5; bonuses %6(%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2276"/>
+        <location filename="../contest.cpp" line="2288"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 districts%8; %9%10 locators %13 = %14</source>
         <translation>Score: %1 Qsos; %2 pts;%3%4 pays%5;%6%7 quartiers%8; %9%10 locators %13 = %14</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="2283"/>
+        <location filename="../contest.cpp" line="2295"/>
         <source>Score: %1 Qsos; %2 pts;%3%4 countries%5;%6%7 locators %8 = %9</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1251,17 +1260,17 @@
 <context>
     <name>CountryList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="479"/>
+        <location filename="../MultsImpl.cpp" line="490"/>
         <source>CT9 Country File</source>
         <translation>CT9 Fichier  des Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="563"/>
+        <location filename="../MultsImpl.cpp" line="574"/>
         <source>Failed to open %1 (%2)</source>
         <translation>L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="740"/>
+        <location filename="../MultsImpl.cpp" line="755"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
         <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
@@ -1269,7 +1278,7 @@
 <context>
     <name>CountrySynonymList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="715"/>
+        <location filename="../MultsImpl.cpp" line="730"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
     </message>
@@ -1468,32 +1477,32 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="426"/>
+        <location filename="../DisplayContestContact.cpp" line="429"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="486"/>
+        <location filename="../DisplayContestContact.cpp" line="489"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="556"/>
+        <location filename="../DisplayContestContact.cpp" line="559"/>
         <source>DEL</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="559"/>
+        <location filename="../DisplayContestContact.cpp" line="562"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="566"/>
+        <location filename="../DisplayContestContact.cpp" line="569"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="647"/>
+        <location filename="../DisplayContestContact.cpp" line="650"/>
         <source>UNFILLED CONTACT </source>
         <translation>CONTACT NON REMPLI </translation>
     </message>
@@ -2828,27 +2837,27 @@ The row background will change colour when selected.</source>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="747"/>
+        <location filename="../MatchThread.cpp" line="751"/>
         <source>Possible</source>
         <translation>Possible</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="750"/>
+        <location filename="../MatchThread.cpp" line="754"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="754"/>
+        <location filename="../MatchThread.cpp" line="758"/>
         <source>District</source>
         <translation>District</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="758"/>
+        <location filename="../MatchThread.cpp" line="762"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="760"/>
+        <location filename="../MatchThread.cpp" line="764"/>
         <source> - %1%2 %3 matches</source>
         <translation> - %1%2 %3 correspondances</translation>
     </message>

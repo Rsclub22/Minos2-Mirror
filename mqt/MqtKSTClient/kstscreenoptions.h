@@ -5,8 +5,9 @@
 
 #include "ScreenConfigElement.h"
 
-class KSTScreenOptions
+class KSTScreenOptions: public QObject
 {
+    Q_OBJECT
     static QVector <SCTypeOption> kstScreenOptions;
     static QString defaultConfig;
     static QString protectedConfig;

@@ -116,7 +116,7 @@ QString LoggerScreenOptions::protectedConfig  = "[{\"name\": \"%1\","
                                             "]}]";
 
 
-LoggerScreenOptions::LoggerScreenOptions()
+LoggerScreenOptions::LoggerScreenOptions():QObject()
 {
     ScreenConfigFile::setFileName("ScreenConfigs.json");
 
@@ -137,10 +137,10 @@ LoggerScreenOptions::LoggerScreenOptions()
             .arg(ScreenConfigElement::getRawScreenTypeString(sctArchiveMatch));
 
     QString prot = protectedConfig
-            .arg(defaultProtectedLayoutName())
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch));
+            .arg(defaultProtectedLayoutName(),
+                            ScreenConfigElement::getRawScreenTypeString(sctLog),
+                            ScreenConfigElement::getRawScreenTypeString(sctQSOEdit),
+                            ScreenConfigElement::getRawScreenTypeString(sctThisMatch));
 
     ScreenConfigFile::setDefProt(def, prot);
 
