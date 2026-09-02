@@ -33,7 +33,12 @@ on:
 
 concurrency:
   group: build-${{ inputs.tag }}
-  cancel-in-progress: true
+  # Queue rather than cancel. Runs for one tag may carry different targets -
+  # topping a release up with a format built later, or re-running a target that
+  # failed - and they all publish into the same release. Cancelling would kill
+  # a build that is doing unrelated work, and letting two publish jobs merge
+  # the checksum file at once would lose one of their entries.
+  cancel-in-progress: false
 
 permissions:
   contents: write
