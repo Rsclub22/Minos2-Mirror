@@ -74,18 +74,19 @@ COMMON=(
     --plugin qt
 )
 
-# First pass: deploy the applications, Qt and whatever linuxdeploy pulls in.
+# Deploy the applications, Qt and everything linuxdeploy pulls in with them.
 linuxdeploy "${COMMON[@]}"
 
-# linuxdeploy leaves out everything on the AppImage excludelist. Most of that
-# list genuinely has to come from the host - glibc, the GL and X stack, ALSA,
-# and the font libraries, which must match the host's rendering. But the list
-# also drops libraries no ordinary desktop is guaranteed to have, libusb (which
-# our bundled Hamlib needs) among them. So work out what is still unresolved
-# and deploy exactly those in a second pass.
+# linuxdeploy drops everything on the AppImage excludelist, and refuses to
+# deploy those libraries even when they are named with --library. Most of that
+# list genuinely has to come from the host: glibc, the GL and X stack, ALSA,
+# and the font libraries, which must match the host's rendering. But it also
+# drops libraries no ordinary desktop is guaranteed to have - libusb, which our
+# bundled Hamlib needs, among them. Those are copied in by hand below; the
+# AppRun puts usr/lib first on LD_LIBRARY_PATH, so they are found.
 HOST_LIBS='^(ld-linux.*|libc|libm|libdl|libpthread|librt|libresolv|libnsl|libutil|libgcc_s|libstdc\+\+|libGL|libGLX|libGLdispatch|libGLESv2|libEGL|libOpenGL|libdrm|libglapi|libX11|libX11-xcb|libxcb.*|libICE|libSM|libXext|libXrender|libXi|libXfixes|libXcursor|libXrandr|libXinerama|libXss|libXtst|libxshmfence|libwayland.*|libasound|libfontconfig|libfreetype|libharfbuzz|libz|libexpat)\.so.*$'
 
-mapfile -t EXTRA_LIBS < <(
+resolve_missing() {
     for f in "$APPDIR/usr/bin"/Mqt* "$APPDIR/usr/lib"/*.so* "$APPDIR"/usr/plugins/*/*.so; do
         [ -f "$f" ] || continue
         objdump -p "$f" 2>/dev/null | awk '/NEEDED/{print $2}'
@@ -95,17 +96,30 @@ mapfile -t EXTRA_LIBS < <(
         p="$(ldconfig -p | awk -v n="$n" '$1 == n {print $NF; exit}')"
         [ -n "$p" ] && [ -e "$p" ] && echo "$p"
     done | sort -u
-)
+}
 
-LIB_ARGS=()
-if [ "${#EXTRA_LIBS[@]}" -gt 0 ]; then
-    echo "==> deploying ${#EXTRA_LIBS[@]} library/libraries the excludelist dropped:"
+# Copying can pull in further dependencies, so repeat until nothing is left.
+for _ in 1 2 3 4 5; do
+    mapfile -t EXTRA_LIBS < <(resolve_missing)
+    [ "${#EXTRA_LIBS[@]}" -eq 0 ] && break
+    echo "==> bundling ${#EXTRA_LIBS[@]} librar(y/ies) the excludelist dropped:"
     printf '    %s\n' "${EXTRA_LIBS[@]}"
-    for l in "${EXTRA_LIBS[@]}"; do LIB_ARGS+=(--library "$l"); done
+    for l in "${EXTRA_LIBS[@]}"; do
+        cp -L "$l" "$APPDIR/usr/lib/$(basename "$l")"
+        chmod 0755 "$APPDIR/usr/lib/$(basename "$l")"
+    done
+done
+
+still_missing="$(resolve_missing)"
+if [ -n "$still_missing" ]; then
+    echo "!! could not resolve: $still_missing" >&2
+    exit 1
 fi
 
-# Second pass over the same AppDir: add those libraries and build the image.
-linuxdeploy "${COMMON[@]}" "${LIB_ARGS[@]}" --output appimage
+# Build the image from the finished AppDir. Going through the plugin directly
+# rather than `linuxdeploy --output appimage` keeps linuxdeploy from running
+# another deployment pass, which would strip the libraries just added.
+linuxdeploy-plugin-appimage --appdir "$APPDIR"
 
 rm -rf "$BINSRC"
 echo "==> $OUTPUT"

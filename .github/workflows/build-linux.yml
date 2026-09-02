@@ -47,7 +47,7 @@ jobs:
     outputs:
       matrix: ${{ steps.select.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: select
         env:
           TARGETS: ${{ inputs.targets }}
@@ -65,12 +65,12 @@ jobs:
 
     steps:
       - name: Check out the pipeline
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ci
 
       - name: Check out ${{ inputs.tag }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.tag }}
           path: src
@@ -141,7 +141,7 @@ jobs:
       (github.event_name != 'workflow_dispatch' || inputs.publish)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ci
 

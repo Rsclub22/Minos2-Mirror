@@ -98,6 +98,18 @@ target and keyed on `mqthamlib.pri`, so bumping the pin upstream rebuilds it by
 itself. If a distribution ever ships a Hamlib at or past the pinned
 major.minor, `build.sh` links against that one instead and drops the bundle.
 
+**The AppImage bundles three libraries linuxdeploy refuses to.** Its
+excludelist is mostly right — glibc, the GL and X stack, ALSA and the font
+libraries have to come from the host, and linuxdeploy will not deploy them even
+when named with `--library`. But the list also drops `libusb`, which the
+bundled Hamlib needs, along with `libgpg-error` and `libcom_err`, which the
+bundled Kerberos and gcrypt need. `pkg-appimage.sh` therefore works out what is
+still unresolved, copies those in by hand, and then builds the image through
+`linuxdeploy-plugin-appimage` directly — going through `linuxdeploy --output
+appimage` would run another deployment pass and strip them out again. What is
+left for the host is the ordinary desktop baseline; the AppImage will not start
+on a bare container without a GUI stack.
+
 arm64 is emulated through QEMU because hosted arm64 runners are not available
 for private repositories on this plan. It is by far the most expensive job in
 the matrix; if the minutes get tight, dropping that one matrix entry is the
