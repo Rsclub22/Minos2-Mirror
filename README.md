@@ -98,6 +98,26 @@ target and keyed on `mqthamlib.pri`, so bumping the pin upstream rebuilds it by
 itself. If a distribution ever ships a Hamlib at or past the pinned
 major.minor, `build.sh` links against that one instead and drops the bundle.
 
+**The Arch package pins a Qt floor.** Qt moves symbols between ELF version
+nodes even in patch releases — 6.11.2 promoted
+`QUntypedPropertyBinding(QPropertyBindingPrivate*)` from `Qt_6_PRIVATE_API` to
+`Qt_6`. A `qt6-serialport` from one patch release loaded against a `qt6-base`
+from another then dies at startup with
+
+```
+symbol lookup error: /usr/lib/libQt6SerialPort.so.6: undefined symbol:
+_ZN23QUntypedPropertyBindingC1EP23QPropertyBindingPrivate, version Qt_6
+```
+
+That is a partial upgrade on the user's machine rather than a Minos fault, and
+a full `pacman -Syu` fixes it — but the package used to invite it by depending
+on `qt6-base` with no bound at all. `pkg-arch.sh` now emits
+`qt6-base>=<the Qt it was built against>` and the same for the other Qt
+modules, so pacman reports a dependency conflict instead of letting the crash
+happen at startup. The deb needs no equivalent: Qt5 is long stable and
+`dpkg-shlibdeps` already emits versioned dependencies. Fedora ships its Qt
+stack as one consistent set per release, so the rpm does not need it either.
+
 **The AppImage bundles three libraries linuxdeploy refuses to.** Its
 excludelist is mostly right — glibc, the GL and X stack, ALSA and the font
 libraries have to come from the host, and linuxdeploy will not deploy them even

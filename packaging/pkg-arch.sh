@@ -17,7 +17,18 @@ id -u builder >/dev/null 2>&1 || useradd -m builder
 WORK="$(mktemp -d)"
 chmod 0755 "$WORK"
 
-DEPENDS="'qt6-base' 'qt6-serialport' 'qt6-charts' 'qt6-multimedia' 'qt6-translations' 'alsa-lib'"
+# Qt moves symbols between version nodes even in patch releases - 6.11.2 for
+# instance promoted QUntypedPropertyBinding(QPropertyBindingPrivate*) from
+# Qt_6_PRIVATE_API to Qt_6. A Qt6SerialPort from one patch release against a
+# Qt6Core from another then fails at load time with an undefined symbol. On a
+# rolling distribution that is a partial upgrade waiting to happen, so the Qt
+# we built against is the floor: pacman then reports a dependency conflict
+# instead of letting the user hit a symbol lookup error at startup.
+QT_FLOOR="${MINOS_QT_VERSION:-}"
+qtdep() { [ -n "$QT_FLOOR" ] && echo "'$1>=$QT_FLOOR'" || echo "'$1'"; }
+
+DEPENDS="$(qtdep qt6-base) $(qtdep qt6-serialport) $(qtdep qt6-charts)"
+DEPENDS="$DEPENDS $(qtdep qt6-multimedia) $(qtdep qt6-translations) 'alsa-lib'"
 if [ "${MINOS_HAMLIB_BUNDLED:-0}" = "1" ]; then
     # makepkg does not derive dependencies from ELF files, so the bundled
     # Hamlib's own needs have to be named here.
