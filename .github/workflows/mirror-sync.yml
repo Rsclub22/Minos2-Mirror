@@ -1,0 +1,63 @@
+name: Mirror sync
+
+# Keeps this repository in step with the upstream SourceForge repository and
+# builds Linux packages for release tags that turn up.
+
+on:
+  schedule:
+    # Every three hours. Upstream is a low-traffic repository; this is often
+    # enough to feel live without burning the private-repository minutes.
+    - cron: '25 1/3 * * *'
+  workflow_dispatch:
+    inputs:
+      build_new_tags:
+        description: Build packages for release tags found in this sync
+        type: boolean
+        default: true
+
+concurrency:
+  group: mirror-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync from SourceForge
+    runs-on: ubuntu-latest
+    outputs:
+      new_tags: ${{ steps.sync.outputs.new_tags }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mirror upstream refs
+        id: sync
+        env:
+          UPSTREAM: https://git.code.sf.net/p/minos/minos
+          GH_REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The script works inside a clone of *upstream*, so gh cannot infer
+          # which repository the releases belong to.
+          GH_REPO: ${{ github.repository }}
+          CI_BRANCH: ci
+          TAG_REGEX: ${{ vars.TAG_REGEX || '^(tags/)?[Mm]qt_Rel' }}
+          MAX_NEW_TAG_BUILDS: ${{ vars.MAX_NEW_TAG_BUILDS || '3' }}
+        run: ./scripts/sync-mirror.sh
+
+  build:
+    name: Release ${{ matrix.tag }}
+    needs: sync
+    if: >-
+      needs.sync.outputs.new_tags != '' &&
+      needs.sync.outputs.new_tags != '[]' &&
+      (github.event_name != 'workflow_dispatch' || inputs.build_new_tags)
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: ${{ fromJSON(needs.sync.outputs.new_tags) }}
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      tag: ${{ matrix.tag }}
+    permissions:
+      contents: write

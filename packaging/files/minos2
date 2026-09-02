@@ -1,0 +1,33 @@
+#!/bin/sh
+# Minos2 launcher.
+#
+# The Minos applications resolve ./Bin, ./Configuration, ./Logs and ./Lists
+# relative to the working directory and they write into them, while the
+# installed package is read-only. So the first launch builds a per-user
+# runtime tree that links back to the installed binaries and seeds the
+# configuration; later launches only top up files the user does not have yet.
+#
+#   MINOS2_RUNTIME   where the runtime tree lives  [default ~/minos2-runtime]
+#   MINOS2_APP       which application to start    [default MqtLogger]
+set -eu
+
+PREFIX="${MINOS2_PREFIX:-/opt/minos2}"
+RUNTIME="${MINOS2_RUNTIME:-$HOME/minos2-runtime}"
+
+if [ ! -x "$PREFIX/Bin/MqtLogger" ]; then
+    echo "minos2: no Minos installation under $PREFIX" >&2
+    exit 1
+fi
+
+mkdir -p "$RUNTIME/Configuration" "$RUNTIME/Logs" "$RUNTIME/Lists" "$RUNTIME/TraceLog"
+ln -sfn "$PREFIX/Bin" "$RUNTIME/Bin"
+ln -sfn "$PREFIX/Docs" "$RUNTIME/Docs"
+
+# -n: never clobber a file the operator has edited.
+cp -rn "$PREFIX/Configuration/." "$RUNTIME/Configuration/" 2>/dev/null || true
+for icon in "$PREFIX"/*.ico; do
+    [ -e "$icon" ] && cp -n "$icon" "$RUNTIME/" 2>/dev/null
+done || true
+
+cd "$RUNTIME"
+exec "./Bin/${MINOS2_APP:-MqtLogger}" "$@"

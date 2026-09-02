@@ -1,0 +1,37 @@
+#!/bin/sh
+# AppImage entry point.
+#
+# Minos resolves ./Bin, ./Configuration, ./Logs and ./Lists relative to the
+# working directory and writes into them, so we set up a per-user runtime tree
+# that points back into the read-only image.
+#
+# Deliberately no `set -u`: linuxdeploy's Qt hook reads XDG_CURRENT_DESKTOP and
+# friends without guarding them, and an unset variable there must not stop
+# Minos from starting.
+
+HERE="$(dirname "$(readlink -f "$0")")"
+export APPDIR="${APPDIR:-$HERE}"
+
+# Environment set up by linuxdeploy's plugins: Qt plugin path, QML imports, ...
+if [ -d "$HERE/apprun-hooks" ]; then
+    for hook in "$HERE"/apprun-hooks/*.sh; do
+        if [ -e "$hook" ]; then
+            . "$hook"
+        fi
+    done
+fi
+export LD_LIBRARY_PATH="$HERE/usr/lib:$LD_LIBRARY_PATH"
+
+RUNTIME="${MINOS2_RUNTIME:-$HOME/minos2-runtime}"
+mkdir -p "$RUNTIME/Configuration" "$RUNTIME/Logs" "$RUNTIME/Lists" "$RUNTIME/TraceLog" || {
+    echo "minos2: cannot create runtime directory $RUNTIME" >&2
+    exit 1
+}
+ln -sfn "$HERE/usr/bin" "$RUNTIME/Bin"
+ln -sfn "$HERE/usr/share/minos2/Docs" "$RUNTIME/Docs"
+
+# -n: never clobber a file the operator has edited.
+cp -rn "$HERE/usr/share/minos2/Configuration/." "$RUNTIME/Configuration/" 2>/dev/null
+
+cd "$RUNTIME" || exit 1
+exec "./Bin/${MINOS2_APP:-MqtLogger}" "$@"

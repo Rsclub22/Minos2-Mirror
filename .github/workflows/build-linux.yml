@@ -1,0 +1,166 @@
+name: Build Linux packages
+
+# Builds Minos2 for one tag and publishes the packages as a GitHub release.
+# Called by the mirror sync for new release tags, or started by hand.
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      targets:
+        description: Comma-separated target names, or "all"
+        type: string
+        default: all
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to build (e.g. Mqt_Release_2.8.1.0)
+        required: true
+        type: string
+      targets:
+        description: >-
+          Targets to build: "all", or a comma-separated subset of
+          deb-ubuntu-24.04-amd64, deb-debian-12-arm64, rpm-fedora-41-amd64,
+          arch-amd64, appimage-amd64
+        type: string
+        default: all
+      publish:
+        description: Publish a GitHub release (off = artifacts only)
+        type: boolean
+        default: true
+
+concurrency:
+  group: build-${{ inputs.tag }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    # Evaluated per matrix entry, so a re-run can rebuild one target into an
+    # existing release instead of redoing the whole set.
+    if: inputs.targets == 'all' || contains(inputs.targets, matrix.name)
+    # Generous because of the emulated arm64 job; the amd64 ones take ~20 min.
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: deb-ubuntu-24.04-amd64
+            image: ubuntu:24.04
+            format: deb
+            arch: amd64
+          - name: deb-debian-12-arm64
+            image: debian:bookworm
+            format: deb
+            arch: arm64
+          - name: rpm-fedora-41-amd64
+            image: fedora:41
+            format: rpm
+            arch: amd64
+          - name: arch-amd64
+            image: archlinux:base
+            format: arch
+            arch: amd64
+          - name: appimage-amd64
+            image: ubuntu:22.04
+            format: appimage
+            arch: amd64
+
+    steps:
+      - name: Check out the pipeline
+        uses: actions/checkout@v4
+        with:
+          path: ci
+
+      - name: Check out ${{ inputs.tag }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          path: src
+
+      # arm64 has no hosted runner on this plan, so it is emulated. Slow, but
+      # it is the architecture the Raspberry Pi packages have to match.
+      - name: Enable arm64 emulation
+        if: matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      # Hamlib is pinned by mqt/mqthamlib.pri and rarely moves; rebuilding it
+      # for every release would dominate the emulated build.
+      - name: Restore Hamlib build
+        uses: actions/cache@v4
+        with:
+          path: wd/hamlib-root
+          key: hamlib-${{ matrix.name }}-${{ hashFiles('src/mqt/mqthamlib.pri') }}
+
+      - name: Build and package
+        run: |
+          mkdir -p wd out
+          docker run --rm --platform "linux/${{ matrix.arch }}" \
+            -v "$PWD/ci:/ci:ro" -v "$PWD/src:/src" \
+            -v "$PWD/wd:/wd" -v "$PWD/out:/out" \
+            -e SRC=/src -e OUTDIR=/out -e HAMLIB_ROOT=/wd/hamlib-root \
+            -e MINOS_REF='${{ inputs.tag }}' \
+            -w /wd "${{ matrix.image }}" \
+            bash /ci/packaging/run.sh "${{ matrix.format }}"
+
+      - name: Job summary
+        run: |
+          {
+            echo "### ${{ matrix.name }}"
+            echo
+            echo '```'
+            cat wd/minos-build.env
+            echo '```'
+            echo
+            ls -la out
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minos2-${{ matrix.name }}
+          path: out/*
+          if-no-files-found: error
+          retention-days: 30
+
+      # Carries the version and build facts to the publish job.
+      - uses: actions/upload-artifact@v4
+        if: matrix.name == 'deb-ubuntu-24.04-amd64'
+        with:
+          name: minos2-buildinfo
+          path: wd/minos-build.env
+
+  publish:
+    name: Publish release
+    needs: build
+    # always(): a release with three of five packages is more useful than none,
+    # and the missing ones can be re-run into the same release afterwards.
+    if: >-
+      always() &&
+      needs.build.result != 'cancelled' &&
+      (github.event_name != 'workflow_dispatch' || inputs.publish)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: ./ci/scripts/publish-release.sh dist

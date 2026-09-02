@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Minos 2
+GenericName=Contest Logger
+Comment=Amateur radio VHF/UHF contest logging
+Exec=minos2
+Icon=minos2
+Terminal=false
+Categories=Network;HamRadio;
+Keywords=amateur;radio;ham;contest;log;logging;vhf;uhf;
+StartupNotify=true

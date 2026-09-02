@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>minos2</id>
+  <name>Minos 2</name>
+  <summary>Amateur radio VHF/UHF contest logging</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <description>
+    <p>
+      Minos is a contest logging suite for amateur radio, with rig and rotator
+      control, DX cluster and KST chat integration, CW and voice keying.
+    </p>
+  </description>
+  <launchable type="desktop-id">minos2.desktop</launchable>
+  <url type="homepage">https://sourceforge.net/projects/minos/</url>
+  <categories>
+    <category>Network</category>
+    <category>HamRadio</category>
+  </categories>
+</component>
