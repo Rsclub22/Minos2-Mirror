@@ -25,12 +25,18 @@ fi
 echo "==> this run produced ${#assets[@]} package(s)"
 printf '    %s\n' "${assets[@]##*/}"
 
-# Build facts recorded by packaging/build.sh on the reference target. Absent
-# when this run did not include that target.
+# Build facts recorded by packaging/build.sh. Every target stashes its own, so
+# a run without the reference target still has something to report; prefer the
+# reference target when it is there, for a stable set of facts across runs.
+BUILDINFO=""
+for candidate in "$DIST/buildinfo-deb-ubuntu-24.04-amd64.env" "$DIST"/buildinfo-*.env; do
+    if [ -f "$candidate" ]; then BUILDINFO="$candidate"; break; fi
+done
+
 VERSION=""
-if [ -f "$DIST/minos-build.env" ]; then
-    # shellcheck disable=SC1091
-    . "$DIST/minos-build.env"
+if [ -n "$BUILDINFO" ]; then
+    # shellcheck disable=SC1090
+    . "$BUILDINFO"
     VERSION="${MINOS_VERSION:-}"
 fi
 
@@ -122,12 +128,12 @@ NOTES="$WORK/notes.md"
     done < "$WORK/release-assets"
     printf '| `%s` | %s |\n' "SHA256SUMS" \
         "$(numfmt --to=iec --suffix=B "$(stat -c%s "$WORK/SHA256SUMS")")"
-    if [ -f "$DIST/minos-build.env" ]; then
+    if [ -n "$BUILDINFO" ]; then
         echo
         echo '<details><summary>Build details</summary>'
         echo
         echo '```'
-        cat "$DIST/minos-build.env"
+        cat "$BUILDINFO"
         echo '```'
         echo
         echo '</details>'

@@ -126,12 +126,16 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      # Carries the version and build facts to the publish job.
+      # Carries the version and build facts to the publish job. Named per
+      # target so a run that does not include the reference target still has
+      # something to put in the release notes.
+      - name: Stash build facts
+        run: cp wd/minos-build.env "wd/buildinfo-${{ matrix.name }}.env"
+
       - uses: actions/upload-artifact@v4
-        if: matrix.name == 'deb-ubuntu-24.04-amd64'
         with:
-          name: minos2-buildinfo
-          path: wd/minos-build.env
+          name: minos2-buildinfo-${{ matrix.name }}
+          path: wd/buildinfo-${{ matrix.name }}.env
 
   publish:
     name: Publish release
