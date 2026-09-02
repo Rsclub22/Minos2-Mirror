@@ -1,0 +1,32 @@
+[
+  {
+    "name": "deb-ubuntu-24.04-amd64",
+    "image": "ubuntu:24.04",
+    "format": "deb",
+    "arch": "amd64"
+  },
+  {
+    "name": "deb-debian-12-arm64",
+    "image": "debian:bookworm",
+    "format": "deb",
+    "arch": "arm64"
+  },
+  {
+    "name": "rpm-fedora-41-amd64",
+    "image": "fedora:41",
+    "format": "rpm",
+    "arch": "amd64"
+  },
+  {
+    "name": "arch-amd64",
+    "image": "archlinux:base",
+    "format": "arch",
+    "arch": "amd64"
+  },
+  {
+    "name": "appimage-amd64",
+    "image": "ubuntu:22.04",
+    "format": "appimage",
+    "arch": "amd64"
+  }
+]
