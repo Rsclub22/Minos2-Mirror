@@ -573,6 +573,34 @@ bool BandmapView::filterAcceptsRow(int sourceRow) const
 
     return false;
 }
+void BandmapView::pushNearMatch(ClusterSpotData *pSpot)
+{
+    int tol = getModeTolerance();
+    Frequency f = dial->getCurFreq();
+    Frequency freq = pSpot->getFreq();
+
+    int offset = std::abs(freq - f);
+    if (tol > 0 && offset < tol )
+    {
+        QString nm;
+        QTextStream os(&nm);
+        os.setFieldWidth(5);
+        os << offset;
+        os.setFieldWidth(0);
+
+        QString dxCallsign = pSpot->getDxCallStr();
+        QString dxQth = pSpot->getDistrict();
+        bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
+        QString dxLoc = pSpot->getDxLocator();
+        QString dxMode = pSpot->getMode();
+
+        os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
+        os << "|" << dxQth;
+
+        nearMatches.push_back(nm);
+    }
+}
+
 bool BandmapView::checkCallWorked(int row)
 {
     bool callWkd = false;
@@ -587,38 +615,14 @@ bool BandmapView::checkCallWorked(int row)
         CheckableContact test(contest, cs, contest->currentBand.getValue(), contest->currentMode.getValue());
         CheckableContact *cc = contest->haveWorked(&test);
         callWkd = cc != nullptr;
-        if (callWkd)
-        {
-            int tol = getModeTolerance();
-            Frequency f = dial->getCurFreq();
-            Frequency freq = pSpot->getFreq();
-
-            int offset = std::abs(freq - f);
-            if (tol > 0 && offset < tol )
-            {
-                QString nm;
-                QTextStream os(&nm);
-                os.setFieldWidth(5);
-                os << offset;
-                os.setFieldWidth(0);
-
-                QString dxQth = pSpot->getDistrict();
-                bool dxLocFromNodeFlag = pSpot->getDxLocatorIsFromNode();
-                QString dxLoc = pSpot->getDxLocator();
-                QString dxMode = pSpot->getMode();
-
-                os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
-                os << "|" << dxQth;
-
-                nearMatches.push_back(nm);
-            }
-        }
     }
     return callWkd;
 }
 
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn)
 {
+    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+    pushNearMatch(pSpot);
     bool callWkd = checkCallWorked(row);
     if (callWkd)
     {
@@ -628,7 +632,6 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
             return;
         }
     }
-    ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
 
     bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
     if (savedSpotType == bandmapSpotType::DELETED)
@@ -904,6 +907,8 @@ void BandmapView::drawBandMapSpots()
 
         for (int row = 0; row < numrows; ++row)
         {
+            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
+            pushNearMatch(pSpot);
             bool callWkd = checkCallWorked(row);
             if (callWkd)
             {
@@ -913,7 +918,6 @@ void BandmapView::drawBandMapSpots()
                     continue;
                 }
             }
-            ClusterSpotData *pSpot = bandmapDataModel->getBandmapDataRow(row).data();
             bandmapSpotType::SPOT_TYPE savedSpotType = pSpot->getSpotType();
             if (savedSpotType == bandmapSpotType::DELETED)
             {

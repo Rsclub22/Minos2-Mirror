@@ -250,9 +250,10 @@ class LocList
           llist = ll.llist;
       }
       virtual ~LocList();
-      QSharedPointer<LocSquare> itemAt(int offset)
+      QSharedPointer<LocSquare> locSquareAt(int offset)
       {
-          QSharedPointer<LocSquare> ce = std::next(llist.begin(), offset)->wt;
+          auto li = std::next(llist.begin(), offset);   //Return the nth successor of the iterator
+          QSharedPointer<LocSquare> ce = li->wt;
           return ce;
       }
 };

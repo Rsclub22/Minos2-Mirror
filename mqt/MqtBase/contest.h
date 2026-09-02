@@ -142,6 +142,7 @@ class BaseContestLog: public BaseLogList
       QString getCabrilloFreqBand(Frequency txfreq) const;
 
       void setCurrentBand(QString);
+      LocSquare *getLocSquare(const QString &band, const Locator &loc);
 
       // The contest details
 
@@ -335,7 +336,7 @@ class BaseContestLog: public BaseLogList
       QMap<QString, int> postcodeBonuses;
       QMap<QString, int> dxccBonuses;
       void loadBonusList();
-      int getSquareBonus(QString sloc) const;
+      int getSquareBonus(const QString &loc) const;
       int getCountryBonus(QString c) const;
       int getDistBonus(QString d) const;
 

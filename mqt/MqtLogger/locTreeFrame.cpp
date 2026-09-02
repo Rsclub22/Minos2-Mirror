@@ -47,7 +47,7 @@ void LocTreeFrame::reInitialiseLocators()
 
     for (int k = 0; k < ct->locs[band].llist.size(); k++)
     {
-        QSharedPointer<LocSquare> l = ct->locs[band].itemAt(k);
+        QSharedPointer<LocSquare> l = ct->locs[band].locSquareAt(k);
         if (!l)
             break;
 

@@ -316,7 +316,32 @@ void BaseContestLog::setCurrentBand(QString cb)
     currentBand.setValue(cb);
     commonSave(false);
 }
+LocSquare *BaseContestLog::getLocSquare(const QString &band, const Locator &loc)
+{
+    QString letters;
+    QString numbers;
 
+    QString sloc = loc.getLoc().mid(0, 4);
+
+    letters = sloc.left(2);
+    numbers = sloc.mid(2, 2);
+
+    LocSquare *ls = nullptr;
+    if ( letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
+    {
+        LocSquare lss( letters );
+        MapKeyWrapper<LocSquare> wlsk(&lss);
+        if (!locs[band].llist.contains(wlsk))
+        {
+            LocSquare *lsi = new LocSquare ( letters );
+            MapKeyWrapper<LocSquare> wlsk(lsi);
+            MapWrapper<LocSquare> wls(lsi);
+            locs[band].llist.insert ( wlsk, wls );
+        }
+        ls = locs[band].llist[wlsk].wt.data();
+    }
+    return ls;
+}
 //==========================================================================
 
 void BaseContestLog::clearDirty()
@@ -1959,9 +1984,10 @@ void BaseContestLog::loadBonusList()
     }
 
 }
-int BaseContestLog::getSquareBonus(QString sloc) const
+int BaseContestLog::getSquareBonus(const QString &loc) const
 {
     int bonus = 0;
+    QString sloc = loc.left(4);
     QMap<QString, int>::const_iterator l = locBonuses.find(sloc);
 
     if ( l != locBonuses.end())

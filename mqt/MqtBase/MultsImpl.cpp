@@ -225,6 +225,7 @@ bool DistrictList::procLine(QStringList a )
    QString prefix2 = a[ 3 ];
    QString cloc = (a.size() > 4)?a[ 4 ]:QString();
 
+   // district will normally be new in this case
    DistrictEntry *de = new DistrictEntry ( cd, cname, prefix, prefix2, cloc );
    MapKeyWrapper<DistrictEntry >dtk(de);
    if (!contains(dtk))
@@ -608,6 +609,7 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          int cq = a[1].toInt();
          int itu = a[2].toInt();
 
+         // Country will normally be new
          CountryEntry *ce = new CountryEntry ( a[ 3 ], a[ 7 ], a[ 0 ], gridref, cq, itu );
          MapKeyWrapper<CountryEntry> ctk(ce);
          if (!contains(ctk))

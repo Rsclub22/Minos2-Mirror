@@ -82,7 +82,9 @@ public:
     bool checkCallWorked(int row);
 
     int getModeTolerance();
-
+    
+    void pushNearMatch(ClusterSpotData *pSpot);
+    
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);

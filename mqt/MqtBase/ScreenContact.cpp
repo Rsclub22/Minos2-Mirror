@@ -6,7 +6,6 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "QtUtils.h"
 #include "contest.h"
 #include "cutils.h"
 #include "BandList.h"
@@ -385,65 +384,31 @@ void ScreenContact::score()
 
         if (gridref.length() >= 4)
         {
-           // now look at the locator list
-           QString letters;
-           QString numbers;
+            // now look at the locator list
+            int oldMultCount = multCount;
 
-           QString sloc = loc.getLoc().mid(0, 4);
-
-           letters = sloc.left(2);
-           numbers = sloc.mid(2, 2);
-
-           LocSquare *ls = nullptr;
-
-           for ( auto const &i: QASCONST(contest->locs[band].llist) )
-           {
-               LocSquare *locsq = i.wt.data();
-               if (locsq && strnicmp ( locsq ->loc, letters, 2 ) == 0 )
-               {
-                   ls = locsq;
-                   break;
-               }
-
-           }
-
-           if ( !ls )
-           {
-              if ( letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
-              {
-                 LocSquare lst ( letters );
-                 MapKeyWrapper<LocSquare> wlsk(&lst);
-                 if (!contest->locs[band].llist.contains(wlsk))
-                 {
-                     LocSquare *lsi = new LocSquare ( letters );
-                     MapKeyWrapper<LocSquare> wlsk(lsi);
-                     MapWrapper<LocSquare> wls(ls);
-                     contest->locs[band].llist.insert ( wlsk, wls );
-                 }
-              }
-           }
-
-           int oldMultCount = multCount;
-           if ( ls )
-           {
-              LocCount * npt = ls->map ( numbers );
-              if ( npt && npt->locCount == 0)
-              {
-                 if (contest->usesBonus.getValue())
-                 {
-                    int lb = contest->getSquareBonus(sloc);
-                    if (lb)
+            LocSquare *ls = contest->getLocSquare(band, loc);
+            if ( ls )
+            {
+                QString numbers = loc.getLoc().mid(2, 2);
+                LocCount * npt = ls->map ( numbers );
+                if ( npt && npt->locCount == 0)
+                {
+                    if (contest->usesBonus.getValue())
                     {
-                        locBonus += lb;
-                        newBonus++;
+                        int lb = contest->getSquareBonus(loc.getLoc());
+                        if (lb)
+                        {
+                            locBonus += lb;
+                            newBonus++;
+                        }
                     }
-                 }
 
-                 multCount += contest->loc_multiplier;  // will be 0 if no loc mults
-                 newLoc = true;
-              }
-           }
-           locMultCount = multCount - oldMultCount;
+                    multCount += contest->loc_multiplier;  // will be 0 if no loc mults
+                    newLoc = true;
+                }
+            }
+            locMultCount = multCount - oldMultCount;
         }
 
     }

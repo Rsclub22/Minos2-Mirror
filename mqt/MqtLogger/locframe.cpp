@@ -268,19 +268,25 @@ void LocFrame::reInitialiseLocators()
     QString ctLocE = l_add(ctLoc, 3, 0);
     QString ELoc = QString(ctLocE[0]) + ctLocE[2];
 
-
     for (int k = 0; k < ct->locs[band].llist.size(); k++)
     {
-        QString locStart = ct->locs[band].itemAt(k) ->loc;
+        QSharedPointer<LocSquare> lsi = ct->locs[band].locSquareAt(k);
+        if (!lsi)
+            continue;
+
+        if (lsi->isClear())
+            continue;
+
+        QString locStart = lsi->loc;
 
         for (int j = 0; j < 10; j++)
         {
             for (int i = 0; i < 10; i++)
             {
-                LocCount *lc = ct->locs[band].itemAt(k) ->map( j * 10 + i );
+                LocCount *lc = lsi->map(j * 10 + i);
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
-                if ( lc && (lc->locCount))
+                if (lc && (lc->locCount))
                 {
                     model->locMap[locStart + disp] = lc;
 
