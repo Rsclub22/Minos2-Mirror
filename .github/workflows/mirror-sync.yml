@@ -7,7 +7,7 @@ on:
   schedule:
     # Every three hours. Upstream is a low-traffic repository; this is often
     # enough to feel live without burning the private-repository minutes.
-    - cron: '25 1/3 * * *'
+    - cron: '25 */3 * * *'
   workflow_dispatch:
     inputs:
       build_new_tags:
