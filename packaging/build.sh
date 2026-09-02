@@ -17,11 +17,22 @@ JOBS="${JOBS:-$(nproc)}"
 
 # Libraries and applications, in the order buildInstall.sh uses them. The
 # "libs" have translations that get merged into every application catalogue.
-LIBS="MqtUtils TinyXML XMPPLib MqtBase KeyerBase"
-APPS="MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes MqtKeyer
-      MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor MqtPcCwKeyer
-      MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator
-      MqtServer MqtWinkeyer"
+#
+# Filtered against the checkout, because older tags predate some of these
+# subprojects and we build whatever tag upstream publishes.
+present() {
+    local found=""
+    for p in $1; do
+        [ -f "$SRC/mqt/$p/$p.pro" ] && found="$found $p"
+    done
+    echo "${found# }"
+}
+LIBS="$(present "MqtUtils TinyXML XMPPLib MqtBase KeyerBase")"
+APPS="$(present "MqtAppStarter MqtChat MqtCluster MqtControl MqtDataModes
+                 MqtKeyer MqtKeyerProxy MqtKSTClient MqtLogger MqtMonitor
+                 MqtPcCwKeyer MqtQrzServer MqtRigControl MqtRigSync
+                 MqtRigRecorder MqtRotator MqtServer MqtWinkeyer")"
+: "${APPS:?no Minos applications found under $SRC/mqt}"
 
 # ---------------------------------------------------------------- versions --
 MINOS_VERSION="$(sed -n 's/^VERSION=\([0-9][0-9.]*\).*/\1/p' "$SRC/mqt/mqt.pri" | head -1)"
@@ -124,10 +135,12 @@ if [ "$HAMLIB_BUNDLED" = "1" ]; then
 fi
 install -m 0644 "$BUILD/translations"/*.qm "$P/Bin/translations/"
 
-# Qt's own catalogues, so dialogs are translated too.
+# Qt's own catalogues, so its dialogs are translated too. Which locales a
+# distribution ships varies, so an unmatched pattern here is not an error.
 QT_TR="$($QMAKE -query QT_INSTALL_TRANSLATIONS)"
 for f in "$QT_TR"/qt_??.qm "$QT_TR"/qt_??_??.qm "$QT_TR"/qtbase_??.qm "$QT_TR"/qtbase_??_??.qm; do
-    [ -f "$f" ] && install -m 0644 "$f" "$P/Bin/translations/"
+    [ -f "$f" ] || continue
+    install -m 0644 "$f" "$P/Bin/translations/"
 done
 
 if [ "$HAMLIB_BUNDLED" = "1" ]; then
