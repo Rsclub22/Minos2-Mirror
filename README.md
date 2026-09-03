@@ -130,10 +130,13 @@ appimage` would run another deployment pass and strip them out again. What is
 left for the host is the ordinary desktop baseline; the AppImage will not start
 on a bare container without a GUI stack.
 
-arm64 is emulated through QEMU because hosted arm64 runners are not available
-for private repositories on this plan. It is by far the most expensive job in
-the matrix; if the minutes get tight, dropping that one matrix entry is the
-first thing to do.
+**arm64 runs natively where it can.** Hosted arm64 runners are free for public
+repositories and on the larger plans; where they are not available the same
+build has to be emulated through QEMU, which turns roughly 20 minutes into
+about two hours. `scripts/select-targets.sh` picks the runner and only asks for
+QEMU when the arm64 target lands on an x64 one, so the workflow is the same
+either way. Set the `ARM64_RUNNER` repository variable to `ubuntu-latest` if
+the native runners stop being available here.
 
 ### Building a tag by hand
 
@@ -180,6 +183,7 @@ Repository variables (Settings → Secrets and variables → Actions → Variabl
 |---|---|---|
 | `TAG_REGEX` | `^(tags/)?[Mm]qt_Rel` | Which tags count as releases |
 | `MAX_NEW_TAG_BUILDS` | `3` | Refuse to auto-build more than this at once |
+| `ARM64_RUNNER` | `ubuntu-24.04-arm` | Runner for the arm64 build; an x64 label switches it to QEMU |
 
 No secrets are needed. The sync pushes with the built-in `GITHUB_TOKEN`.
 

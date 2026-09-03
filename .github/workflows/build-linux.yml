@@ -56,13 +56,16 @@ jobs:
       - id: select
         env:
           TARGETS: ${{ inputs.targets }}
+          # Set this repository variable to ubuntu-latest if native arm64
+          # runners are not available here; the arm64 build then emulates.
+          ARM64_RUNNER: ${{ vars.ARM64_RUNNER || 'ubuntu-24.04-arm' }}
         run: ./scripts/select-targets.sh
 
   build:
     name: ${{ matrix.name }}
     needs: prepare
-    runs-on: ubuntu-latest
-    # Generous because of the emulated arm64 job; the amd64 ones take ~20 min.
+    runs-on: ${{ matrix.runner }}
+    # Generous so an emulated arm64 job still fits; native builds take ~20 min.
     timeout-minutes: 350
     strategy:
       fail-fast: false
@@ -80,10 +83,11 @@ jobs:
           ref: ${{ inputs.tag }}
           path: src
 
-      # arm64 has no hosted runner on this plan, so it is emulated. Slow, but
-      # it is the architecture the Raspberry Pi packages have to match.
+      # Only when the arm64 build landed on an x64 runner. Emulation turns a
+      # ~20 minute build into about two hours, so it is the fallback, not the
+      # default - see ARM64_RUNNER in scripts/select-targets.sh.
       - name: Enable arm64 emulation
-        if: matrix.arch == 'arm64'
+        if: matrix.qemu
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
